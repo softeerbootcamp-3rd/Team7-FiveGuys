@@ -1,9 +1,9 @@
 ---
 name: Five Guys Issue Template
 about: for issue template
-title: ''
+title: "[All, BE, AOS] 구현요약"
 labels: ''
-assignees: lsh2613
+assignees: ''
 
 ---
 
