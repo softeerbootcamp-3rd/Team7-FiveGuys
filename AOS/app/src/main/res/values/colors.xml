@@ -2,4 +2,20 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="hyundai_blue">#002C5F</color>
+    <color name="hyundai_sand">#E4DCD3</color>
+    <color name="hyundai_light_sand">#F5F3F2</color>
+    <color name="hyundai_gold">#A26B4F</color>
+    <color name="active_blue_pms_312C">#07AAD2</color>
+    <color name="sky_blue_pms">#AACAE5</color>
+    <color name="gray_1000">#3D3D3D</color>
+    <color name="gray_900">#666666</color>
+    <color name="gray_800">#888888</color>
+    <color name="gray_700">#999999</color>
+    <color name="gray_600">#CCCCCC</color>
+    <color name="gray_400">#E9E9E9</color>
+    <color name="gray_300">#ECECEC</color>
+    <color name="gray_200">#F3F3F3</color>
+    <color name="gray_100">#F8F8F8</color>
+    <color name="red_200">#FF6B6B</color>
 </resources>
