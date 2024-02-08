@@ -1,4 +1,4 @@
-package com.example.robocar
+package org.softeer.robocar
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

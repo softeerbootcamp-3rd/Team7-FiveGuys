@@ -1,4 +1,4 @@
-package com.example.robocar
+package org.softeer.robocar
 
 import org.junit.Test
 
