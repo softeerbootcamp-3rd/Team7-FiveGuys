@@ -1,4 +1,4 @@
-package com.fiveguys.robocar.models;
+package com.fiveguys.robocar.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

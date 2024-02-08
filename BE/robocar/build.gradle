@@ -32,6 +32,9 @@ dependencies {
 
 	//swagger 연동
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+
+	//mysql 연동
+	runtimeOnly 'mysql:mysql-connector-java'
 }
 
 tasks.named('test') {

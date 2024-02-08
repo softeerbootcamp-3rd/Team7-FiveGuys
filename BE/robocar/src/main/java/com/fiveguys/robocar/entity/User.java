@@ -1,5 +1,6 @@
-package com.fiveguys.robocar.models;
+package com.fiveguys.robocar.entity;
 
+import com.fiveguys.robocar.models.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 
