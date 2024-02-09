@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="bottomNavigationTheme" parent="Theme.MaterialComponents.Light">
+        <item name="fontFamily">@font/pretendard_semibold</item>
+    </style>
+
+</resources>
