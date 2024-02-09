@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">RoboCar</string>
+    <string name="navigation_home">홈화면</string>
+    <string name="navigation_my_page">마이페이지</string>
+    <string name="taxi_type_title">원하는 차량 타입을 알려주세요!</string>
+    <string name="compact_taxi">소형택시</string>
+    <string name="midsize_taxi">중형택시</string>
+    <string name="car_pool_title">저렴한 가격으로 이동해보세요.</string>
+    <string name="recruit_car_pool">동승자 모집</string>
+    <string name="participate_car_pool">동승 참여</string>
+    <string name="return_taxi">내 택시로 돌아가기</string>
 </resources>
