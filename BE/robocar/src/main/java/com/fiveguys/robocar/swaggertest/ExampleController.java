@@ -1,11 +1,13 @@
 package com.fiveguys.robocar.swaggertest;
 
+import com.fiveguys.robocar.apiPayload.ResponseApi;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,8 +26,8 @@ public class ExampleController {
             @ApiResponse(responseCode = "400", description = "클라이언트 에러1"),
             @ApiResponse(responseCode = "500", description = "서버 에러")})
     @GetMapping("/swagger/concat")
-    public String concat(String str1, String str2) {
-        return str1 + " " + str2;
+    public ResponseEntity concat(String str1, String str2) {
+        return ResponseApi.ok(str1 + str2);
     }
 
     @Operation(summary = "문자열 복사하기") // 메소드 설명
@@ -34,14 +36,14 @@ public class ExampleController {
             @ApiResponse(responseCode = "400", description = "클라이언트 에러1"),
             @ApiResponse(responseCode = "500", description = "서버 에러")})
     @GetMapping("/swagger/copy")
-    public String copy(@RequestBody ExamDto examDto) {
-        return examDto.getName() + examDto.getAge();
+    public ResponseEntity copy(@RequestBody ExamDto examDto) {
+        return ResponseApi.ok(examDto.getName() + examDto.getAge());
     }
 
     @Operation(summary = "pathvaliable 테스트") // 메소드 설명
     @Parameter(name = "id", description = "아이디")
     @GetMapping("/swagger/{id}")
-    public String copy(@PathVariable Long id) {
-        return id.toString();
+    public ResponseEntity copy(@PathVariable String id) {
+        return ResponseApi.ok(id);
     }
 }
