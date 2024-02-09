@@ -24,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="62dp"
             android:theme="@style/bottomNavigationTheme"
+            android:background="@color/hyundai_light_sand"
             app:itemActiveIndicatorStyle="@null"
             app:itemIconTint="@color/menu_selector_color"
             app:itemTextColor="@color/menu_selector_color"
