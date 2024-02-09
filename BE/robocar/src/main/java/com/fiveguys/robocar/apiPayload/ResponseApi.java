@@ -13,7 +13,7 @@ public class ResponseApi {
     }
 
     // body가 없을 경우
-    public static <T> ResponseEntity<T> of(ResponseStatus status) {
+    public static ResponseEntity of(ResponseStatus status) {
         return new ResponseEntity(status.getMessage(), status.getHttpStatus());
     }
 
