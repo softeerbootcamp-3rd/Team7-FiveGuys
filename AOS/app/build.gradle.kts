@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.robocar"
+    namespace = "org.softeer.robocar"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.robocar"
+        applicationId = "org.softeer.robocar"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
