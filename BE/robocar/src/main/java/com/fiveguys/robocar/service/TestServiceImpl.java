@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TestServiceImpl implements TestService {
     @Override
-    public void CheckFlag(Integer flag) {
+    public void checkFlag(Integer flag) {
         if (flag == 1)
             throw new GeneralExceptionHandler(ResponseStatus.TEST_EXCEPTION);
     }
