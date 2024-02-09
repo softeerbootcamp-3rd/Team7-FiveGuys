@@ -7,6 +7,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import org.softeer.robocar.R
 import org.softeer.robocar.databinding.ActivityHomeBinding
+import org.softeer.robocar.utils.setStatusBarTransparent
 
 
 class HomeActivity : AppCompatActivity() {
@@ -17,6 +18,7 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
         bindBottomNavigationToFragments()
+        setStatusBarTransparent(window)
     }
 
     private fun bindBottomNavigationToFragments() {
