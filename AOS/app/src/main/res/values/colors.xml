@@ -12,11 +12,12 @@
     <color name="gray_900">#666666</color>
     <color name="gray_800">#888888</color>
     <color name="gray_700">#999999</color>
-    <color name="gray_500">#F5F5F5</color>
     <color name="gray_600">#CCCCCC</color>
+    <color name="gray_500">#D9D9D9</color>
     <color name="gray_400">#E9E9E9</color>
     <color name="gray_300">#ECECEC</color>
     <color name="gray_200">#F3F3F3</color>
+    <color name="gray_150">#F5F5F5</color>
     <color name="gray_100">#F8F8F8</color>
     <color name="red_200">#FF6B6B</color>
     <color name="yellow_200">#FFB240</color>
