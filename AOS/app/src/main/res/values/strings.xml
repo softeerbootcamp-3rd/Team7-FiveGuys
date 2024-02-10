@@ -9,4 +9,8 @@
     <string name="recruit_car_pool">동승자 모집</string>
     <string name="participate_car_pool">동승 참여</string>
     <string name="return_taxi">내 택시로 돌아가기</string>
+    <string name="modify_user_information">회원정보 수정</string>
+    <string name="modify_user_password">비밀번호 변경</string>
+    <string name="withdrawal"><u>회원탈퇴</u></string>
+    <string name="logout"><u>로그아웃</u></string>
 </resources>
