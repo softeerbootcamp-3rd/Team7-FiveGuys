@@ -13,4 +13,9 @@
     <string name="modify_user_password">비밀번호 변경</string>
     <string name="withdrawal"><u>회원탈퇴</u></string>
     <string name="logout"><u>로그아웃</u></string>
+    <string name="id_placeholder">아이디를 입력하세요.</string>
+    <string name="password_placeholder">비밀번호를 입력하세요.</string>
+    <string name="login">로그인</string>
+    <string name="sign_up">회원가입</string>
+    <string name="login_warning_message">로그인 실패했습니다. 다시 로그인해주세요.</string>
 </resources>
