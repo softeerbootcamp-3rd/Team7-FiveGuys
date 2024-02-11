@@ -30,7 +30,7 @@
 
         <meta-data
             android:name="com.kakao.vectormap.APP_KEY"
-            android:value="39b6a87eaed52e13a4e8bc85c41b2ee0" />
+            android:value="${kakao_native_app_key}" />
     </application>
 
 </manifest>
