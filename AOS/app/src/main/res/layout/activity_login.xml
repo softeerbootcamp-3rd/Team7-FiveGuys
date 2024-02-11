@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <!-- 로고는 수정 예정 -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RoboCar"
+            android:fontFamily="@font/pretendard_semibold"
+            android:textSize="@dimen/logo_text"
+            android:layout_marginTop="80dp"
+            android:textColor="@color/hyundai_blue"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <org.softeer.robocar.ui.custom.BackPressClearFocusEditText
+            android:id="@+id/idInputText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/id_placeholder"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="@dimen/default_left_margin"
+            android:layout_marginEnd="@dimen/default_right_margin"
+            android:paddingStart="@dimen/default_left_margin"
+            android:paddingEnd="@dimen/default_right_margin"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:fontFamily="@font/pretendard_semibold"
+            android:textColor="@color/black"
+            android:background="@drawable/rectangle_gray_150_radius_12"
+            android:inputType="text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/logo"/>
+
+        <org.softeer.robocar.ui.custom.BackPressClearFocusEditText
+            android:id="@+id/passwordInputText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/password_placeholder"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="@dimen/default_left_margin"
+            android:layout_marginEnd="@dimen/default_right_margin"
+            android:paddingStart="@dimen/default_left_margin"
+            android:paddingEnd="@dimen/default_right_margin"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:fontFamily="@font/pretendard_semibold"
+            android:textColor="@color/black"
+            android:background="@drawable/rectangle_gray_150_radius_12"
+            android:inputType="textPassword"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/idInputText"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/waringMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_warning_message"
+            android:textColor="@color/red_200"
+            android:textSize="@dimen/content_text"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/passwordInputText"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/loginButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="@dimen/default_left_margin"
+            android:layout_marginEnd="@dimen/default_right_margin"
+            android:background="@drawable/rectangle_hyundai_blue_radius_12"
+            android:textColor="@color/white"
+            android:textSize="@dimen/title_text"
+            android:text="@string/login"
+            android:fontFamily="@font/pretendard_semibold"
+            app:layout_constraintTop_toBottomOf="@id/waringMessage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_up"
+            android:textSize="@dimen/content_text"
+            android:fontFamily="@font/pretendard_regular"
+            android:layout_marginEnd="@dimen/default_right_margin"
+            android:background="?attr/selectableItemBackground"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/loginButton"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

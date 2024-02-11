@@ -21,16 +21,25 @@
 
         <activity
             android:name=".ui.activity.MapActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:exported="false">
         </activity>
 
         <meta-data
             android:name="com.kakao.vectormap.APP_KEY"
             android:value="${kakao_native_app_key}" />
+
+        <activity
+            android:name=".ui.activity.HomeActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

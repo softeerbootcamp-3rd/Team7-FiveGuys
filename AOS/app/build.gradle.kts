@@ -29,6 +29,10 @@ android {
         manifestPlaceholders["kakao_native_app_key"] = kakao_native_app_key
     }
 
+    buildFeatures {
+        dataBinding = true
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -65,4 +69,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     implementation("com.kakao.maps.open:android:2.6.0") // 카카오내비
+
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
 }
