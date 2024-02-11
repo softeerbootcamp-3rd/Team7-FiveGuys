@@ -21,4 +21,5 @@
     <string name="cancel_call">호출취소</string>
     <string name="taxi_call_message">가장 가까운 차고지에 있는\n택시를 호출하고 있어요.</string>
     <string name="car_pool_call_message">동승 가능한 차량을 탐색 중이에요.</string>
+    <string name="car_pool_matching_message">동승자를 기다리고 있어요!</string>
 </resources>
