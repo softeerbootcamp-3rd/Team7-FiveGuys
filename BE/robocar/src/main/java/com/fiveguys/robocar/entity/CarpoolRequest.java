@@ -7,16 +7,20 @@ import org.springframework.data.redis.core.RedisHash;
 
 import java.time.LocalDateTime;
 
-@RedisHash("Match")
+@RedisHash("CarpoolRequest")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Match {
+public class CarpoolRequest {
     @Id
     private String hostId;
     private LocalDateTime departTime;
-    private String departCoordinate;
-    private String hostDestCoordinate;
+
+    private double departLatitude;
+    private double departLongitude;
+
+    private double hostDestLatitude;
+    private double hostDestLongitude;
 }
