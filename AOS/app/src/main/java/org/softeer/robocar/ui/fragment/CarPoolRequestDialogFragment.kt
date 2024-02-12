@@ -29,4 +29,9 @@ class CarPoolRequestDialogFragment : DialogFragment() {
             dismiss()
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
