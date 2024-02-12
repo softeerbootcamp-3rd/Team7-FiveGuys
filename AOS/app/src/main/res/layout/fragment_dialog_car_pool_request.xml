@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle_white_radius_20"
+        android:layout_gravity="center"
+        android:minWidth="300dp"
+        android:minHeight="250dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/carPoolRequestTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/request_car_pool_message"
+            android:textSize="@dimen/title_text"
+            android:fontFamily="@font/pretendard_semibold"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"
+            app:layout_constraintVertical_bias="0.35"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/cancelRequestButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="24dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:text="@string/cancel_car_pool_request"
+            android:textSize="@dimen/title_text"
+            android:fontFamily="@font/pretendard_semibold"
+            android:textColor="@color/white"
+            android:background="@drawable/rectangle_hyundai_blue_radius_12"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

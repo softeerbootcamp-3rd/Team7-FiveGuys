@@ -26,4 +26,9 @@
     <string name="retry_search">다시 탐색하기</string>
     <string name="to_home">메인으로</string>
     <string name="ride_alone">혼자타기</string>
+    <string name="request_car_pool_message">동승 요청 중입니다.\n잠시만 기다려주세요.</string>
+    <string name="cancel_car_pool_request">요청취소</string>
+    <string name="receive_car_pool_reqeust_message">동승 요청이 들어왔어요!</string>
+    <string name="reject">거절하기</string>
+    <string name="accept">수락하기</string>
 </resources>
