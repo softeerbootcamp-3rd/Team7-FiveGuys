@@ -31,17 +31,17 @@ jobs:
       - name: Create yml in project resource path
         env:
           YML: ${{ secrets.YML }}
-          YML_DIR: ./server/src/main/resources
+          YML_DIR: ./BE/src/main/resources
           YML_FILE_NAME: application.yml
         run: echo "$YML" | base64 --decode > $YML_DIR/$YML_FILE_NAME
 
       - name: Grant execute permission for gradlew
-        run: chmod +x ./server/gradlew
+        run: chmod +x ./BE/gradlew
         shell: bash
       
       - name: Build with Gradle
         run: ./gradlew build -x test
-        working-directory: ./server
+        working-directory: ./BE
         shell: bash
         
       - name: Make zip file
