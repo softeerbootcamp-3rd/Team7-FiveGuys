@@ -38,12 +38,12 @@ jobs:
           echo "$YML" | base64 --decode > $YML_DIR/$YML_FILE_NAME
 
       - name: Grant execute permission for gradlew
-        run: chmod +x ./BE/gradlew
+        run: chmod +x ./BE/robocar/gradlew
         shell: bash
       
       - name: Build with Gradle
         run: ./gradlew build -x test
-        working-directory: ./BE
+        working-directory: ./BE/robocar
         shell: bash
         
       - name: Make zip file
