@@ -14,7 +14,6 @@ import org.softeer.robocar.ui.fragment.HeadcountDialogFragment
 class MapActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMapBinding
     private lateinit var mapView: MapView
-    private lateinit var fragment: HeadcountDialogFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +34,6 @@ class MapActivity : AppCompatActivity() {
             }
         })
 
-        fragment = HeadcountDialogFragment()
-        fragment.show(supportFragmentManager, "headCount")
+        HeadcountDialogFragment().show(supportFragmentManager, "headCount")
     }
 }
