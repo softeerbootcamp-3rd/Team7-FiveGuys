@@ -1,0 +1,75 @@
+# workflow의 이름
+name: CD
+
+# 해당 workflow가 언제 실행될 것인지에 대한 트리거를 지정
+on:
+  push:
+    branches: [ dev ] # dev branch로 push 될 때 실행됩니다.
+  pull_request:
+    branches: [ dev ]
+
+env:
+  S3_BUCKET_NAME: robocar-build
+  PROJECT_NAME: robocar
+  
+# workflow는 한개 이상의 job을 가지며, 각 job은 여러 step에 따라 단계를 나눌 수 있습니다.
+jobs:
+  build:
+    name: CD
+    # 해당 jobs에서 아래의 steps들이 어떠한 환경에서 실행될 것인지를 지정합니다.
+    runs-on: ubuntu-latest
+
+    steps:
+     # 작업에서 액세스할 수 있도록 $GITHUB_WORKSPACE에서 저장소를 체크아웃합니다.
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+      
+      - name: Create yml in project resource path
+        env:
+          YML: ${{ secrets.YML }}
+          YML_DIR: ./server/src/main/resources
+          YML_FILE_NAME: application.yml
+        run: echo "$YML" | base64 --decode > $YML_DIR/$YML_FILE_NAME
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./server/gradlew
+        shell: bash
+      
+      - name: Build with Gradle
+        run: ./gradlew build -x test
+        working-directory: ./server
+        shell: bash
+        
+      - name: Make zip file
+        run: zip -r ./$GITHUB_SHA.zip .
+        shell: bash
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          
+      # script files 복사
+      - name: Copy script
+        run: cp ./scripts/*.sh ./deploy
+      
+      # S3에 업로드
+      - name: Upload to S3
+        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$PROJECT_NAME/$GITHUB_SHA.zip
+
+        # Deploy
+      - name: Deploy
+        run: |
+          aws deploy create-deployment \
+          --application-name robocar-project \
+          --deployment-config-name CodeDeployDefault.AllAtOnce \
+          --deployment-group-name robocar-prod \
+          --file-exists-behavior OVERWRITE \
+          --s3-location bucket=robocar-build,bundleType=zip,key=robocar/$GITHUB_SHA.zip \
+          --region ap-northeast-2 \
