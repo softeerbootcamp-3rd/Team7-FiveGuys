@@ -22,6 +22,8 @@
     <string name="taxi_call_message">가장 가까운 차고지에 있는\n택시를 호출하고 있어요.</string>
     <string name="car_pool_call_message">동승 가능한 차량을 탐색 중이에요.</string>
     <string name="car_pool_matching_message">동승자를 기다리고 있어요!</string>
+    <string name="request_car_pool_message">동승 요청 중입니다.\n잠시만 기다려주세요.</string>
+    <string name="cancel_car_pool_request">요청취소</string>
     <string name="receive_car_pool_reqeust_message">동승 요청이 들어왔어요!</string>
     <string name="reject">거절하기</string>
     <string name="accept">수락하기</string>
