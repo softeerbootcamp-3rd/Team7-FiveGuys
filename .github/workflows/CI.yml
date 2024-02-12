@@ -25,7 +25,7 @@ jobs:
           distribution: 'zulu'
 
       - name: Grant execute permission for gradlew
-        run: chmod +x ./server/gradlew
+        run: chmod +x ./BE/gradlew
         shell: bash
       
       - name: Build with Gradle
