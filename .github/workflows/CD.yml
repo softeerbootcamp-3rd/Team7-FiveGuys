@@ -31,9 +31,11 @@ jobs:
       - name: Create yml in project resource path
         env:
           YML: ${{ secrets.YML }}
-          YML_DIR: /home/robocar/action/BE/robocar/src/main/resources
+          YML_DIR: ./BE/robocar/src/main/resources
           YML_FILE_NAME: application.yml
-        run: echo "$YML" | base64 --decode > $YML_DIR/$YML_FILE_NAME
+        run: |
+          mkdir -p $YML_DIR
+          echo "$YML" | base64 --decode > $YML_DIR/$YML_FILE_NAME
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./BE/gradlew
