@@ -36,6 +36,6 @@ class MapActivity : AppCompatActivity() {
         })
 
         fragment = HeadcountDialogFragment()
-        fragment.show(supportFragmentManager,"headCount")
+        fragment.show(supportFragmentManager, "headCount")
     }
 }

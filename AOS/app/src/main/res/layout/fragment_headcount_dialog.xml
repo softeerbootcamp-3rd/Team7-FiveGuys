@@ -14,8 +14,8 @@
         android:fontFamily="@font/pretendard_semibold"
         android:gravity="center"
         android:text="@string/head_check"
-        android:textSize="@dimen/title_text"
         android:textColor="@color/black"
+        android:textSize="@dimen/title_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,8 +28,8 @@
         android:layout_marginTop="72dp"
         android:fontFamily="@font/pretendard_semibold"
         android:text="@string/male"
-        android:textSize="@dimen/title_text"
         android:textColor="@color/black"
+        android:textSize="@dimen/title_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,9 +39,9 @@
         android:layout_height="47dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/male"
-        app:layout_constraintTop_toBottomOf="@id/headCount"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/headCount">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnMinusMale"
@@ -52,16 +52,16 @@
             android:backgroundTint="@android:color/transparent"
             app:icon="@drawable/img_minus"
             app:iconGravity="textStart"
-            app:iconTint="@color/black"/>
+            app:iconTint="@color/black" />
 
         <com.google.android.material.button.MaterialButton
             style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:clickable="false"
+            android:fontFamily="@font/pretendard_semibold"
             android:text="@string/count_male"
-            android:textSize="16sp"
-            android:fontFamily="@font/pretendard_semibold"/>
+            android:textSize="16sp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnPlusMale"
@@ -72,7 +72,7 @@
             android:backgroundTint="@android:color/transparent"
             app:icon="@drawable/img_plus"
             app:iconGravity="textStart"
-            app:iconTint="@color/black"/>
+            app:iconTint="@color/black" />
 
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -85,8 +85,8 @@
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/pretendard_semibold"
         android:text="@string/female"
-        android:textSize="@dimen/title_text"
         android:textColor="@color/black"
+        android:textSize="@dimen/title_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/male" />
 
@@ -96,9 +96,9 @@
         android:layout_height="47dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/female"
-        app:layout_constraintTop_toBottomOf="@id/headCountMale"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/headCountMale">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnMinusFemale"
@@ -109,16 +109,16 @@
             android:backgroundTint="@android:color/transparent"
             app:icon="@drawable/img_minus"
             app:iconGravity="textStart"
-            app:iconTint="@color/black"/>
+            app:iconTint="@color/black" />
 
         <com.google.android.material.button.MaterialButton
             style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:clickable="false"
+            android:fontFamily="@font/pretendard_semibold"
             android:text="@string/count_female"
-            android:textSize="16sp"
-            android:fontFamily="@font/pretendard_semibold"/>
+            android:textSize="16sp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnPlusFemale"
@@ -129,7 +129,7 @@
             android:backgroundTint="@android:color/transparent"
             app:icon="@drawable/img_plus"
             app:iconGravity="textStart"
-            app:iconTint="@color/black"/>
+            app:iconTint="@color/black" />
 
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -142,10 +142,10 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/rectangle_hyundai_blue_radius_12"
+        android:fontFamily="@font/pretendard_semibold"
         android:text="@string/finish_head_count"
         android:textColor="@color/white"
         android:textSize="@dimen/content_text"
-        android:fontFamily="@font/pretendard_semibold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

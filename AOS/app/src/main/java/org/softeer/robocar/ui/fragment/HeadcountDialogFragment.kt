@@ -18,6 +18,6 @@ class HeadcountDialogFragment : DialogFragment(R.layout.fragment_headcount_dialo
 
             builder.setView(R.layout.fragment_headcount_dialog)
             builder.create()
-        }?: throw IllegalStateException("Activity cannot be null")
+        } ?: throw IllegalStateException("Activity cannot be null")
     }
 }
