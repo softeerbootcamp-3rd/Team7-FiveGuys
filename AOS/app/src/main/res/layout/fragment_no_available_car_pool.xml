@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="128dp"
+        android:fontFamily="@font/pretendard_semibold"
+        android:textSize="@dimen/title_text"
+        android:textColor="@color/black"
+        android:text="@string/no_available_car_pool"
+        android:gravity="center"
+        android:lineSpacingExtra="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/retrySearchButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_marginStart="@dimen/default_left_margin"
+        android:layout_marginEnd="@dimen/default_right_margin"
+        android:background="@drawable/rectangle_hyundai_blue_radius_12"
+        android:text="@string/retry_search"
+        android:textColor="@color/white"
+        android:textSize="@dimen/content_text"
+        android:fontFamily="@font/pretendard_semibold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/rideAloneButton"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/rideAloneButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_marginStart="@dimen/default_left_margin"
+        android:layout_marginEnd="@dimen/default_right_margin"
+        android:background="@drawable/rectangle_hyundai_blue_radius_12"
+        android:text="@string/ride_alone"
+        android:textColor="@color/white"
+        android:textSize="@dimen/content_text"
+        android:fontFamily="@font/pretendard_semibold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/toHomeButton"/>
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/toHomeButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_marginStart="@dimen/default_left_margin"
+        android:layout_marginEnd="@dimen/default_right_margin"
+        android:background="@drawable/rectangle_hyundai_blue_radius_12"
+        android:text="@string/to_home"
+        android:textColor="@color/white"
+        android:textSize="@dimen/content_text"
+        android:fontFamily="@font/pretendard_semibold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

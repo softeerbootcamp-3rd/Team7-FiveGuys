@@ -22,4 +22,8 @@
     <string name="taxi_call_message">가장 가까운 차고지에 있는\n택시를 호출하고 있어요.</string>
     <string name="car_pool_call_message">동승 가능한 차량을 탐색 중이에요.</string>
     <string name="car_pool_matching_message">동승자를 기다리고 있어요!</string>
+    <string name="no_available_car_pool">앗, 현재 동승 가능한 차량이 없어요. \n잠시 후에 다시 시도해주세요.</string>
+    <string name="retry_search">다시 탐색하기</string>
+    <string name="to_home">메인으로</string>
+    <string name="ride_alone">혼자타기</string>
 </resources>
