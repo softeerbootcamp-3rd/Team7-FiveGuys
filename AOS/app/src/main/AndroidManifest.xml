@@ -27,6 +27,9 @@
             android:value="${kakao_native_app_key}" />
 
         <activity
+            android:name=".ui.activity.LoadingActivity"
+            android:exported="false"/>
+        <activity
             android:name=".ui.activity.HomeActivity"
             android:exported="true">
             <intent-filter>
