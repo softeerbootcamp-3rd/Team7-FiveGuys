@@ -31,7 +31,7 @@ jobs:
       - name: Create yml in project resource path
         env:
           YML: ${{ secrets.YML }}
-          YML_DIR: ./BE/robocar/src/main/resources
+          YML_DIR: /home/robocar/action/BE/robocar/src/main/resources
           YML_FILE_NAME: application.yml
         run: echo "$YML" | base64 --decode > $YML_DIR/$YML_FILE_NAME
 
