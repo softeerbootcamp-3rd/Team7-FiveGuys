@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="312dp"
+    android:layout_height="246dp"
+    tools:context=".ui.fragment.HeadcountDialogFragment">
+
+    <TextView
+        android:id="@+id/headCount"
+        android:layout_width="83dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/pretendard_semibold"
+        android:gravity="center"
+        android:text="@string/head_check"
+        android:textSize="@dimen/title_text"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/male"
+        android:layout_width="36dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="72dp"
+        android:fontFamily="@font/pretendard_semibold"
+        android:text="@string/male"
+        android:textSize="@dimen/title_text"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/headCountMale"
+        android:layout_width="225dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toEndOf="@id/male"
+        app:layout_constraintTop_toBottomOf="@id/headCount"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnMinusMale"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@android:color/transparent"
+            app:icon="@drawable/img_minus"
+            app:iconGravity="textStart"
+            app:iconTint="@color/black"/>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:text="@string/count_male"
+            android:textSize="16sp"
+            android:fontFamily="@font/pretendard_semibold"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPlusMale"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="73dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@android:color/transparent"
+            app:icon="@drawable/img_plus"
+            app:iconGravity="textStart"
+            app:iconTint="@color/black"/>
+
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    <TextView
+        android:id="@+id/female"
+        android:layout_width="36dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/pretendard_semibold"
+        android:text="@string/female"
+        android:textSize="@dimen/title_text"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/male" />
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/headCountFemale"
+        android:layout_width="225dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toEndOf="@id/female"
+        app:layout_constraintTop_toBottomOf="@id/headCountMale"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnMinusFemale"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@android:color/transparent"
+            app:icon="@drawable/img_minus"
+            app:iconGravity="textStart"
+            app:iconTint="@color/black"/>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:text="@string/count_female"
+            android:textSize="16sp"
+            android:fontFamily="@font/pretendard_semibold"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPlusFemale"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@android:color/transparent"
+            app:icon="@drawable/img_plus"
+            app:iconGravity="textStart"
+            app:iconTint="@color/black"/>
+
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/finishHeadCount"
+        android:layout_width="264dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/rectangle_hyundai_blue_radius_12"
+        android:text="@string/finish_head_count"
+        android:textColor="@color/white"
+        android:textSize="@dimen/content_text"
+        android:fontFamily="@font/pretendard_semibold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headCountFemale" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

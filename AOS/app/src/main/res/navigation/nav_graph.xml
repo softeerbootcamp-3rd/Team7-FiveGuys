@@ -15,4 +15,14 @@
         android:name="org.softeer.robocar.ui.fragment.MyPageFragment"
         android:label="MyPageFragment"
         tools:layout="@layout/fragment_my_page"/>
+    <activity
+        android:id="@+id/mapActivity"
+        android:name="org.softeer.robocar.ui.activity.MapActivity"
+        android:label="MapActivity"
+        tools:layout="@layout/activity_map"/>
+    <dialog
+        android:id="@+id/headcountDialogFragment"
+        android:name="org.softeer.robocar.ui.fragment.HeadcountDialogFragment"
+        android:label="fragment_headcount_dialog"
+        tools:layout="@layout/fragment_headcount_dialog"/>
 </navigation>

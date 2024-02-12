@@ -18,4 +18,10 @@
     <string name="login">로그인</string>
     <string name="sign_up">회원가입</string>
     <string name="login_warning_message">로그인 실패했습니다. 다시 로그인해주세요.</string>
+    <string name="head_check">탑승인원</string>
+    <string name="count_male">0명</string>
+    <string name="count_female">0명</string>
+    <string name="male">남성</string>
+    <string name="female">여성</string>
+    <string name="finish_head_count">확인</string>
 </resources>
