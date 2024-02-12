@@ -32,8 +32,16 @@ dependencies {
 
 	//swagger 연동
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+
+	//redis 연동
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+// plain.jar 생성되지 않도록
+jar {
+	enabled = false
 }
