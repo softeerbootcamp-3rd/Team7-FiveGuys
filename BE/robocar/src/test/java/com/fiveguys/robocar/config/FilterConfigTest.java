@@ -12,7 +12,7 @@ class FilterConfigTest {
         JwtUtil jwtUtil = new JwtUtil();
         String loginId = "tester1";
         String token = jwtUtil.createToken(loginId);
-
+        System.out.println(token);
         assertEquals(loginId, jwtUtil.extractLoginId(token));
     }
 

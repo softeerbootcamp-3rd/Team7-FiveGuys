@@ -19,7 +19,7 @@ public class JwtUtil {
     // Base64.getDecoder().decode(SECRET_KEY) -> SECRET_KEY.getBytes(StandardCharsets.UTF_8))
     private static final String SECRET_KEY = "CHANGETHISCHANGETHISCHANGETHISCHANGETHISCHANGETHIS";
     private static final String ISSUER = "FIVEGUYS";
-    public String createToken(String loginId){
+    public static String createToken(String loginId){
         return Jwts.builder()
                 .setSubject(loginId)
                 .setIssuer(ISSUER)
@@ -29,11 +29,11 @@ public class JwtUtil {
 
     }
 
-    public String extractLoginId(String token){
+    public static String extractLoginId(String token){
         return extractClaim(token, Claims::getSubject);
     }
 
-    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
+    private static <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
 
 
         try {
@@ -48,7 +48,7 @@ public class JwtUtil {
         }
     }
 
-    public Boolean validateToken(String token) {
+    public static Boolean validateToken(String token) {
         try {
             String issuer = extractIssuer(token);
             return !isTokenExpired(token) && ISSUER.equals(issuer);
@@ -57,14 +57,14 @@ public class JwtUtil {
         }
     }
 
-    private Boolean isTokenExpired(String token) {
+    private static Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    private Date extractExpiration(String token) {
+    private static Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private String extractIssuer(String token){ return extractClaim(token, Claims::getIssuer);}
+    private static String extractIssuer(String token){ return extractClaim(token, Claims::getIssuer);}
 
 }

@@ -6,12 +6,11 @@ import com.fiveguys.robocar.util.JwtUtil;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 
 public class JwtRequestFilter implements Filter {
-    private JwtUtil jwtUtil = new JwtUtil();
+
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -25,8 +24,8 @@ public class JwtRequestFilter implements Filter {
 
             try {
                 // 토큰이 있으면 loginId 리퀘스트에 추가, 없으면 그대로 다음 필터/컨트롤러 넘겨줌
-                if (jwtUtil.validateToken(jwt)) {
-                    String loginId = jwtUtil.extractLoginId(jwt);
+                if (JwtUtil.validateToken(jwt)) {
+                    String loginId = JwtUtil.extractLoginId(jwt);
                     httpRequest.setAttribute("loginId", loginId);
                 }
                 chain.doFilter(request, response);
