@@ -13,7 +13,6 @@ class ModifyPasswordActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // 여기에서 R.layout.activity_modify_password로 변경해야 합니다.
         binding = DataBindingUtil.setContentView(this, R.layout.activity_modify_password)
 
         // 초기 경고 메시지 숨김
