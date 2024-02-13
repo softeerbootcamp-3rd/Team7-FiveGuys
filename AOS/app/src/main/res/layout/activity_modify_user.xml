@@ -15,10 +15,10 @@
                 android:text="@string/nickname_warning_message"
                 android:textColor="@color/red_200"
                 android:textSize="@dimen/content_text"
+                android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/nickNameInputText"
-                android:layout_marginTop="8dp"/>
+                app:layout_constraintTop_toBottomOf="@+id/nickNameInputText"/>
 
         <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/nickNameCheckButton"
@@ -59,9 +59,9 @@
                 android:textSize="@dimen/content_text"
                 android:layout_marginStart="24dp"
                 android:textColor="@color/black"
+                android:layout_marginTop="48dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/modifyUser"
-                android:layout_marginTop="48dp"/>
+                app:layout_constraintTop_toBottomOf="@+id/modifyUser"/>
 
         <TextView
                 android:id="@+id/idText"
@@ -78,10 +78,10 @@
                 android:fontFamily="@font/pretendard_semibold"
                 android:textColor="@color/gray_500"
                 android:background="@drawable/rectangle_gray_150_radius_12"
+                android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/id"
-                android:layout_marginTop="8dp"/>
+                app:layout_constraintTop_toBottomOf="@+id/id"/>
 
         <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/nickname"
@@ -94,9 +94,9 @@
                 android:textSize="@dimen/content_text"
                 android:layout_marginStart="24dp"
                 android:textColor="@color/black"
+                android:layout_marginTop="64dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/idText"
-                android:layout_marginTop="64dp"/>
+                app:layout_constraintTop_toBottomOf="@+id/idText"/>
 
         <org.softeer.robocar.ui.custom.BackPressClearFocusEditText
                 android:id="@+id/nickNameInputText"
@@ -114,10 +114,10 @@
                 android:textColor="@color/black"
                 android:background="@drawable/rectangle_gray_150_radius_12"
                 android:inputType="text"
+                android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nickname"
-                app:layout_constraintEnd_toStartOf="@+id/nickNameCheckButton"
-                android:layout_marginTop="8dp"/>
+                app:layout_constraintEnd_toStartOf="@+id/nickNameCheckButton"/>
 
         <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/modifyButton"
@@ -130,10 +130,10 @@
                 android:textSize="@dimen/title_text"
                 android:text="@string/modify_success"
                 android:fontFamily="@font/pretendard_semibold"
+                android:layout_marginTop="324dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nickNameInputText"
-                android:layout_marginTop="324dp"
                 app:layout_constraintHorizontal_bias="0.0"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
