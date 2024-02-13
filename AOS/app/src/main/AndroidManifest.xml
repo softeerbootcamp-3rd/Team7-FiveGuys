@@ -29,6 +29,7 @@
         <activity
             android:name=".ui.activity.LoadingActivity"
             android:exported="false"/>
+
         <activity
             android:name=".ui.activity.HomeActivity"
             android:exported="true">

@@ -3,8 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginStart="24dp"
-    android:layout_marginEnd="24dp"
+    android:layout_margin="24dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/rectangle_white_radius_20"
@@ -26,8 +25,8 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/male"
-        android:layout_width="36dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="72dp"
         android:fontFamily="@font/pretendard_semibold"
@@ -35,6 +34,7 @@
         android:textColor="@color/black"
         android:textSize="@dimen/title_text"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/headCountMale"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButtonToggleGroup
@@ -53,6 +53,7 @@
             style="@style/Widget.Material3.Button.IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minWidth="64dp"
             android:layout_gravity="center"
             android:backgroundTint="@android:color/transparent"
             app:icon="@drawable/img_minus"
@@ -61,7 +62,8 @@
 
         <com.google.android.material.button.MaterialButton
             style="@style/Widget.Material3.Button.TextButton"
-            android:layout_width="80dp"
+            android:layout_width="wrap_content"
+            android:minWidth="88dp"
             android:layout_height="wrap_content"
             android:clickable="false"
             android:fontFamily="@font/pretendard_semibold"
@@ -73,6 +75,7 @@
             style="@style/Widget.Material3.Button.IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minWidth="64dp"
             android:layout_gravity="center"
             android:backgroundTint="@android:color/transparent"
             app:icon="@drawable/img_plus"
@@ -83,16 +86,16 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/female"
-        android:layout_width="36dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
         android:fontFamily="@font/pretendard_semibold"
         android:text="@string/female"
         android:textColor="@color/black"
         android:textSize="@dimen/title_text"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/headCountFemale"
         app:layout_constraintTop_toBottomOf="@id/male" />
 
     <com.google.android.material.button.MaterialButtonToggleGroup
@@ -111,6 +114,7 @@
             style="@style/Widget.Material3.Button.IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minWidth="64dp"
             android:layout_gravity="center"
             android:backgroundTint="@android:color/transparent"
             app:icon="@drawable/img_minus"
@@ -119,8 +123,9 @@
 
         <com.google.android.material.button.MaterialButton
             style="@style/Widget.Material3.Button.TextButton"
-            android:layout_width="80dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minWidth="88dp"
             android:clickable="false"
             android:fontFamily="@font/pretendard_semibold"
             android:text="@string/count_female"
@@ -131,6 +136,7 @@
             style="@style/Widget.Material3.Button.IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minWidth="64dp"
             android:layout_gravity="center"
             android:backgroundTint="@android:color/transparent"
             app:icon="@drawable/img_plus"
