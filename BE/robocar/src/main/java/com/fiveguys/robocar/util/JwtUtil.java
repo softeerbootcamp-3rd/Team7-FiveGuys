@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.xml.bind.DatatypeConverter;
 
+import java.util.Base64;
 import java.util.Date;
 import java.util.function.Function;
 
@@ -15,15 +16,16 @@ public class JwtUtil {
     //TODO
     //아래 필드 값들은 꼭 secret으로 빼놓을 것
     // SECRET_KEY는 BASE64로 인코딩 된 값으로 가정, 그냥 String으로 하고 싶으면 코드 수정 필요
-    // DatatypeConverter.parseBase64Binary(SECRET_KEY)) -> SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+    // Base64.getDecoder().decode(SECRET_KEY) -> SECRET_KEY.getBytes(StandardCharsets.UTF_8))
     private static final String SECRET_KEY = "CHANGETHISCHANGETHISCHANGETHISCHANGETHISCHANGETHIS";
-
+    private static final String ISSUER = "FIVEGUYS";
     public String createToken(String loginId){
         return Jwts.builder()
                 .setSubject(loginId)
+                .setIssuer(ISSUER)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_TIME))
-                .signWith(SignatureAlgorithm.HS256,DatatypeConverter.parseBase64Binary(SECRET_KEY)).compact();
+                .signWith(SignatureAlgorithm.HS256, Base64.getDecoder().decode(SECRET_KEY)).compact();
 
     }
 
@@ -31,26 +33,38 @@ public class JwtUtil {
         return extractClaim(token, Claims::getSubject);
     }
 
-    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        Claims claims = Jwts.parser()
-                            .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
-                            .parseClaimsJws(token)
-                            .getBody();
-        return claimsResolver.apply(claims);
+    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
+
+
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(Base64.getDecoder().decode(SECRET_KEY))
+                    .parseClaimsJws(token)
+                    .getBody();
+            return claimsResolver.apply(claims);
+        }
+        catch(Exception e){
+            throw new RuntimeException("JWT 토큰 오류", e);
+        }
     }
-    //TODO
-    //날짜 뿐만아니라 우리가 발급한 토큰인지 구별할 필요도 있어보임
+
     public Boolean validateToken(String token) {
-        return !isTokenExpired(token);
+        try {
+            String issuer = extractIssuer(token);
+            return !isTokenExpired(token) && ISSUER.equals(issuer);
+        } catch(Exception e){
+            return false;
+        }
     }
 
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    public Date extractExpiration(String token) {
+    private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
+    private String extractIssuer(String token){ return extractClaim(token, Claims::getIssuer);}
 
 }

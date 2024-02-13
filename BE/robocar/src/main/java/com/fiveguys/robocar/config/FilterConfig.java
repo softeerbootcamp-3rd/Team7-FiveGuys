@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 
-public class JwtConfig {
+public class FilterConfig {
     @Bean
     public FilterRegistrationBean<JwtRequestFilter> jwtRequestFilter() {
         FilterRegistrationBean<JwtRequestFilter> registrationBean = new FilterRegistrationBean<>();
