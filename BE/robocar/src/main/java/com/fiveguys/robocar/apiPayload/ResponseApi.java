@@ -26,6 +26,11 @@ public class ResponseApi {
     }
 
     // 200
+    public static ResponseEntity ok() {
+        return of(ResponseStatus._OK);
+    }
+
+    // 200
     public static <T> ResponseEntity<T> ok(T data) {
         return of(ResponseStatus._OK, data);
     }
