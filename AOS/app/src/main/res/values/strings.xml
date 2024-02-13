@@ -27,4 +27,6 @@
     <string name="receive_car_pool_reqeust_message">동승 요청이 들어왔어요!</string>
     <string name="reject">거절하기</string>
     <string name="accept">수락하기</string>
+    <string name="car_pool_detail">상세정보</string>
+    <string name="request_car_pool">동승 요청</string>
 </resources>

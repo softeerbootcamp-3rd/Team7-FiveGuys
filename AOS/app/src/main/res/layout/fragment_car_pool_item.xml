@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:minHeight="260dp"
+    android:minWidth="320dp">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/itemContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:cardBackgroundColor="@color/hyundai_light_sand"
+        app:cardCornerRadius="20dp"
+        app:strokeColor="@color/hyundai_blue"
+        app:strokeWidth="3dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topGuidelineOfStartLocation"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.15"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomGuidelineOfStartLocation"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/startLocationContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/default_left_margin"
+        android:layout_marginEnd="@dimen/default_right_margin"
+        app:cardBackgroundColor="@color/hyundai_light_sand"
+        app:cardCornerRadius="10dp"
+        app:strokeColor="@color/gray_900"
+        app:strokeWidth="2dp"
+        app:layout_constraintTop_toTopOf="@id/topGuidelineOfStartLocation"
+        app:layout_constraintBottom_toBottomOf="@id/bottomGuidelineOfStartLocation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/startLocationIcon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/icon_start_location"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="@id/startLocationContainer"
+        app:layout_constraintTop_toTopOf="@id/startLocationContainer"
+        app:layout_constraintBottom_toBottomOf="@id/startLocationContainer"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="수원역"
+        android:fontFamily="@font/pretendard_semibold"
+        android:textColor="@color/black"
+        android:textSize="@dimen/content_text"
+        app:layout_constraintTop_toTopOf="@id/startLocationIcon"
+        app:layout_constraintBottom_toBottomOf="@id/startLocationIcon"
+        app:layout_constraintStart_toEndOf="@id/startLocationIcon"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topGuidelineOfDestinationLocation"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.45"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomGuidelineOfDestinationLocation"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.6"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/destinationLocationContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/default_left_margin"
+        android:layout_marginEnd="@dimen/default_right_margin"
+        app:cardBackgroundColor="@color/hyundai_light_sand"
+        app:cardCornerRadius="10dp"
+        app:strokeColor="@color/gray_900"
+        app:strokeWidth="2dp"
+        app:layout_constraintTop_toTopOf="@id/topGuidelineOfDestinationLocation"
+        app:layout_constraintBottom_toBottomOf="@id/bottomGuidelineOfDestinationLocation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/destinationLocationIcon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/icon_destination_location"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="@id/destinationLocationContainer"
+        app:layout_constraintTop_toTopOf="@id/destinationLocationContainer"
+        app:layout_constraintBottom_toBottomOf="@id/destinationLocationContainer"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="강남역"
+        android:fontFamily="@font/pretendard_semibold"
+        android:textColor="@color/black"
+        android:textSize="@dimen/content_text"
+        app:layout_constraintTop_toTopOf="@id/destinationLocationIcon"
+        app:layout_constraintBottom_toBottomOf="@id/destinationLocationIcon"
+        app:layout_constraintStart_toEndOf="@id/destinationLocationIcon"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/arrowDownIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_arrow_down"
+        app:layout_constraintStart_toStartOf="@id/startLocationIcon"
+        app:layout_constraintEnd_toEndOf="@id/startLocationIcon"
+        app:layout_constraintTop_toBottomOf="@id/startLocationContainer"
+        app:layout_constraintBottom_toTopOf="@id/destinationLocationContainer"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_arrow_down"
+        app:layout_constraintStart_toStartOf="@id/startLocationIcon"
+        app:layout_constraintEnd_toEndOf="@id/startLocationIcon"
+        app:layout_constraintTop_toBottomOf="@id/startLocationContainer"
+        app:layout_constraintBottom_toTopOf="@id/destinationLocationContainer"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00분 소요예정"
+        android:textSize="@dimen/content_text"
+        android:fontFamily="@font/pretendard_medium"
+        android:textColor="@color/gray_800"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/arrowDownIcon"
+        app:layout_constraintTop_toTopOf="@id/arrowDownIcon"
+        app:layout_constraintBottom_toBottomOf="@id/arrowDownIcon"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomGuidelineOfItemContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.75"/>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:background="@color/hyundai_blue"
+        app:layout_constraintStart_toStartOf="itemContainer"
+        app:layout_constraintEnd_toEndOf="@id/itemContainer"
+        app:layout_constraintTop_toBottomOf="@id/bottomGuidelineOfItemContainer"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/carPoolDetailButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@string/car_pool_detail"
+        android:textColor="@color/gray_1000"
+        android:fontFamily="@font/pretendard_semibold"
+        android:textSize="@dimen/content_text"
+        android:layout_margin="16dp"
+        android:background="@drawable/rectangle_gray_600_radius_12"
+        app:layout_constraintTop_toBottomOf="@id/bottomGuidelineOfItemContainer"
+        app:layout_constraintBottom_toBottomOf="@id/itemContainer"
+        app:layout_constraintStart_toStartOf="@id/itemContainer"
+        app:layout_constraintEnd_toStartOf="@id/carPoolRequestButton"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/carPoolRequestButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@string/request_car_pool"
+        android:textColor="@color/white"
+        android:fontFamily="@font/pretendard_semibold"
+        android:textSize="@dimen/content_text"
+        android:layout_margin="16dp"
+        android:background="@drawable/rectangle_hyundai_blue_radius_12"
+        app:layout_constraintTop_toBottomOf="@id/bottomGuidelineOfItemContainer"
+        app:layout_constraintBottom_toBottomOf="@id/itemContainer"
+        app:layout_constraintStart_toEndOf="@id/carPoolDetailButton"
+        app:layout_constraintEnd_toEndOf="@id/itemContainer"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
