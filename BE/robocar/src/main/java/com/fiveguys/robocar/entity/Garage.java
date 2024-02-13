@@ -16,5 +16,11 @@ public class Garage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String coordinate;
+    private Double latitude;
+    private Double longitude;
+
+    public Garage(Double latitude, Double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 }
