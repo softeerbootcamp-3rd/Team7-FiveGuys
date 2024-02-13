@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mapTopGuideLine"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mapBottomGuideLine"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.4"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/title_text"
+        android:textColor="@color/black"
+        android:text="닉네임"
+        android:fontFamily="@font/pretendard_semibold"
+        android:layout_marginStart="@dimen/default_left_margin"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/mapTopGuideLine"/>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/hyundai_blue"
+        android:layout_marginStart="@dimen/default_left_margin"
+        android:layout_marginEnd="@dimen/default_right_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/mapTopGuideLine"
+        app:layout_constraintBottom_toBottomOf="@id/mapBottomGuideLine"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/startLocationIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_left_margin"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/icon_start_location"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/mapBottomGuideLine"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/startLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="수원역 수인분당선"
+        android:fontFamily="@font/pretendard_semibold"
+        android:textSize="@dimen/content_text"
+        android:textColor="@color/black"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/startLocationIcon"
+        app:layout_constraintTop_toTopOf="@id/startLocationIcon"
+        app:layout_constraintBottom_toBottomOf="@id/startLocationIcon"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/startTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/start_point"
+        android:fontFamily="@font/pretendard_medium"
+        android:textSize="@dimen/content_sub_text"
+        android:textColor="@color/gray_700"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="@id/startLocation"
+        app:layout_constraintTop_toBottomOf="@id/startLocation"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/desinationLocationIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_left_margin"
+        android:layout_marginTop="32dp"
+        android:src="@drawable/icon_destination_location"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/startLocationIcon"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/destinationLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="강남역 2호선"
+        android:fontFamily="@font/pretendard_semibold"
+        android:textSize="@dimen/content_text"
+        android:textColor="@color/black"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/desinationLocationIcon"
+        app:layout_constraintTop_toTopOf="@id/desinationLocationIcon"
+        app:layout_constraintBottom_toBottomOf="@id/desinationLocationIcon"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/destinationTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/end_point"
+        android:fontFamily="@font/pretendard_medium"
+        android:textSize="@dimen/content_sub_text"
+        android:textColor="@color/gray_700"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="@id/destinationLocation"
+        app:layout_constraintTop_toBottomOf="@id/destinationLocation"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomGuideline"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.6"/>
+
+    <View
+        android:id="@+id/bottomDivider"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
+        android:background="@color/gray_200"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/timerIcon"
+        android:layout_width="25dp"
+        android:layout_height="24dp"
+        android:src="@drawable/icon_timer"
+        android:layout_marginStart="@dimen/default_left_margin"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bottomGuideline"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/timeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray_700"
+        android:text="@string/time"
+        android:fontFamily="@font/pretendard_medium"
+        android:textSize="@dimen/content_sub_text"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/timerIcon"
+        app:layout_constraintTop_toTopOf="@id/timerIcon"
+        app:layout_constraintBottom_toBottomOf="@id/timerIcon"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="1시간 1분 소요"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:fontFamily="@font/pretendard_semibold"
+        app:layout_constraintStart_toEndOf="@id/timeTitle"
+        app:layout_constraintTop_toTopOf="@id/timerIcon"
+        app:layout_constraintBottom_toBottomOf="@id/timerIcon"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/expectedChargeIcon"
+        android:layout_width="25dp"
+        android:layout_height="24dp"
+        android:src="@drawable/icon_price"
+        android:layout_marginStart="@dimen/default_left_margin"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/timerIcon"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/expectedChargeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray_700"
+        android:text="@string/expected_charge"
+        android:fontFamily="@font/pretendard_medium"
+        android:textSize="@dimen/content_sub_text"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/expectedChargeIcon"
+        app:layout_constraintTop_toTopOf="@id/expectedChargeIcon"
+        app:layout_constraintBottom_toBottomOf="@id/expectedChargeIcon"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="20,000원"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:fontFamily="@font/pretendard_semibold"
+        app:layout_constraintStart_toEndOf="@id/expectedChargeTitle"
+        app:layout_constraintTop_toTopOf="@id/expectedChargeIcon"
+        app:layout_constraintBottom_toBottomOf="@id/expectedChargeIcon"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/passengerCountIcon"
+        android:layout_width="25dp"
+        android:layout_height="24dp"
+        android:src="@drawable/icon_nav_my_page"
+        android:tint="@color/black"
+        android:layout_marginStart="@dimen/default_left_margin"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/expectedChargeIcon"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/passengerCountTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray_700"
+        android:text="@string/passenger_count"
+        android:fontFamily="@font/pretendard_medium"
+        android:textSize="@dimen/content_sub_text"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/passengerCountIcon"
+        app:layout_constraintTop_toTopOf="@id/passengerCountIcon"
+        app:layout_constraintBottom_toBottomOf="@id/passengerCountIcon"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="남성 1 명 · 여성 1 명"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:fontFamily="@font/pretendard_semibold"
+        app:layout_constraintStart_toEndOf="@id/passengerCountTitle"
+        app:layout_constraintTop_toTopOf="@id/passengerCountIcon"
+        app:layout_constraintBottom_toBottomOf="@id/passengerCountIcon"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topGuidelineOfRequestButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.88"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomGuidelineOfRequestButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/default_left_margin"
+        android:layout_marginEnd="@dimen/default_right_margin"
+        android:background="@drawable/rectangle_hyundai_blue_radius_12"
+        android:text="@string/apply_for_car_pool"
+        android:textColor="@color/white"
+        android:fontFamily="@font/pretendard_semibold"
+        android:textSize="@dimen/content_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/topGuidelineOfRequestButton"
+        app:layout_constraintBottom_toBottomOf="@id/bottomGuidelineOfRequestButton"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
