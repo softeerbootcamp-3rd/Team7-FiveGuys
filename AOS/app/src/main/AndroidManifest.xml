@@ -43,5 +43,9 @@
             android:name=".ui.activity.LoginActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".ui.activity.RequestCarPoolActivity"
+            android:exported="true"/>
+
     </application>
 </manifest>
