@@ -23,4 +23,9 @@ public class Garage {
         this.latitude = latitude;
         this.longitude = longitude;
     }
+
+    public void edit(Double latitude, Double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 }
