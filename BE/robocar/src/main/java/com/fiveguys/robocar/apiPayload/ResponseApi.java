@@ -26,13 +26,23 @@ public class ResponseApi {
     }
 
     // 200
+    public static ResponseEntity ok() {
+        return of(ResponseStatus._OK);
+    }
+
+    // 200
     public static <T> ResponseEntity<T> ok(T data) {
         return of(ResponseStatus._OK, data);
     }
 
+    // 400
     public static <T> ResponseEntity<T> badRequest(T data) {
         return of(ResponseStatus._BAD_REQUEST, data);
     }
+    public static ResponseEntity invalidArguments() {
+        return of(ResponseStatus._INVALID_ARGUMENT);
+    }
+
 
     // 401
     public static <T> ResponseEntity<T> unauthorized(T data) {
