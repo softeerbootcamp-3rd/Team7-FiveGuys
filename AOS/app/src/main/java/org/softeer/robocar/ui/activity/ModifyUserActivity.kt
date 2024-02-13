@@ -9,29 +9,22 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import org.softeer.robocar.R
-import org.softeer.robocar.databinding.ActivityRegisterBinding
+import org.softeer.robocar.databinding.ActivityModifyUserBinding
 
-class RegisterActivity : AppCompatActivity() {
+class ModifyUserActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityRegisterBinding
+    private lateinit var binding: ActivityModifyUserBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_register)
-
-        // 초기 경고 메시지 숨김
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_modify_user)
         hideWarningMessages()
-
-        // 공통 TextWatcher 인스턴스 생성
         val commonTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // 텍스트 변경 전에 호출됨
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // idInputText의 텍스트가 변경될 때
-                updateButtonBackground(binding.idInputText, binding.idCheckButton)
-
                 // nickNameInputText의 텍스트가 변경될 때
                 updateButtonBackground(binding.nickNameInputText, binding.nickNameCheckButton)
             }
@@ -41,12 +34,11 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
-        // 공통 TextWatcher를 두 EditText에 적용
-        binding.idInputText.addTextChangedListener(commonTextWatcher)
         binding.nickNameInputText.addTextChangedListener(commonTextWatcher)
+        // 로그인된 사용자의 아이디를 설정, 실제 앱에서는 사용자 데이터를 관리하는 로직에 따라 변경필요
+        val userId = "userid" // 사용자 아이디
+        binding.idText.text = getString(R.string.user_id, userId)
     }
-
-    // 버튼 배경을 업데이트하는 공통 함수
     private fun updateButtonBackground(editText: EditText, button: Button) {
         val backgroundResource = if (editText.text.isNotEmpty()) {
             R.drawable.rectangle_hyundai_blue_radius_12 // 텍스트가 있으면 파란색 배경
@@ -55,11 +47,7 @@ class RegisterActivity : AppCompatActivity() {
         }
         button.setBackgroundResource(backgroundResource)
     }
-
     private fun hideWarningMessages() {
-        // 모든 경고 메시지를 숨기기
-        binding.idWarningMessage.visibility = View.GONE
-        binding.passwordWarningMessage.visibility = View.GONE
         binding.nicknameWarningMessage.visibility = View.GONE
     }
 }

@@ -44,4 +44,5 @@
     <string name="reject">거절하기</string>
     <string name="accept">수락하기</string>
     <string name="check">중복체크</string>
+    <string name="user_id">%1$s</string>
 </resources>
