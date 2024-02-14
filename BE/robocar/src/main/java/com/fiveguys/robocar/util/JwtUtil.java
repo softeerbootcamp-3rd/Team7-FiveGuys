@@ -3,6 +3,7 @@ package com.fiveguys.robocar.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
@@ -13,8 +14,16 @@ import java.util.function.Function;
 public class JwtUtil {
     final Long EXPIRE_TIME = 30L * 24 * 60 * 60 * 1000;
 
-    private final String SECRET_KEY = "CHANGETHISCHANGETHISCHANGETHISCHANGETHISCHANGETHIS";
-    private final String ISSUER = "FIVEGUYS";
+
+    private final String SECRET_KEY;
+
+    private final String ISSUER;
+
+    public JwtUtil(@Value("${jwt.key}") String secretKey, @Value("${jwt.issuer}") String issuer) {
+        SECRET_KEY = secretKey;
+        ISSUER = issuer;
+    }
+
     public String createToken(Long userId){
         return Jwts.builder()
                 .setSubject(String.valueOf(userId))
