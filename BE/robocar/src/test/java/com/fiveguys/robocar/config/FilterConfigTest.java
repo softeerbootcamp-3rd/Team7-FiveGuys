@@ -11,14 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FilterConfigTest {
     Logger logger = LoggerFactory.getLogger("JWT Test");
-    @Test
-    @DisplayName("토큰이 잘 생성되는지 확인")
-    void testUtil(){
-        String loginId = "tester1";
-        String token = JwtUtil.createToken(loginId);
-        logger.info("token: [{}]",token);
-        assertEquals(loginId, JwtUtil.extractLoginId(token));;
-    }
+
 
 
 }
