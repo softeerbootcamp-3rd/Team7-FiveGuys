@@ -1,32 +1,58 @@
 package com.fiveguys.robocar.service;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
+import com.fiveguys.robocar.util.JsonParserUtil;
+import com.fiveguys.robocar.util.JsonParserUtil.Coordinate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import java.util.List;
 
+@Service
 public class RouteService {
 
-    private Gson gson = new Gson();
+    @Autowired
+    private MapService mapService;
 
-    public String extractPathCoordinatesAndRespond(String jsonResponse) {
-        JsonObject responseObject = gson.fromJson(jsonResponse, JsonObject.class);
-        JsonArray pathArray = responseObject.getAsJsonObject("route").getAsJsonArray("trafast").get(0).getAsJsonObject().getAsJsonArray("path");
+    // 경로 정보를 가져오는 메서드
+    public RouteInfo getRouteInfo(String start, String goal1, String goal2) {
+        ResponseEntity<?> response = mapService.getRoute(start, goal1, goal2);
+        if (response.getBody() instanceof String) {
+            String jsonResponse = (String) response.getBody();
 
-        // pathArray를 List<Coordinate>로 변환
-        Type listType = new TypeToken<ArrayList<Coordinate>>(){}.getType();
-        List<Coordinate> pathCoordinates = gson.fromJson(pathArray, listType);
+            long duration = JsonParserUtil.extractDuration(jsonResponse);
+            long taxiFare = JsonParserUtil.extractTaxiFare(jsonResponse);
+            List<Coordinate> pathCoordinates = JsonParserUtil.extractPathCoordinates(jsonResponse);
 
-        // List<Coordinate>를 JSON 문자열로 변환하여 반환
-        String response = gson.toJson(pathCoordinates);
-        return response;
+            // RouteInfo는 경로에 대한 정보를 담는 클래스
+            return new RouteInfo(duration, taxiFare, pathCoordinates);
+        } else {
+            return null; // 일단 예외처리
+        }
     }
 
-    class Coordinate {
-        double lat;
-        double lng;
+    // 경로 정보를 담는 클래스
+    public static class RouteInfo {
+        private long duration;
+        private long taxiFare;
+        private List<Coordinate> pathCoordinates;
+
+        public RouteInfo(long duration, long taxiFare, List<Coordinate> pathCoordinates) {
+            this.duration = duration;
+            this.taxiFare = taxiFare;
+            this.pathCoordinates = pathCoordinates;
+        }
+
+        // Getters
+        public long getDuration() {
+            return duration;
+        }
+
+        public long getTaxiFare() {
+            return taxiFare;
+        }
+
+        public List<Coordinate> getPathCoordinates() {
+            return pathCoordinates;
+        }
     }
 }

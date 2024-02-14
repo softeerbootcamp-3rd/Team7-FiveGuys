@@ -28,4 +28,3 @@ public class MapServiceTest {
         System.out.println("응답 JSON: " + jsonResponse);
     }
 }
-

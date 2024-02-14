@@ -11,30 +11,43 @@ public class RouteComparisonService {
     @Autowired
     private MapService mapService;
 
-    public String compareRoutes(String start, String goal1, String goal2) {
-        // start -> goal1 -> goal2 순서로 경로 탐색
-        long duration1 = getRouteDuration(start, goal1, goal2);
-        // start -> goal2 -> goal1 순서로 경로 탐색
-        long duration2 = getRouteDuration(start, goal2, goal1);
+    // 최적의 경로 결정 및 해당 경로의 goal과 waypoint 반환
+    public OptimalRoute determineOptimalRoute(String start, String hostDestCoordinate, String guestDestCoordinate) {
+        long guestFirstDuration = getRouteDuration(start, hostDestCoordinate, guestDestCoordinate);
+        long hostFirstDuration = getRouteDuration(start, guestDestCoordinate, hostDestCoordinate);
 
-        // duration 비교 및 결과 반환
-        if (duration1 <= duration2) {
-            return String.format("Faster route is Start -> Goal1 -> Goal2 with duration: %d", duration1);
+        if (hostFirstDuration <= guestFirstDuration) {
+            return new OptimalRoute(hostDestCoordinate, guestDestCoordinate);
         } else {
-            return String.format("Faster route is Start -> Goal2 -> Goal1 with duration: %d", duration2);
+            return new OptimalRoute(guestDestCoordinate, hostDestCoordinate);
         }
     }
 
     private long getRouteDuration(String start, String goal, String waypoint) {
-        try {
-            ResponseEntity<?> response = mapService.getRoute(start, goal, waypoint);
-            if (response.getBody() instanceof String) {
-                String jsonResponse = (String) response.getBody();
-                return JsonParserUtil.extractDuration(jsonResponse);
-            }
-        } catch (Exception e) {
-            System.out.println("Error during route comparison: " + e.getMessage());
+        ResponseEntity<String> response = mapService.getRoute(start, goal, waypoint);
+        if (response.getBody() != null) {
+            return JsonParserUtil.extractDuration(response.getBody());
         }
         return Long.MAX_VALUE; // 에러 발생 시, 최대값 반환
+    }
+
+    // 최적 경로 정보를 담는 클래스
+    public static class OptimalRoute {
+        private final String firstDestination;
+        private final String secondDestination;
+
+        public OptimalRoute(String firstDestination, String secondDestination) {
+            this.firstDestination = firstDestination;
+            this.secondDestination = secondDestination;
+        }
+
+        // Getters
+        public String getFirstDestination() {
+            return firstDestination;
+        }
+
+        public String getSecondDestination() {
+            return secondDestination;
+        }
     }
 }
