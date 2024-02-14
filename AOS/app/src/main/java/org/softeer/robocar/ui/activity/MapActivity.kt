@@ -9,13 +9,13 @@ import com.kakao.vectormap.MapLifeCycleCallback
 import com.kakao.vectormap.MapView
 import org.softeer.robocar.R
 import org.softeer.robocar.databinding.ActivityMapBinding
+import org.softeer.robocar.ui.fragment.HeadcountDialogFragment
 
 class MapActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMapBinding
     private lateinit var mapView: MapView
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_map)
 
@@ -33,5 +33,7 @@ class MapActivity : AppCompatActivity() {
                 // 인증 후 API가 정상적으로 실행될 때 호출됨
             }
         })
+
+        HeadcountDialogFragment().show(supportFragmentManager, "headCount")
     }
 }
