@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center_vertical"
     android:minHeight="260dp"
     android:minWidth="320dp">
 
@@ -157,13 +158,13 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.75"/>
+        app:layout_constraintGuide_percent="0.7"/>
 
     <View
         android:layout_width="0dp"
         android:layout_height="2dp"
         android:background="@color/hyundai_blue"
-        app:layout_constraintStart_toStartOf="itemContainer"
+        app:layout_constraintStart_toStartOf="@id/itemContainer"
         app:layout_constraintEnd_toEndOf="@id/itemContainer"
         app:layout_constraintTop_toBottomOf="@id/bottomGuidelineOfItemContainer"/>
 
