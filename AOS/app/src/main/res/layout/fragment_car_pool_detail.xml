@@ -257,7 +257,7 @@
         android:layout_marginStart="@dimen/default_left_margin"
         android:layout_marginEnd="@dimen/default_right_margin"
         android:background="@drawable/rectangle_hyundai_blue_radius_12"
-        android:text="@string/request_car_pool"
+        android:text="@string/apply_for_car_pool"
         android:textColor="@color/white"
         android:fontFamily="@font/pretendard_semibold"
         android:textSize="@dimen/content_text"
