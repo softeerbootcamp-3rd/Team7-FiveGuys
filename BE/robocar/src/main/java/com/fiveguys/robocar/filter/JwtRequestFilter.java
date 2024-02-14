@@ -6,35 +6,54 @@ import com.fiveguys.robocar.util.JwtUtil;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+@Component
 public class JwtRequestFilter implements Filter {
-
+    final private List<String> whiteList = List.of("/login", "/");
+    private final JwtUtil jwtUtil;
+    @Autowired
+    public JwtRequestFilter(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         final String authorizationHeader = httpRequest.getHeader("Authorization");
+        String requestUrl = httpRequest.getRequestURI();
 
         String jwt = null;
-        // 파싱
+
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
 
-            try {
-                // 토큰이 있으면 loginId 리퀘스트에 추가, 없으면 그대로 다음 필터/컨트롤러 넘겨줌
-                if (JwtUtil.validateToken(jwt)) {
-                    String loginId = JwtUtil.extractLoginId(jwt);
-                    httpRequest.setAttribute("loginId", loginId);
-                }
+            // 유효한 토큰이 있으면 userId를 리퀘스트에 추가
+            if (jwtUtil.validateToken(jwt)) {
+                String userId = jwtUtil.extractUserId(jwt);
+                httpRequest.setAttribute("userId", userId);
                 chain.doFilter(request, response);
-            // 토큰 검증 때 예외가 발생한 경우 UNAUTHORIZED
-            } catch (Exception e) {
+            }
+            // 토큰이 없으나 로그인이 필요 없는 페이지인 경우
+            else if(!isLoginCheckPath(requestUrl)){
+                chain.doFilter(request, response);
+            }
+            // 그 외엔 전부 UNAUTHORIZED
+            else {
                 HttpServletResponse httpResponse = (HttpServletResponse) ResponseApi.of(ResponseStatus._UNAUTHORIZED);
             }
 
-        }
 
+        }
+    }
+
+    private boolean isLoginCheckPath(String requestURL){
+        return !whiteList.contains(requestURL);
     }
 }

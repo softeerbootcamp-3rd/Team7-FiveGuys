@@ -3,25 +3,21 @@ package com.fiveguys.robocar.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import jakarta.xml.bind.DatatypeConverter;
+import org.springframework.stereotype.Component;
 
 import java.util.Base64;
 import java.util.Date;
 import java.util.function.Function;
 
-
+@Component
 public class JwtUtil {
-    //시간 단위는 ms
-    static final Long EXPIRE_TIME = 30L * 24 * 60 * 60 * 1000;
-    //TODO
-    // 아래 필드 값들은 꼭 secret으로 빼놓을 것
-    // SECRET_KEY는 BASE64로 인코딩 된 값으로 가정, 그냥 String으로 하고 싶으면 코드 수정 필요
-    // Base64.getDecoder().decode(SECRET_KEY) -> SECRET_KEY.getBytes(StandardCharsets.UTF_8))
-    private static final String SECRET_KEY = "CHANGETHISCHANGETHISCHANGETHISCHANGETHISCHANGETHIS";
-    private static final String ISSUER = "FIVEGUYS";
-    public static String createToken(String loginId){
+    final Long EXPIRE_TIME = 30L * 24 * 60 * 60 * 1000;
+
+    private final String SECRET_KEY = "CHANGETHISCHANGETHISCHANGETHISCHANGETHISCHANGETHIS";
+    private final String ISSUER = "FIVEGUYS";
+    public String createToken(Long userId){
         return Jwts.builder()
-                .setSubject(loginId)
+                .setSubject(String.valueOf(userId))
                 .setIssuer(ISSUER)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_TIME))
@@ -29,15 +25,12 @@ public class JwtUtil {
 
     }
 
-    public static String extractLoginId(String token){
+    public String extractUserId(String token){
         return extractClaim(token, Claims::getSubject);
     }
 
-    private static <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
-
-
+    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
         try {
-            //Claims 는 토큰 내에 포함된 정보 조각
             Claims claims = Jwts.parser()
                     .setSigningKey(Base64.getDecoder().decode(SECRET_KEY))
                     .parseClaimsJws(token)
@@ -49,7 +42,7 @@ public class JwtUtil {
         }
     }
 
-    public static Boolean validateToken(String token) {
+    public Boolean validateToken(String token) {
         try {
             String issuer = extractIssuer(token);
             return !isTokenExpired(token) && ISSUER.equals(issuer);
@@ -58,14 +51,14 @@ public class JwtUtil {
         }
     }
 
-    private static Boolean isTokenExpired(String token) {
+    private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    private static Date extractExpiration(String token) {
+    private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private static String extractIssuer(String token){ return extractClaim(token, Claims::getIssuer);}
+    private String extractIssuer(String token){ return extractClaim(token, Claims::getIssuer);}
 
 }
