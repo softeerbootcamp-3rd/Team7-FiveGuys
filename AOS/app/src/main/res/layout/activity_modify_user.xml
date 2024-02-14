@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white">
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/nicknameWarningMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nickname_warning_message"
+                android:textColor="@color/red_200"
+                android:textSize="@dimen/content_text"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nickNameInputText"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/nickNameCheckButton"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/default_right_margin"
+                android:background="@drawable/rectangle_gray_600_radius_12"
+                android:textColor="@color/white"
+                android:textSize="@dimen/content_text"
+                android:text="@string/check"
+                android:fontFamily="@font/pretendard_semibold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintTop_toTopOf="@+id/nickNameInputText"
+                app:layout_constraintStart_toEndOf="@+id/nickNameInputText"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/modifyUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/modify_user_information"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="@dimen/title_text"
+                android:layout_marginTop="64dp"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/id"
+                android:lineSpacingExtra="5sp"
+                android:gravity="center_vertical"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="@dimen/content_text"
+                android:layout_marginStart="24dp"
+                android:textColor="@color/black"
+                android:layout_marginTop="48dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/modifyUser"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/idText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/user_id"
+                android:textSize="@dimen/content_text"
+                android:layout_marginStart="@dimen/default_left_margin"
+                android:layout_marginEnd="@dimen/default_right_margin"
+                android:paddingStart="@dimen/default_left_margin"
+                android:paddingEnd="@dimen/default_right_margin"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textColor="@color/gray_500"
+                android:background="@drawable/rectangle_gray_150_radius_12"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/id"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nickname"
+                android:lineSpacingExtra="5sp"
+                android:gravity="center_vertical"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="@dimen/content_text"
+                android:layout_marginStart="24dp"
+                android:textColor="@color/black"
+                android:layout_marginTop="64dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/idText"/>
+
+        <org.softeer.robocar.ui.custom.BackPressClearFocusEditText
+                android:id="@+id/nickNameInputText"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:hint="@string/nickname_placeholder"
+                android:textSize="16sp"
+                android:layout_marginStart="16dp"
+                android:paddingStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:paddingEnd="@dimen/default_right_margin"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textColor="@color/black"
+                android:background="@drawable/rectangle_gray_150_radius_12"
+                android:inputType="text"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nickname"
+                app:layout_constraintEnd_toStartOf="@+id/nickNameCheckButton"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/modifyButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_left_margin"
+                android:layout_marginEnd="@dimen/default_right_margin"
+                android:background="@drawable/rectangle_gray_600_radius_12"
+                android:textColor="@color/white"
+                android:textSize="@dimen/title_text"
+                android:text="@string/modify_success"
+                android:fontFamily="@font/pretendard_semibold"
+                android:layout_marginTop="324dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nickNameInputText"
+                app:layout_constraintHorizontal_bias="0.0"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
