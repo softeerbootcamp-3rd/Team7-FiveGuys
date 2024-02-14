@@ -13,25 +13,13 @@ import lombok.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private Long userId;
 
     private String loginId;
 
+    private String name;
 
     private String password;
 
-
-    private String phone;
-
-
-    private String email;
-
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
-
     private String clientId;
-
-
-
 }
