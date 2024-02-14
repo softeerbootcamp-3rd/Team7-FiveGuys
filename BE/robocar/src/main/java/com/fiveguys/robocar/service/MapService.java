@@ -6,8 +6,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import org.springframework.http.ResponseEntity;
-
 @Service
 public class MapService {
     private final RestTemplate restTemplate;
@@ -22,7 +20,10 @@ public class MapService {
     }
 
     public ResponseEntity<String> getRoute(String start, String goal1, String goal2) {
-        String url = String.format("https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=%s&goal=%s&waypoints=%s&option=trafast", start, goal1, goal2.replace(" ", ""));
+        // waypoint가 있는지 확인하고, 없으면 waypoint 파라미터를 URL에 포함시키지 않음
+        String waypointParam = goal2 != null && !goal2.isEmpty() ? "&waypoints=" + goal2.replace(" ", "") : "";
+        String url = String.format("https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=%s&goal=%s%s&option=trafast", start, goal1, waypointParam);
+
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-NCP-APIGW-API-KEY-ID", apiKeyId);
         headers.set("X-NCP-APIGW-API-KEY", apiKeySecret);

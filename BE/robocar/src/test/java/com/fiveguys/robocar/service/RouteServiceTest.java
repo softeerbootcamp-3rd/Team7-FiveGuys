@@ -17,7 +17,8 @@ public class RouteServiceTest {
     public void testGetRouteInfo() throws Exception {
         String start = "127.1058342,37.359708";
         String goal1 = "127.1230000,37.323";
-        String goal2 = "127.1156,37.3456";
+        //String guestDestCoordinate = "127.1156,37.3456";
+        String goal2 = null;
 
         // 경로 정보 가져오기 로직을 테스트
         RouteService.RouteInfo routeInfo = routeService.getRouteInfo(start, goal1, goal2);
