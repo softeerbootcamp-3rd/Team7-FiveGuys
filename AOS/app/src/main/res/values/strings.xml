@@ -37,10 +37,12 @@
     <string name="receive_car_pool_reqeust_message">동승 요청이 들어왔어요!</string>
     <string name="reject">거절하기</string>
     <string name="accept">수락하기</string>
+    <string name="car_pool_detail">상세정보</string>
+    <string name="request_car_pool">동승 요청</string>
     <string name="start_point">출발지</string>
     <string name="end_point">도착지</string>
     <string name="time">시간</string>
     <string name="expected_charge">예상금액</string>
     <string name="passenger_count">인원 수</string>
-    <string name="request_car_pool">동승 신청하기</string>
+    <string name="apply_for_car_pool">동승 신청하기</string>
 </resources>
