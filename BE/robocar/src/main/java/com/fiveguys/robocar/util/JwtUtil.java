@@ -14,7 +14,7 @@ public class JwtUtil {
     //시간 단위는 ms
     static final Long EXPIRE_TIME = 30L * 24 * 60 * 60 * 1000;
     //TODO
-    //아래 필드 값들은 꼭 secret으로 빼놓을 것
+    // 아래 필드 값들은 꼭 secret으로 빼놓을 것
     // SECRET_KEY는 BASE64로 인코딩 된 값으로 가정, 그냥 String으로 하고 싶으면 코드 수정 필요
     // Base64.getDecoder().decode(SECRET_KEY) -> SECRET_KEY.getBytes(StandardCharsets.UTF_8))
     private static final String SECRET_KEY = "CHANGETHISCHANGETHISCHANGETHISCHANGETHISCHANGETHIS";
@@ -37,6 +37,7 @@ public class JwtUtil {
 
 
         try {
+            //Claims 는 토큰 내에 포함된 정보 조각
             Claims claims = Jwts.parser()
                     .setSigningKey(Base64.getDecoder().decode(SECRET_KEY))
                     .parseClaimsJws(token)

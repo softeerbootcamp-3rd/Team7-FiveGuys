@@ -18,7 +18,7 @@ public class JwtRequestFilter implements Filter {
         final String authorizationHeader = httpRequest.getHeader("Authorization");
 
         String jwt = null;
-
+        // 파싱
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
 
