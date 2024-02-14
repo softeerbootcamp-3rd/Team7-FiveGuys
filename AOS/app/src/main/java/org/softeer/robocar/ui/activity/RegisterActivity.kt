@@ -19,8 +19,6 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_register)
 
-        // 초기 경고 메시지 숨김
-        hideWarningMessages()
 
         // 공통 TextWatcher 인스턴스 생성
         val commonTextWatcher = object : TextWatcher {

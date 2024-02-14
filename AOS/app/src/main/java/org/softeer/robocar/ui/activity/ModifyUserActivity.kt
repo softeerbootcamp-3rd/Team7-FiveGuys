@@ -19,7 +19,6 @@ class ModifyUserActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_modify_user)
-        hideWarningMessages()
 
         binding.nickNameInputText.doOnTextChanged { text, _, _, _ ->
             updateButtonBackground(binding.nickNameInputText, binding.nickNameCheckButton)
@@ -32,8 +31,5 @@ class ModifyUserActivity : AppCompatActivity() {
             R.drawable.rectangle_gray_600_radius_12 // 텍스트가 없으면 회색 배경
         }
         button.setBackgroundResource(backgroundResource)
-    }
-    private fun hideWarningMessages() {
-        binding.nicknameWarningMessage.visibility = View.GONE
     }
 }

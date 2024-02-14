@@ -16,12 +16,5 @@ class ModifyPasswordActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_modify_password)
 
         // 초기 경고 메시지 숨김
-        hideWarningMessages()
-    }
-
-    private fun hideWarningMessages() {
-        // 모든 경고 메시지를 숨기기
-        binding.passwordWarningMessage.visibility = View.GONE
-        // 필요에 따라 추가된 다른 경고 메시지도 숨김 처리
     }
 }
