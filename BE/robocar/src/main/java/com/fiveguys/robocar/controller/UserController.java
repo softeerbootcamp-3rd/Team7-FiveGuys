@@ -99,7 +99,7 @@ public class UserController {
 
     })
     @PatchMapping("/users/password")
-    public ResponseEntity modifyPassword(Long id, @RequestBody @Validated UserPasswordReqDto userPasswordReqDto, Errors errors){
+    public ResponseEntity modifyPassword(@RequestBody @Validated UserPasswordReqDto userPasswordReqDto, Errors errors){
         if(errors.hasErrors())
             return ResponseApi.invalidArguments();
 
@@ -124,15 +124,36 @@ public class UserController {
     })
     @GetMapping("/users/loginId-validation")
     public ResponseEntity checkLoginId(@RequestParam String loginId){
-        boolean usableId;
+        boolean isUsable;
 
         try{
-            usableId = userService.checkLoginId(loginId);
+            isUsable = userService.checkLoginId(loginId);
         } catch(Exception e) {
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
 
-        return ResponseApi.ok(usableId);
+        return ResponseApi.ok(isUsable);
+    }
+
+    @Operation(summary = "닉네임 중복 체크")
+    @Parameters(value = {
+            @Parameter(name = "nickname", description = "닉네임"),
+    })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "사용가능 여부"),
+            @ApiResponse(responseCode = "500", description = "서버 에러")
+    })
+    @GetMapping("/users/nickname-validation")
+    public ResponseEntity checkNickname(@RequestParam String nickname){
+        boolean isUsable;
+
+        try{
+            isUsable = userService.checkNickname(nickname);
+        } catch(Exception e) {
+            return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
+        }
+
+        return ResponseApi.ok(isUsable);
     }
 
 }

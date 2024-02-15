@@ -68,4 +68,9 @@ public class UserService {
     public boolean checkLoginId(String loginId) {
         return userRepository.existsByLoginId(loginId);
     }
+
+    @Transactional(readOnly = true)
+    public boolean checkNickname(String nickname) {
+        return userRepository.existsByNickname(nickname);
+    }
 }
