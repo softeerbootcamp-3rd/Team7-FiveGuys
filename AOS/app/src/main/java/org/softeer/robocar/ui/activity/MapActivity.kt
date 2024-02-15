@@ -2,7 +2,9 @@ package org.softeer.robocar.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.MapLifeCycleCallback
@@ -33,6 +35,9 @@ class MapActivity : AppCompatActivity() {
                 // 인증 후 API가 정상적으로 실행될 때 호출됨
             }
         })
+
+        var behavior = BottomSheetBehavior<ConstraintLayout>()
+        behavior = BottomSheetBehavior.from(binding.selectDestination)
 
         HeadcountDialogFragment().show(supportFragmentManager, "headCount")
     }
