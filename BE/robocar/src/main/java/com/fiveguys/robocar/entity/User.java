@@ -1,6 +1,5 @@
 package com.fiveguys.robocar.entity;
 
-import com.fiveguys.robocar.models.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,25 +12,15 @@ import lombok.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
-
+    @Column(unique = true)
     private String loginId;
 
+    @Column(unique = true)
+    private String nickname;
 
     private String password;
 
-
-    private String phone;
-
-
-    private String email;
-
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
-
     private String clientId;
-
-
-
 }
