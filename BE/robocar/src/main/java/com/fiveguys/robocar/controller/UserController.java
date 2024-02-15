@@ -95,7 +95,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "사용가능 여부"),
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
-    @GetMapping("/users/nickname-validation")
+    @GetMapping("/users/loginId-validation")
     public ResponseEntity checkLoginId(@PathVariable("loginId") String loginId){
         boolean usableId = false;
 
@@ -107,7 +107,5 @@ public class UserController {
 
         return ResponseApi.ok(usableId);
     }
-
-
 
 }
