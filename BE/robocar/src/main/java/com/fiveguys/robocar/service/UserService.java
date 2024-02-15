@@ -3,6 +3,7 @@ package com.fiveguys.robocar.service;
 import com.fiveguys.robocar.apiPayload.ResponseStatus;
 import com.fiveguys.robocar.dto.req.UserCreateReqDto;
 import com.fiveguys.robocar.dto.req.UserNicknameReqDto;
+import com.fiveguys.robocar.dto.req.UserPasswordReqDto;
 import com.fiveguys.robocar.entity.User;
 import com.fiveguys.robocar.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -45,6 +46,20 @@ public class UserService {
 
         user.setNickname(nickname);
         //nickname는 유니크이므로 중복되는 경우 예외 발생
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void modifyPassword(UserPasswordReqDto userPasswordReqDto) {
+        String password = userPasswordReqDto.getPassword();
+        Long userId = userPasswordReqDto.getUserId();
+
+        User user = userRepository.findById(userId).orElse(null);
+
+        if(user == null)
+            throw new EntityNotFoundException(ResponseStatus.USER_NOT_FOUND.getMessage());
+
+        user.setPassword(password);
         userRepository.save(user);
 
     }

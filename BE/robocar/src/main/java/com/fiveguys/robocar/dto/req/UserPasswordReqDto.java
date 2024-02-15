@@ -6,13 +6,12 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-
 @Getter
 @AllArgsConstructor
-public class UserNicknameReqDto {
+public class UserPasswordReqDto {
     @NotNull
     Long userId;
     @Size(max = 50)
     @NotBlank
-    String nickname;
+    String password;
 }
