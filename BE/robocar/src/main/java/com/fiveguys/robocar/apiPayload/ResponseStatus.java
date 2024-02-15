@@ -26,6 +26,9 @@ public enum ResponseStatus {
     GARAGE_ALREADY_EXIST(CONFLICT, "중복된 차고지 위치입니다."),
     GARAGE_NOT_FOUND(BAD_REQUEST, "해당하는 차고지가 없습니다."),
 
+    // 외부 api호출
+    EXTERNAL_SERVICE_ERROR(INTERNAL_SERVER_ERROR, "외부 서비스 호출 중 오류가 발생했습니다."),
+
     // 테스트용
     TEST_EXCEPTION(BAD_REQUEST, "Error 테스트"),
     ;

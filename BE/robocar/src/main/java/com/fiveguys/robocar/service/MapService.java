@@ -1,9 +1,12 @@
 package com.fiveguys.robocar.service;
 
+import com.fiveguys.robocar.apiPayload.ResponseStatus;
+import com.fiveguys.robocar.apiPayload.exception.GeneralException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -20,9 +23,8 @@ public class MapService {
     }
 
     public ResponseEntity<String> getRoute(String start, String goal1, String goal2) {
-        // waypoint가 있는지 확인하고, 없으면 waypoint 파라미터를 URL에 포함시키지 않음
-        String waypointParam = goal2 != null && !goal2.isEmpty() ? "&waypoints=" + goal2.replace(" ", "") : "";
-        String url = String.format("https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=%s&goal=%s%s&option=trafast", start, goal1, waypointParam);
+        String waypointParam = goal2 != null && !goal2.isEmpty() ? "&waypoints=" + goal2 : "";
+        String url = String.format("https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=%s&goal=%s%s&option=trafast", start.replace(" ", ""), goal1.replace(" ", ""), waypointParam.replace(" ", ""));
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-NCP-APIGW-API-KEY-ID", apiKeyId);
@@ -30,11 +32,10 @@ public class MapService {
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         try {
-            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-            return response; // API로부터 받은 원본 JSON 응답을 그대로 반환
-        } catch (Exception e) {
-            System.out.println("API 호출 중 오류 발생: " + e.getMessage());
-            return new ResponseEntity<>("API 호출 실패: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        } catch (RestClientException e) {
+            // 새로운 ResponseStatus를 사용하여 GeneralException을 던집니다.
+            throw new GeneralException(ResponseStatus.EXTERNAL_SERVICE_ERROR);
         }
     }
 }

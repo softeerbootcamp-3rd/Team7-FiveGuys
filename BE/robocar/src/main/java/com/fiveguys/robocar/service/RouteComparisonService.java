@@ -1,6 +1,7 @@
 package com.fiveguys.robocar.service;
 
 import com.fiveguys.robocar.util.JsonParserUtil;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class RouteComparisonService {
     }
 
     // 최적 경로 정보를 담는 클래스
+    @Getter // Lombok 어노테이션을 사용하여 모든 필드의 getter 메서드를 자동 생성
     public static class OptimalRoute {
         private final String firstDestination;
         private final String secondDestination;
@@ -39,15 +41,6 @@ public class RouteComparisonService {
         public OptimalRoute(String firstDestination, String secondDestination) {
             this.firstDestination = firstDestination;
             this.secondDestination = secondDestination;
-        }
-
-        // Getters
-        public String getFirstDestination() {
-            return firstDestination;
-        }
-
-        public String getSecondDestination() {
-            return secondDestination;
         }
     }
 }
