@@ -6,9 +6,10 @@
     <data>
 
     </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/container"
@@ -19,8 +20,7 @@
             <com.kakao.vectormap.MapView
                 android:id="@+id/map_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-            </com.kakao.vectormap.MapView>
+                android:layout_height="match_parent" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="wrap_content"
@@ -31,25 +31,107 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="200dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:background="@android:color/transparent"
+                android:src="@drawable/icon_current_location" />
 
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="24dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/icon_current_location" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/selectDestination"
             android:layout_width="match_parent"
             android:layout_height="760dp"
             android:background="@drawable/rectangle_white_top_radius_20"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-            app:behavior_peekHeight="187dp">
+            app:behavior_peekHeight="187dp"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/bottomSheetTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/select_destination"
+                android:textSize="@dimen/title_text"
+                android:textColor="@color/black"
+                android:fontFamily="@font/pretendard_semibold"/>
+
+            <org.softeer.robocar.ui.custom.BackPressClearFocusEditText
+                android:id="@+id/editOrigin"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:hint="현 위치: 서울 강남구 학동로 171"
+                android:textColorHint="@color/black"
+                android:textColor="@color/black"
+                android:textSize="@dimen/content_text"
+                android:fontFamily="@font/pretendard_semibold"
+                android:paddingStart="40dp"
+                android:background="@drawable/rectangle_gray_200_radius_12"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bottomSheetTitle"
+                android:layout_margin="16dp"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/icon_start_location"
+                app:layout_constraintStart_toStartOf="@id/editOrigin"
+                app:layout_constraintTop_toTopOf="@id/editOrigin"
+                app:layout_constraintBottom_toBottomOf="@id/editOrigin"
+                android:layout_marginStart="8dp" />
+
+            <org.softeer.robocar.ui.custom.BackPressClearFocusEditText
+                android:id="@+id/editDestination"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:hint="@string/default_edit_destination"
+                android:textColor="@color/black"
+                android:textSize="@dimen/content_text"
+                android:fontFamily="@font/pretendard_semibold"
+                android:paddingStart="40dp"
+                android:background="@drawable/rectangle_gray_200_radius_12"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/editOrigin"
+                android:layout_margin="16dp"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/icon_destination_location"
+                app:layout_constraintStart_toStartOf="@id/editDestination"
+                app:layout_constraintTop_toTopOf="@id/editDestination"
+                app:layout_constraintBottom_toBottomOf="@id/editDestination"
+                android:layout_marginStart="8dp" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/icon_map"
+                app:layout_constraintEnd_toEndOf="@id/editDestination"
+                app:layout_constraintTop_toTopOf="@id/editDestination"
+                app:layout_constraintBottom_toBottomOf="@id/editDestination"
+                android:layout_marginEnd="8dp" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/selectDestinationDivider"
+                android:layout_width="0dp"
+                android:layout_height="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/editDestination"
+                android:layout_marginTop="8dp"
+                app:dividerColor="@color/gray_200" />
+                
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

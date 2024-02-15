@@ -68,7 +68,8 @@
             android:clickable="false"
             android:fontFamily="@font/pretendard_semibold"
             android:text="@string/count_male"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnPlusMale"
@@ -129,7 +130,8 @@
             android:clickable="false"
             android:fontFamily="@font/pretendard_semibold"
             android:text="@string/count_female"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnPlusFemale"
