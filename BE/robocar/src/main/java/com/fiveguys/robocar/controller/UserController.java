@@ -96,7 +96,7 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @GetMapping("/users/nickname-validation")
-    public ResponseEntity modifyPassword(@PathVariable("loginId") String loginId){
+    public ResponseEntity checkLoginId(@PathVariable("loginId") String loginId){
         boolean usableId = false;
 
         try{
@@ -107,8 +107,6 @@ public class UserController {
 
         return ResponseApi.ok(usableId);
     }
-
-
 
 
 
