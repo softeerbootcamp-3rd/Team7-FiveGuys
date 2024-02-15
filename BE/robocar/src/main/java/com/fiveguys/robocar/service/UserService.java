@@ -63,4 +63,9 @@ public class UserService {
         userRepository.save(user);
 
     }
+
+    @Transactional(readOnly = true)
+    public boolean checkLoginId(String loginId) {
+        return userRepository.existsByLoginId(loginId);
+    }
 }

@@ -19,9 +19,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Tag(name = "유저")
@@ -44,7 +42,6 @@ public class UserController {
             @ApiResponse(responseCode = "201", description = "회원가입 성공"),
             @ApiResponse(responseCode = "409", description = "아이디/닉네임 중복"),
             @ApiResponse(responseCode = "500", description = "서버 에러")
-
     })
     @PostMapping("/users")
     public ResponseEntity createUser(@RequestBody @Validated UserCreateReqDto userCreateReqDto, Errors errors){
@@ -71,7 +68,6 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "존재하지 않는 유저"),
             @ApiResponse(responseCode = "409", description = "닉네임 중복"),
             @ApiResponse(responseCode = "500", description = "서버 에러")
-
     })
     @PatchMapping("/users/nickname")
     public ResponseEntity modifyNickname(Long id, @RequestBody @Validated UserNicknameReqDto userNicknameReqDto,Errors errors){
@@ -91,32 +87,28 @@ public class UserController {
         return ResponseApi.ok();
     }
 
-    @Operation(summary = "비밀번호 수정")
+    @Operation(summary = "아이디 중복 체크")
     @Parameters(value = {
-            @Parameter(name = "password", description = "비밀번호"),
+            @Parameter(name = "loginId", description = "아이디"),
     })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "비밀 수정 성공"),
-            @ApiResponse(responseCode = "400", description = "존재하지 않는 유저"),
-            @ApiResponse(responseCode = "401", description = "권한이 없음"),
+            @ApiResponse(responseCode = "200", description = "사용가능 여부"),
             @ApiResponse(responseCode = "500", description = "서버 에러")
-
     })
-    @PatchMapping("/users/password")
-    public ResponseEntity modifyPassword(Long id, @RequestBody @Validated UserPasswordReqDto userPasswordReqDto, Errors errors){
-        if(errors.hasErrors())
-            return ResponseApi.invalidArguments();
+    @GetMapping("/users/nickname-validation")
+    public ResponseEntity modifyPassword(@PathVariable("loginId") String loginId){
+        boolean usableId = false;
 
         try{
-            userService.modifyPassword(userPasswordReqDto);
-        } catch (EntityNotFoundException e){
-            return ResponseApi.of(ResponseStatus.USER_NOT_FOUND);
+            usableId = userService.checkLoginId(loginId);
         } catch(Exception e) {
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
 
-        return ResponseApi.ok();
+        return ResponseApi.ok(usableId);
     }
+
+
 
 
 
