@@ -70,7 +70,7 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @PatchMapping("/users/nickname")
-    public ResponseEntity modifyNickname(Long id, @RequestBody @Validated UserNicknameReqDto userNicknameReqDto,Errors errors){
+    public ResponseEntity modifyNickname(@RequestBody @Validated UserNicknameReqDto userNicknameReqDto,Errors errors){
         if(errors.hasErrors())
             return ResponseApi.invalidArguments();
 
@@ -87,6 +87,33 @@ public class UserController {
         return ResponseApi.ok();
     }
 
+    @Operation(summary = "비밀번호 수정")
+    @Parameters(value = {
+            @Parameter(name = "password", description = "비밀번호"),
+    })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "비밀 수정 성공"),
+            @ApiResponse(responseCode = "400", description = "존재하지 않는 유저"),
+            @ApiResponse(responseCode = "401", description = "권한이 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 에러")
+
+    })
+    @PatchMapping("/users/password")
+    public ResponseEntity modifyPassword(Long id, @RequestBody @Validated UserPasswordReqDto userPasswordReqDto, Errors errors){
+        if(errors.hasErrors())
+            return ResponseApi.invalidArguments();
+
+        try{
+            userService.modifyPassword(userPasswordReqDto);
+        } catch (EntityNotFoundException e){
+            return ResponseApi.of(ResponseStatus.USER_NOT_FOUND);
+        } catch(Exception e) {
+            return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
+        }
+
+        return ResponseApi.ok();
+    }
+
     @Operation(summary = "아이디 중복 체크")
     @Parameters(value = {
             @Parameter(name = "loginId", description = "아이디"),
@@ -96,8 +123,8 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @GetMapping("/users/loginId-validation")
-    public ResponseEntity checkLoginId(@PathVariable("loginId") String loginId){
-        boolean usableId = false;
+    public ResponseEntity checkLoginId(@RequestParam String loginId){
+        boolean usableId;
 
         try{
             usableId = userService.checkLoginId(loginId);
