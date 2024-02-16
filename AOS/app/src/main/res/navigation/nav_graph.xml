@@ -16,7 +16,7 @@
         android:label="MyPageFragment"
         tools:layout="@layout/fragment_my_page" />
     <activity
-        android:id="@+id/mapActivity"
+        android:id="@+id/map"
         android:name="org.softeer.robocar.ui.activity.MapActivity"
         android:label="MapActivity"
         tools:layout="@layout/activity_map" />
@@ -25,4 +25,19 @@
         android:name="org.softeer.robocar.ui.fragment.HeadcountDialogFragment"
         android:label="fragment_headcount_dialog"
         tools:layout="@layout/fragment_headcount_dialog" />
+    <fragment
+        android:id="@+id/pathSettingFragment"
+        android:name="org.softeer.robocar.ui.fragment.PathSettingFragment"
+        android:label="PathSettingFragment"
+        tools:layout="@layout/fragment_path_setting">
+        <action
+            android:id="@+id/action_pathSettingFragment_to_selectDestinationFragment"
+            app:destination="@id/selectDestinationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectDestinationFragment"
+        android:name="org.softeer.robocar.ui.fragment.SelectDestinationFragment"
+        android:label="fragment_select_destination"
+        tools:layout="@layout/fragment_select_destination" />
+
 </navigation>

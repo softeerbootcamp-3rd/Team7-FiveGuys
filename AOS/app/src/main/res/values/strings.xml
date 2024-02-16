@@ -45,4 +45,6 @@
     <string name="request_car_pool">동승 신청하기</string>
     <string name="select_destination">어디로 갈까요?</string>
     <string name="default_edit_destination">도착지를 입력하세요</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

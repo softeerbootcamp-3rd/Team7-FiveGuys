@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.fragment.PathSettingFragment">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/bottomSheetTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/select_destination"
+            android:textSize="@dimen/title_text"
+            android:textColor="@color/black"
+            android:fontFamily="@font/pretendard_semibold" />
+
+        <org.softeer.robocar.ui.custom.BackPressClearFocusEditText
+            android:id="@+id/editOrigin"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:hint="현 위치: 서울 강남구 학동로 171"
+            android:textColorHint="@color/black"
+            android:textColor="@color/black"
+            android:textSize="@dimen/content_text"
+            android:fontFamily="@font/pretendard_semibold"
+            android:paddingStart="40dp"
+            android:background="@drawable/rectangle_gray_200_radius_12"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bottomSheetTitle"
+            android:layout_margin="16dp"
+            android:inputType="text"
+            android:imeOptions="actionSearch" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/icon_start_location"
+            app:layout_constraintStart_toStartOf="@id/editOrigin"
+            app:layout_constraintTop_toTopOf="@id/editOrigin"
+            app:layout_constraintBottom_toBottomOf="@id/editOrigin"
+            android:layout_marginStart="8dp" />
+
+        <org.softeer.robocar.ui.custom.BackPressClearFocusEditText
+            android:id="@+id/editDestination"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:hint="@string/default_edit_destination"
+            android:textColor="@color/black"
+            android:textSize="@dimen/content_text"
+            android:fontFamily="@font/pretendard_semibold"
+            android:paddingStart="40dp"
+            android:background="@drawable/rectangle_gray_200_radius_12"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editOrigin"
+            android:layout_margin="16dp"
+            android:inputType="text"
+            android:imeOptions="actionSearch" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/icon_destination_location"
+            app:layout_constraintStart_toStartOf="@id/editDestination"
+            app:layout_constraintTop_toTopOf="@id/editDestination"
+            app:layout_constraintBottom_toBottomOf="@id/editDestination"
+            android:layout_marginStart="8dp" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/icon_map"
+            app:layout_constraintEnd_toEndOf="@id/editDestination"
+            app:layout_constraintTop_toTopOf="@id/editDestination"
+            app:layout_constraintBottom_toBottomOf="@id/editDestination"
+            android:layout_marginEnd="8dp" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/selectDestinationDivider"
+            android:layout_width="0dp"
+            android:layout_height="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editDestination"
+            android:layout_marginTop="8dp"
+            app:dividerColor="@color/gray_200" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/test"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="test"
+            android:gravity="center"
+            android:visibility="invisible"
+            app:layout_constraintTop_toBottomOf="@id/selectDestinationDivider"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
