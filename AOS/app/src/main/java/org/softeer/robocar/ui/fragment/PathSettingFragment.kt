@@ -40,6 +40,14 @@ class PathSettingFragment : Fragment() {
                 else -> false
             }
         }
+
+        binding.test.setOnClickListener {
+            findNavController().navigate(R.id.action_pathSettingFragment_to_selectDestinationFragment)
+        }
+
+        binding.editDestMap.setOnClickListener {
+            findNavController().navigate(R.id.action_pathSettingFragment_to_selectDestinationFragment)
+        }
     }
 
     override fun onDestroy() {

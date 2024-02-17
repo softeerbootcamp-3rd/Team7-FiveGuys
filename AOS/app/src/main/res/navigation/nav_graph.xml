@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/home">
+    app:startDestination="@id/pathSettingFragment">
 
     <fragment
         android:id="@+id/home"
@@ -15,16 +15,6 @@
         android:name="org.softeer.robocar.ui.fragment.MyPageFragment"
         android:label="MyPageFragment"
         tools:layout="@layout/fragment_my_page" />
-    <activity
-        android:id="@+id/map"
-        android:name="org.softeer.robocar.ui.activity.MapActivity"
-        android:label="MapActivity"
-        tools:layout="@layout/activity_map" />
-    <dialog
-        android:id="@+id/headcountDialogFragment"
-        android:name="org.softeer.robocar.ui.fragment.HeadcountDialogFragment"
-        android:label="fragment_headcount_dialog"
-        tools:layout="@layout/fragment_headcount_dialog" />
     <fragment
         android:id="@+id/pathSettingFragment"
         android:name="org.softeer.robocar.ui.fragment.PathSettingFragment"
@@ -37,7 +27,6 @@
     <fragment
         android:id="@+id/selectDestinationFragment"
         android:name="org.softeer.robocar.ui.fragment.SelectDestinationFragment"
-        android:label="fragment_select_destination"
-        tools:layout="@layout/fragment_select_destination" />
-
+        android:label="SelectDestinationFragment"
+        tools:layout="@layout/fragment_select_destination"/>
 </navigation>

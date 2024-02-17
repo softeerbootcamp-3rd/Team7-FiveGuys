@@ -32,13 +32,6 @@ class MapActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_map)
 
-        if (savedInstanceState == null) {
-            supportFragmentManager.commit {
-                setReorderingAllowed(true)
-                add<PathSettingFragment>(R.id.destinationFragmentContainer)
-            }
-        }
-
 //        status bar를 투명화하는 코드, bottom sheet와 충돌이 있어서 주석 처리함
 //        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, windowInsets ->
 //            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())

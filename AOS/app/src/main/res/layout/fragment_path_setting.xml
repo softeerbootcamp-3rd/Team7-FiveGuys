@@ -13,14 +13,14 @@
         tools:context=".ui.fragment.PathSettingFragment">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/bottomSheetTitle"
+            android:id="@+id/pathSettingTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="@string/select_destination"
+            android:text="@string/path_setting_title"
             android:textSize="@dimen/title_text"
             android:textColor="@color/black"
             android:fontFamily="@font/pretendard_semibold" />
@@ -38,7 +38,7 @@
             android:background="@drawable/rectangle_gray_200_radius_12"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/bottomSheetTitle"
+            app:layout_constraintTop_toBottomOf="@id/pathSettingTitle"
             android:layout_margin="16dp"
             android:inputType="text"
             android:imeOptions="actionSearch" />
@@ -79,6 +79,7 @@
             android:layout_marginStart="8dp" />
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/editDestMap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/icon_map"
@@ -88,7 +89,7 @@
             android:layout_marginEnd="8dp" />
 
         <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/selectDestinationDivider"
+            android:id="@+id/pathSettingDivider"
             android:layout_width="0dp"
             android:layout_height="8dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -104,7 +105,7 @@
             android:text="test"
             android:gravity="center"
             android:visibility="invisible"
-            app:layout_constraintTop_toBottomOf="@id/selectDestinationDivider"
+            app:layout_constraintTop_toBottomOf="@id/pathSettingDivider"
             app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
