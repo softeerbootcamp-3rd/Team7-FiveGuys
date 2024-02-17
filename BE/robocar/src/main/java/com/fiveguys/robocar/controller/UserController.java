@@ -156,4 +156,26 @@ public class UserController {
         return ResponseApi.ok(isUsable);
     }
 
+    @Operation(summary = "회원탈퇴")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "탈퇴성공"),
+            @ApiResponse(responseCode = "400", description = "존재하지 않는 유저"),
+            @ApiResponse(responseCode = "500", description = "서버 에러")
+    })
+    @DeleteMapping("/users")
+    public ResponseEntity userResign(@RequestBody Long userId){
+
+        try{
+            userService.userResign(userId);
+        } catch (EntityNotFoundException e){
+            return ResponseApi.of(ResponseStatus.USER_NOT_FOUND);
+        }
+        catch(Exception e){
+            return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
+        }
+        return ResponseApi.ok();
+    }
+
+
+
 }

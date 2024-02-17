@@ -73,4 +73,10 @@ public class UserService {
     public boolean checkNickname(String nickname) {
         return userRepository.existsByNickname(nickname);
     }
+
+    public void userResign(Long userId) {
+        User user = userRepository.deleteByUserId(userId);
+        if(user == null)
+            throw new EntityNotFoundException(ResponseStatus.USER_NOT_FOUND.getMessage());
+    }
 }
