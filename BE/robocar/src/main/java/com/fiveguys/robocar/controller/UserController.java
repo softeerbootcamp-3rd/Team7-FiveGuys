@@ -3,6 +3,7 @@ package com.fiveguys.robocar.controller;
 import com.fiveguys.robocar.apiPayload.ResponseApi;
 import com.fiveguys.robocar.apiPayload.ResponseStatus;
 import com.fiveguys.robocar.dto.req.UserCreateReqDto;
+import com.fiveguys.robocar.dto.req.UserLoginReqDto;
 import com.fiveguys.robocar.dto.req.UserNicknameReqDto;
 import com.fiveguys.robocar.dto.req.UserPasswordReqDto;
 import com.fiveguys.robocar.service.UserService;
@@ -56,7 +57,7 @@ public class UserController {
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
 
-        return ResponseApi.of(ResponseStatus.CREATE_OK);
+        return ResponseApi.of(ResponseStatus.USER_CREATE_OK);
     }
 
     @Operation(summary = "닉네임 수정")
@@ -174,6 +175,26 @@ public class UserController {
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
         return ResponseApi.ok();
+    }
+
+    @Operation(summary = "로그인")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "로그인 성공"),
+            @ApiResponse(responseCode = "400", description = "로그인 실패"),
+            @ApiResponse(responseCode = "500", description = "서버 에러")
+    })
+    @DeleteMapping("/users")
+    public ResponseEntity userLogin(@RequestBody UserLoginReqDto userLoginReqDto){
+
+        try{
+            userService.userLogin(userLoginReqDto);
+        } catch (EntityNotFoundException e){
+
+        }
+        catch(Exception e){
+            return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
+        }
+        return ResponseApi.ok(); // 토큰 넣어주기
     }
 
 

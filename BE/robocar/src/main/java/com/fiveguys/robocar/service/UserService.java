@@ -2,11 +2,14 @@ package com.fiveguys.robocar.service;
 
 import com.fiveguys.robocar.apiPayload.ResponseStatus;
 import com.fiveguys.robocar.dto.req.UserCreateReqDto;
+import com.fiveguys.robocar.dto.req.UserLoginReqDto;
 import com.fiveguys.robocar.dto.req.UserNicknameReqDto;
 import com.fiveguys.robocar.dto.req.UserPasswordReqDto;
 import com.fiveguys.robocar.entity.User;
 import com.fiveguys.robocar.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.apache.coyote.BadRequestException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +18,7 @@ public class UserService {
 
 
     private final UserRepository userRepository;
+    @Autowired
     UserService(UserRepository userRepository){
         this.userRepository = userRepository;
     }
@@ -75,8 +79,30 @@ public class UserService {
     }
 
     public void userResign(Long userId) {
-        User user = userRepository.deleteByUserId(userId);
+        User user = userRepository.findById(userId).orElse(null);
+
         if(user == null)
             throw new EntityNotFoundException(ResponseStatus.USER_NOT_FOUND.getMessage());
+
+        userRepository.deleteById(userId);
+    }
+
+    //TODO
+    //  토큰 기능이 완성되면 토큰값을 리턴하도록 수정
+    public void userLogin(UserLoginReqDto userLoginReqDto) {
+        Long userId = userLoginReqDto.getUserId();
+        String loginId = userLoginReqDto.getLoginId();
+        String password = userLoginReqDto.getPassword();
+        if (userId!=null)
+            throw new IllegalStateException(ResponseStatus._BAD_REQUEST.getMessage());
+
+        User user = userRepository.findById(userId).orElse(null);
+
+        if(userId == null)
+            throw new EntityNotFoundException(ResponseStatus.USER_NOT_FOUND.getMessage());
+        else if(!user.getLoginId().equals(loginId) || !user.getPassword().equals(password))
+            throw new EntityNotFoundException(ResponseStatus.USER_WRONG_PASSWORD.getMessage());
+
+        //토큰 발급
     }
 }
