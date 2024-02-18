@@ -56,7 +56,7 @@ public class GarageController {
             @ApiResponse(responseCode = "200", description = "추가 성공"),
             @ApiResponse(responseCode = "400", description = "해당하는 차고지가 없음")})
     @GetMapping("/garage/{id}")
-    public ResponseEntity getGarage(Long id) {
+    public ResponseEntity getGarage(@PathVariable Long id) {
         Garage findGarage = null;
         try {
             findGarage = garageService.getGarage(id);
@@ -85,7 +85,7 @@ public class GarageController {
             @ApiResponse(responseCode = "400", description = "해당하는 차고지가 없음"),
             @ApiResponse(responseCode = "409", description = "중복된 차고지 위치로 수정")})
     @PutMapping("/garage/{id}")
-    public ResponseEntity editGarage(Long id,
+    public ResponseEntity editGarage(@PathVariable Long id,
                                      @RequestBody @Validated GarageReqDto garageReqDto,
                                      Errors errors) {
         if (errors.hasErrors()) {
@@ -110,7 +110,7 @@ public class GarageController {
             @ApiResponse(responseCode = "200", description = "변경 성공"),
             @ApiResponse(responseCode = "400", description = "해당하는 차고지가 없음")})
     @DeleteMapping("/garage/{id}")
-    public ResponseEntity deleteGarage(Long id) {
+    public ResponseEntity deleteGarage(@PathVariable Long id) {
         try {
             garageService.deleteGarage(id);
         } catch (EntityNotFoundException e) {
