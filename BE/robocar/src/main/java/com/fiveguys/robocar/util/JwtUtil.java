@@ -24,9 +24,9 @@ public class JwtUtil {
         ISSUER = issuer;
     }
 
-    public String createToken(Long userId){
+    public String createToken(Long id){
         return Jwts.builder()
-                .setSubject(String.valueOf(userId))
+                .setSubject(String.valueOf(id))
                 .setIssuer(ISSUER)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_TIME))
@@ -34,7 +34,7 @@ public class JwtUtil {
 
     }
 
-    public String extractUserId(String token){
+    public String extractId(String token){
         return extractClaim(token, Claims::getSubject);
     }
 

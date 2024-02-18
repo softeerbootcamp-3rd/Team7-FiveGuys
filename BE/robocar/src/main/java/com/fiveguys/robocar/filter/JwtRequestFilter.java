@@ -34,10 +34,10 @@ public class JwtRequestFilter implements Filter {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
 
-            // 유효한 토큰이 있으면 userId를 리퀘스트에 추가
+            // 유효한 토큰이 있으면 id를 리퀘스트에 추가
             if (jwtUtil.validateToken(jwt)) {
-                String userId = jwtUtil.extractUserId(jwt);
-                httpRequest.setAttribute("userId", userId);
+                String id = jwtUtil.extractId(jwt);
+                httpRequest.setAttribute("id", id);
                 chain.doFilter(request, response);
             }
             // 토큰이 없으나 로그인이 필요 없는 페이지인 경우
