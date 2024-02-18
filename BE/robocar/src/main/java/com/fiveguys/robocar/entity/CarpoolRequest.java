@@ -9,18 +9,25 @@ import java.time.LocalDateTime;
 
 @RedisHash("CarpoolRequest")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class CarpoolRequest {
     @Id
-    private String hostId;
+    private Long hostId;
+    private String hostNickname;
     private LocalDateTime departTime;
 
-    private double departLatitude;
-    private double departLongitude;
+    private Double departLatitude;
+    private Double departLongitude;
 
-    private double hostDestLatitude;
-    private double hostDestLongitude;
+    private Double hostDestLatitude;
+    private Double hostDestLongitude;
+
+    private String hostDepartAddress;
+    private String hostDestAddress;
+
+    private Integer maleCount;
+    private Integer femaleCount;
+
 }

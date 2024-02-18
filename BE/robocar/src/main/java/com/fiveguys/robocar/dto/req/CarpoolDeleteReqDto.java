@@ -7,11 +7,11 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class CarpoolRegisterReqDto {
+public class CarpoolDeleteReqDto {
     @NotNull
     Long id;
+    @NotNull
+    Long guestId;
     @NotBlank
-    String DepartAddress;
-    @NotBlank
-    String DestAddress;
+    String guestDestAddress;
 }
