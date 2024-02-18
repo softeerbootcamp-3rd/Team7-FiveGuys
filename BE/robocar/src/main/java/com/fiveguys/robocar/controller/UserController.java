@@ -164,10 +164,10 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @DeleteMapping("/users")
-    public ResponseEntity userResign(@RequestBody Long userId){
+    public ResponseEntity userResign(@RequestBody Long id){
 
         try{
-            userService.userResign(userId);
+            userService.userResign(id);
         } catch (EntityNotFoundException e){
             return ResponseApi.of(ResponseStatus.USER_NOT_FOUND);
         }
@@ -183,20 +183,21 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "로그인 실패"),
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
-    @DeleteMapping("/users")
+    @PostMapping("/users/login")
     public ResponseEntity userLogin(@RequestBody UserLoginReqDto userLoginReqDto){
 
+        String token = null;
         try{
-            userService.userLogin(userLoginReqDto);
+            token = userService.userLogin(userLoginReqDto);
         } catch (EntityNotFoundException e){
-
+            return ResponseApi.of(ResponseStatus._INVALID_ARGUMENT);
+        } catch(IllegalStateException e){
+            return ResponseApi.of(ResponseStatus._BAD_REQUEST);
         }
         catch(Exception e){
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
-        return ResponseApi.ok(); // 토큰 넣어주기
+        return ResponseApi.ok(token);
     }
-
-
 
 }

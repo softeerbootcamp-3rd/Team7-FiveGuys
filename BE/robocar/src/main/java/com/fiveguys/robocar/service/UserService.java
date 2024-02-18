@@ -7,6 +7,7 @@ import com.fiveguys.robocar.dto.req.UserNicknameReqDto;
 import com.fiveguys.robocar.dto.req.UserPasswordReqDto;
 import com.fiveguys.robocar.entity.User;
 import com.fiveguys.robocar.repository.UserRepository;
+import com.fiveguys.robocar.util.JwtUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,12 @@ public class UserService {
 
 
     private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
     @Autowired
-    UserService(UserRepository userRepository){
+    UserService(UserRepository userRepository, JwtUtil jwtUtil){
+
         this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
     }
     @Transactional
     public void createUser(UserCreateReqDto userCreateReqDto) {
@@ -33,7 +37,6 @@ public class UserService {
         user.setPassword(password);
         user.setNickname(nickname);
 
-        // 유저 테이블에서 loginId와
         userRepository.save(user);
 
     }
@@ -41,24 +44,24 @@ public class UserService {
     @Transactional
     public void modifyNickname(UserNicknameReqDto userNicknameReqDto) {
         String nickname = userNicknameReqDto.getNickname();
-        Long userId = userNicknameReqDto.getUserId();
+        Long id = userNicknameReqDto.getId();
 
-        User user = userRepository.findById(userId).orElse(null);
+        User user = userRepository.findById(id).orElse(null);
 
         if(user == null)
             throw new EntityNotFoundException(ResponseStatus.USER_NOT_FOUND.getMessage());
 
         user.setNickname(nickname);
-        //nickname는 유니크이므로 중복되는 경우 예외 발생
+
         userRepository.save(user);
     }
 
     @Transactional
     public void modifyPassword(UserPasswordReqDto userPasswordReqDto) {
         String password = userPasswordReqDto.getPassword();
-        Long userId = userPasswordReqDto.getUserId();
+        Long id = userPasswordReqDto.getId();
 
-        User user = userRepository.findById(userId).orElse(null);
+        User user = userRepository.findById(id).orElse(null);
 
         if(user == null)
             throw new EntityNotFoundException(ResponseStatus.USER_NOT_FOUND.getMessage());
@@ -78,31 +81,29 @@ public class UserService {
         return userRepository.existsByNickname(nickname);
     }
 
-    public void userResign(Long userId) {
-        User user = userRepository.findById(userId).orElse(null);
+    public void userResign(Long id) {
+        User user = userRepository.findById(id).orElse(null);
 
         if(user == null)
             throw new EntityNotFoundException(ResponseStatus.USER_NOT_FOUND.getMessage());
 
-        userRepository.deleteById(userId);
+        userRepository.deleteById(id);
     }
-
-    //TODO
-    //  토큰 기능이 완성되면 토큰값을 리턴하도록 수정
-    public void userLogin(UserLoginReqDto userLoginReqDto) {
-        Long userId = userLoginReqDto.getUserId();
+    @Transactional(readOnly = true)
+    public String userLogin(UserLoginReqDto userLoginReqDto) {
+        Long id = userLoginReqDto.getId();
         String loginId = userLoginReqDto.getLoginId();
         String password = userLoginReqDto.getPassword();
-        if (userId!=null)
+        if (id!=null)
             throw new IllegalStateException(ResponseStatus._BAD_REQUEST.getMessage());
 
-        User user = userRepository.findById(userId).orElse(null);
+        User user = userRepository.findByLoginId(loginId).orElse(null);
 
-        if(userId == null)
+        if(user == null)
             throw new EntityNotFoundException(ResponseStatus.USER_NOT_FOUND.getMessage());
         else if(!user.getLoginId().equals(loginId) || !user.getPassword().equals(password))
             throw new EntityNotFoundException(ResponseStatus.USER_WRONG_PASSWORD.getMessage());
 
-        //토큰 발급
+        return jwtUtil.createToken(user.getId());
     }
 }

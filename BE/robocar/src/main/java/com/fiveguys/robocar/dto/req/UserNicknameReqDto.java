@@ -11,7 +11,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class UserNicknameReqDto {
     @NotNull
-    Long userId;
+    Long id;
     @Size(max = 50)
     @NotBlank
     String nickname;
