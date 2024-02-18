@@ -14,6 +14,6 @@ fun formatDurationText(hours: UInt, minutes: UInt): String {
     }
 }
 
-const val HOURS_TEXT = "시간"
-const val MINUTES_TEXT = "분"
-const val EXPECTED_TIME_TEXT = "소요예정"
+private const val HOURS_TEXT = "시간"
+private const val MINUTES_TEXT = "분"
+private const val EXPECTED_TIME_TEXT = "소요예정"
