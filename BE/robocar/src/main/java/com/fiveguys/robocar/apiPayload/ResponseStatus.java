@@ -26,9 +26,13 @@ public enum ResponseStatus {
     GARAGE_ALREADY_EXIST(CONFLICT, "중복된 차고지 위치입니다."),
     GARAGE_NOT_FOUND(BAD_REQUEST, "해당하는 차고지가 없습니다."),
 
+    // 결제 관련
+    ORDER_NOT_FOUND(BAD_REQUEST, "해당하는 주문이 없습니다."),
+    INVALID_PAYMENT_AMOUNT(BAD_REQUEST, "주문 내역의 금액과 요청한 금액이 서로 다릅니다."),
+    UNPROCESSABLE_PAYMENT(UNPROCESSABLE_ENTITY, "이미 승인되었거나 만료된 결제 요청입니다."),
+
     // 테스트용
-    TEST_EXCEPTION(BAD_REQUEST, "Error 테스트"),
-    ;
+    TEST_EXCEPTION(BAD_REQUEST, "Error 테스트");
 
     private final HttpStatus httpStatus;
     private final String message;
