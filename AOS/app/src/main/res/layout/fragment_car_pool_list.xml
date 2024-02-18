@@ -19,7 +19,6 @@
             android:id="@+id/resultCountTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="총 N대의 동승 가능한 차량을 찾았어요"
             android:textColor="@color/black"
             android:textSize="@dimen/title_text"
             android:fontFamily="@font/pretendard_semibold"

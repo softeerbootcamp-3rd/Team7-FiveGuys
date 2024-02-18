@@ -5,12 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import dagger.hilt.android.AndroidEntryPoint
 import org.softeer.robocar.databinding.FragmentCarPoolListBinding
 import org.softeer.robocar.ui.adapter.CarPoolAdapter
 import org.softeer.robocar.ui.custom.MarginItemDecoration
+import org.softeer.robocar.ui.viewmodel.CarPoolListViewModel
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CarPoolListFragment : Fragment() {
 
+    @Inject
+    lateinit var viewModel: CarPoolListViewModel
     private lateinit var adapter: CarPoolAdapter
     private var _binding: FragmentCarPoolListBinding? = null
     private val binding
@@ -24,6 +30,12 @@ class CarPoolListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter = CarPoolAdapter()
+        viewModel.getCarPoolList("startLocation", "destinationLocation")
+        viewModel.carPoolList.observe(viewLifecycleOwner) {
+            val availableCarPoolCount = it.carPoolList.size
+            adapter.submitList(it.carPoolList)
+            binding.resultCountTitle.text = getResultCountTitle(availableCarPoolCount)
+        }
 
         with(binding) {
             carPoolList.addItemDecoration(MarginItemDecoration(ITEM_MARGIN))
@@ -34,6 +46,10 @@ class CarPoolListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun getResultCountTitle(availableCarPoolCount: Int): String {
+        return "총 ${availableCarPoolCount}대의 동승 가능한 차량을 찾았어요"
     }
 
     companion object {
