@@ -30,6 +30,7 @@ public enum ResponseStatus {
     ORDER_NOT_FOUND(BAD_REQUEST, "해당하는 주문이 없습니다."),
     INVALID_PAYMENT_AMOUNT(BAD_REQUEST, "주문 내역의 금액과 요청한 금액이 서로 다릅니다."),
     UNPROCESSABLE_PAYMENT(UNPROCESSABLE_ENTITY, "이미 승인되었거나 만료된 결제 요청입니다."),
+    NOT_CANCELABLE_AMOUNT(UNPROCESSABLE_ENTITY, "취소할 수 없는 금액입니다"),
 
     // 테스트용
     TEST_EXCEPTION(BAD_REQUEST, "Error 테스트");
