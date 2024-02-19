@@ -38,6 +38,7 @@ public enum ResponseStatus {
 
     // 외부 api호출
     EXTERNAL_SERVICE_ERROR(INTERNAL_SERVER_ERROR, "외부 서비스 호출 중 오류가 발생했습니다."),
+    ADDRESS_TO_COORDINATE_CONVERSION_FAILED(BAD_REQUEST, "주소를 좌표로 변환할 수 없습니다."),
 
     // 테스트용
     TEST_EXCEPTION(BAD_REQUEST, "Error 테스트");
