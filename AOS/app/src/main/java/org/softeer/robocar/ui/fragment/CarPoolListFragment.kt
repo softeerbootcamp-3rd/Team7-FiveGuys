@@ -32,7 +32,10 @@ class CarPoolListFragment : Fragment(), CarPoolListClickListener {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentCarPoolListBinding.inflate(inflater, container, false)
+        _binding = FragmentCarPoolListBinding.inflate(inflater, container, false).apply {
+            lifecycleOwner = this@CarPoolListFragment
+            listViewModel = viewModel
+        }
         return binding.root
     }
 
@@ -42,9 +45,7 @@ class CarPoolListFragment : Fragment(), CarPoolListClickListener {
         navController = findNavController()
         adapter = CarPoolAdapter(this)
         viewModel.carPoolList.observe(viewLifecycleOwner) {
-            val availableCarPoolCount = it.carPoolList.size
             adapter.submitList(it.carPoolList)
-            binding.resultCountTitle.text = getResultCountTitle(availableCarPoolCount)
         }
 
         with(binding) {
@@ -56,10 +57,6 @@ class CarPoolListFragment : Fragment(), CarPoolListClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun getResultCountTitle(availableCarPoolCount: Int): String {
-        return "총 ${availableCarPoolCount}대의 동승 가능한 차량을 찾았어요"
     }
 
     override fun onClickDetailButton(position: Int) {
@@ -78,3 +75,4 @@ class CarPoolListFragment : Fragment(), CarPoolListClickListener {
         const val ITEM_MARGIN = 32
     }
 }
+
