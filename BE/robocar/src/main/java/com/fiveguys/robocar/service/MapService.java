@@ -23,19 +23,30 @@ public class MapService {
     }
 
     public ResponseEntity<String> getRoute(String start, String goal1, String goal2) {
-        String waypointParam = goal2 != null && !goal2.isEmpty() ? "&waypoints=" + goal2 : "";
-        String url = String.format("https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=%s&goal=%s%s&option=trafast", start.replace(" ", ""), goal1.replace(" ", ""), waypointParam.replace(" ", ""));
+        String url = buildUrl(start, goal1, goal2);
+        HttpHeaders headers = createHeaders();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("X-NCP-APIGW-API-KEY-ID", apiKeyId);
-        headers.set("X-NCP-APIGW-API-KEY", apiKeySecret);
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         try {
             return restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
         } catch (RestClientException e) {
-            // 새로운 ResponseStatus를 사용하여 GeneralException을 던집니다.
             throw new GeneralException(ResponseStatus.EXTERNAL_SERVICE_ERROR);
         }
+    }
+
+    // URL 생성을 위한 메소드
+    private String buildUrl(String start, String goal1, String goal2) {
+        String waypointParam = goal2 != null && !goal2.isEmpty() ? "&waypoints=" + goal2 : "";
+        return String.format("https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=%s&goal=%s%s&option=trafast",
+                start.replace(" ", ""), goal1.replace(" ", ""), waypointParam.replace(" ", ""));
+    }
+
+    // 헤더 설정을 위한 메소드
+    private HttpHeaders createHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-NCP-APIGW-API-KEY-ID", apiKeyId);
+        headers.set("X-NCP-APIGW-API-KEY", apiKeySecret);
+        return headers;
     }
 }

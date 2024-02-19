@@ -3,18 +3,20 @@ package com.fiveguys.robocar.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
 import java.util.Date;
 import java.util.function.Function;
 
+import static com.fiveguys.robocar.models.TokenConstant.*;
+
 @Component
 public class JwtUtil {
     final Long EXPIRE_TIME = 30L * 24 * 60 * 60 * 1000;
-
-
     private final String SECRET_KEY;
 
     private final String ISSUER;
@@ -34,8 +36,8 @@ public class JwtUtil {
 
     }
 
-    public String extractId(String token){
-        return extractClaim(token, Claims::getSubject);
+    public Long extractId(String token){
+        return Long.valueOf(extractClaim(token, Claims::getSubject));
     }
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
@@ -54,7 +56,7 @@ public class JwtUtil {
     public Boolean validateToken(String token) {
         try {
             String issuer = extractIssuer(token);
-            return !isTokenExpired(token) && ISSUER.equals(issuer) && extractId(token) != null;
+            return !isTokenExpired(token) && ISSUER.equals(issuer);
         } catch(Exception e){
             return false;
         }
@@ -70,5 +72,15 @@ public class JwtUtil {
 
     private String extractIssuer(String token){ return extractClaim(token, Claims::getIssuer);}
 
+    public String getAuthorization(HttpServletRequest httpServletRequest) {
+        return httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
+    }
 
+    public String getBearerToken(String authorization) {
+        String token = "";
+        if (authorization.startsWith(BEARER_TYPE)) {
+            token = authorization.substring(7);
+        }
+        return token;
+    }
 }

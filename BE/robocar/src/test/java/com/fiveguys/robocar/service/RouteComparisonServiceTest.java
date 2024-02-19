@@ -3,10 +3,15 @@ package com.fiveguys.robocar.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 public class RouteComparisonServiceTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(RouteComparisonServiceTest.class);
 
     @Autowired
     private RouteComparisonService routeComparisonService;
@@ -25,7 +30,7 @@ public class RouteComparisonServiceTest {
         assertNotNull(optimalRoute.getFirstDestination(), "첫 번째 목적지가 null입니다.");
         assertNotNull(optimalRoute.getSecondDestination(), "두 번째 목적지가 null입니다.");
 
-        // 성공 메시지 출력
-        System.out.println("테스트 성공: 최적 경로는 " + optimalRoute.getFirstDestination() + "에서 " + optimalRoute.getSecondDestination() + "으로 결정되었습니다.");
+        // 성공 메시지 로깅
+        logger.info("테스트 성공: 최적 경로는 {}에서 {}으로 결정되었습니다.", optimalRoute.getFirstDestination(), optimalRoute.getSecondDestination());
     }
 }

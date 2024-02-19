@@ -23,7 +23,7 @@ public class GarageService {
         Double longitude = garageReqDto.getLongitude();
 
         Garage findGarage = garageRepository.findByLatitudeAndLongitude(latitude, longitude)
-                                .orElse(null);
+                .orElseThrow(() -> new IllegalArgumentException(ResponseStatus.GARAGE_ALREADY_EXIST.getMessage()));
 
         if (findGarage != null) {
             throw new IllegalArgumentException(ResponseStatus.GARAGE_ALREADY_EXIST.getMessage());
@@ -34,11 +34,8 @@ public class GarageService {
     }
 
     public Garage getGarage(Long id) {
-        Garage findGarage = garageRepository.findById(id).orElse(null);
-
-        if (findGarage == null) {
-            throw new EntityNotFoundException(ResponseStatus.GARAGE_NOT_FOUND.getMessage());
-        }
+        Garage findGarage = garageRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(ResponseStatus.GARAGE_NOT_FOUND.getMessage()));
 
         return findGarage;
     }
@@ -49,11 +46,9 @@ public class GarageService {
 
     @Transactional
     public Garage editGarage(Long id, GarageReqDto garageReqDto) {
-        Garage findGarage = garageRepository.findById(id).orElse(null);
+        Garage findGarage = garageRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(ResponseStatus.GARAGE_NOT_FOUND.getMessage()));
 
-        if (findGarage == null) {
-            throw new EntityNotFoundException(ResponseStatus.GARAGE_NOT_FOUND.getMessage());
-        }
         Double updateLatitude = garageReqDto.getLatitude();
         Double updateLongitude = garageReqDto.getLongitude();
         if (findGarage.getLatitude() == updateLatitude
@@ -68,10 +63,8 @@ public class GarageService {
 
     @Transactional
     public void deleteGarage(Long id) {
-        Garage findGarage = garageRepository.findById(id).orElse(null);
-        if (findGarage == null) {
-            throw new EntityNotFoundException(ResponseStatus.GARAGE_NOT_FOUND.getMessage());
-        }
+        Garage findGarage = garageRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(ResponseStatus.GARAGE_NOT_FOUND.getMessage()));
 
         garageRepository.delete(findGarage);
     }
