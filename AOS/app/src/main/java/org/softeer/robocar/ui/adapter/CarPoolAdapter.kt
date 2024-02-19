@@ -10,11 +10,13 @@ import org.softeer.robocar.databinding.FragmentCarPoolItemBinding
 import org.softeer.robocar.utils.convertMinutesToHoursAndMinutes
 import org.softeer.robocar.utils.formatDurationText
 
-class CarPoolAdapter : ListAdapter<CarPool, CarPoolViewHolder>(diffCallback) {
+class CarPoolAdapter(
+    private val carPoolListClickListener: CarPoolListClickListener
+) : ListAdapter<CarPool, CarPoolViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarPoolViewHolder {
         val binding = FragmentCarPoolItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return CarPoolViewHolder(binding)
+        return CarPoolViewHolder(binding, carPoolListClickListener)
     }
 
     override fun onBindViewHolder(viewHolder: CarPoolViewHolder, position: Int) {
@@ -35,13 +37,22 @@ class CarPoolAdapter : ListAdapter<CarPool, CarPoolViewHolder>(diffCallback) {
     }
 }
 
-class CarPoolViewHolder(private val binding: FragmentCarPoolItemBinding) : RecyclerView.ViewHolder(binding.root) {
+class CarPoolViewHolder(
+    private val binding: FragmentCarPoolItemBinding,
+    private val carPoolListClickListener: CarPoolListClickListener
+) : RecyclerView.ViewHolder(binding.root) {
     fun bind(carPool: CarPool) {
         with(binding) {
             val (hours, minutes) = convertMinutesToHoursAndMinutes(carPool.duration)
             duration.text = formatDurationText(hours, minutes)
             startLocation.text = carPool.startLocation
             destinationLocation.text = carPool.destinationLocation
+            carPoolDetailButton.setOnClickListener {
+                carPoolListClickListener.onClickDetailButton(adapterPosition)
+            }
+            carPoolRequestButton.setOnClickListener{
+                carPoolListClickListener.onClickRequestCarPoolButton(carPool.carPoolId)
+            }
         }
     }
 }

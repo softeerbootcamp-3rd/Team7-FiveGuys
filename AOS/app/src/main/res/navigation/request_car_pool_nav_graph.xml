@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/request_car_pool_nav_graph"
+            xmlns:tools="http://schemas.android.com/tools"
+            app:startDestination="@id/carPoolList">
+
+    <fragment
+        android:id="@+id/carPoolRequestDetail"
+        android:name="org.softeer.robocar.ui.fragment.CarPoolRequestDetailFragment"
+        android:label="CarPoolRequestDetailFragment"
+        tools:layout="@layout/fragment_car_pool_detail">
+        <action android:id="@+id/action_carPoolRequestDetail_to_carPoolRequestDialog"
+                app:destination="@id/carPoolRequestDialog"/>
+        <argument
+            android:name="carPool" app:argType="org.softeer.robocar.data.model.CarPool"/>
+        <argument
+            android:name="originalCharge" app:argType="integer"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/carPoolList"
+        android:name="org.softeer.robocar.ui.fragment.CarPoolListFragment"
+        android:label="CarPoolListFragment"
+        tools:layout="@layout/fragment_car_pool_list">
+        <action android:id="@+id/action_carPoolList_to_carPoolRequestDialog"
+                app:destination="@id/carPoolRequestDialog"/>
+        <action android:id="@+id/action_carPoolList_to_carPoolRequestDetail"
+                app:destination="@id/carPoolRequestDetail"/>
+    </fragment>
+
+    <dialog
+        android:id="@+id/carPoolRequestDialog"
+        android:name="org.softeer.robocar.ui.fragment.CarPoolRequestDialogFragment"
+        android:label="CarPoolRequestDialogFragment"
+        tools:layout="@layout/fragment_dialog_car_pool_request"/>
+
+</navigation>
