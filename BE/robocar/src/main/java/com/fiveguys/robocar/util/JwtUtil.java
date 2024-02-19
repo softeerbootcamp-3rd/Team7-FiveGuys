@@ -36,8 +36,8 @@ public class JwtUtil {
 
     }
 
-    public String extractId(String token){
-        return extractClaim(token, Claims::getSubject);
+    public Long extractId(String token){
+        return Long.valueOf(extractClaim(token, Claims::getSubject));
     }
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
