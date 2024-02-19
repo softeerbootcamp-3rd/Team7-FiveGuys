@@ -186,15 +186,13 @@ public class UserController {
     @PostMapping("/users/login")
     public ResponseEntity userLogin(@RequestBody UserLoginReqDto userLoginReqDto){
 
+        System.out.println("1[["+userLoginReqDto.getLoginId()+userLoginReqDto.getPassword());
         String token = null;
         try{
             token = userService.userLogin(userLoginReqDto);
         } catch (EntityNotFoundException e){
             return ResponseApi.of(ResponseStatus._INVALID_ARGUMENT);
-        } catch(IllegalStateException e){
-            return ResponseApi.of(ResponseStatus._BAD_REQUEST);
-        }
-        catch(Exception e){
+        } catch(Exception e){
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
         return ResponseApi.ok(token);

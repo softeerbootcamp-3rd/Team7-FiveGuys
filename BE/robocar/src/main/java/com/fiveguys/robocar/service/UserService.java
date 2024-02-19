@@ -91,19 +91,15 @@ public class UserService {
     }
     @Transactional(readOnly = true)
     public String userLogin(UserLoginReqDto userLoginReqDto) {
-        Long id = userLoginReqDto.getId();
+        System.out.println("2[["+userLoginReqDto.getLoginId()+userLoginReqDto.getPassword());
         String loginId = userLoginReqDto.getLoginId();
         String password = userLoginReqDto.getPassword();
-        if (id!=null)
-            throw new IllegalStateException(ResponseStatus._BAD_REQUEST.getMessage());
 
         User user = userRepository.findByLoginId(loginId).orElse(null);
-
         if(user == null)
             throw new EntityNotFoundException(ResponseStatus.USER_NOT_FOUND.getMessage());
         else if(!user.getLoginId().equals(loginId) || !user.getPassword().equals(password))
             throw new EntityNotFoundException(ResponseStatus.USER_WRONG_PASSWORD.getMessage());
-
         return jwtUtil.createToken(user.getId());
     }
 }
