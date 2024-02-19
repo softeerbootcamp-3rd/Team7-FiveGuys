@@ -8,12 +8,13 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 public class NaverMapConfig {
 
+    public static final String DIRECTION_API_URL = "https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving";
+    public static final String GEOCODE_API_URL = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode";
+
     @Value("${naver.api.key.id}")
     private String apiKeyId;
 
     @Value("${naver.api.key.secret}")
     private String apiKeySecret;
 
-    public static final String DIRECTION_API_URL = "https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving";
-    public static final String GEOCODE_API_URL = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode";
 }
