@@ -8,8 +8,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class CarpoolRegisterReqDto {
-    @NotNull
-    Long id;
     @NotBlank
     String DepartAddress;
     @NotBlank

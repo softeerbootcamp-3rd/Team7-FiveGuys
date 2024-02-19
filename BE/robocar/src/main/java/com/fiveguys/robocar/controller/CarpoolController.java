@@ -3,6 +3,8 @@ package com.fiveguys.robocar.controller;
 
 import com.fiveguys.robocar.apiPayload.ResponseApi;
 import com.fiveguys.robocar.apiPayload.ResponseStatus;
+import com.fiveguys.robocar.controller.annotation.Auth;
+import com.fiveguys.robocar.dto.req.CarpoolSuccessReqDto;
 import com.fiveguys.robocar.dto.req.CarpoolRegisterReqDto;
 import com.fiveguys.robocar.dto.res.CarpoolListUpResDto;
 import com.fiveguys.robocar.service.CarpoolRequestService;
@@ -13,7 +15,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -57,8 +58,8 @@ public class CarpoolController {
     @Parameters(value = {
             @Parameter(name = "DepartAddress", description = "출발지 주소"),
             @Parameter(name = "DestAddress", description = "도착지 주소"),
-            @Parameter(name = "maleCount", description = "남자 탑승자 수"),
-            @Parameter(name = "femaleCount", description = "여자 탑승자 수")
+            @Parameter(name = "maleCount", description = "남성 탑승자 수"),
+            @Parameter(name = "femaleCount", description = "여성 탑승자 수")
     })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "추가 성공"),
@@ -66,11 +67,11 @@ public class CarpoolController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @PostMapping("/operations")
-    public ResponseEntity carpoolRegister(@RequestBody @Validated CarpoolRegisterReqDto carpoolRegisterReqDto){
+    public ResponseEntity carpoolRegister(@Auth Long id,@RequestBody @Validated CarpoolRegisterReqDto carpoolRegisterReqDto){
         try{
-            carpoolRequestService.carPoolRegister(carpoolRegisterReqDto);
+            carpoolRequestService.carPoolRegister(carpoolRegisterReqDto, id);
         } catch (EntityNotFoundException e){
-            return ResponseApi.of(ResponseStatus.USER_NOT_FOUND);
+            return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
         } catch (Exception e){
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
@@ -80,16 +81,22 @@ public class CarpoolController {
 
     @Operation(summary = "게스트가 동승 차량을 선택")
     @Parameters(value = {
-            @Parameter(name = "latitude", description = "위도"),
-            @Parameter(name = "longitude", description = "경도"),
-
-
+            @Parameter(name = "guestId", description = "게스트 ID"),
+            @Parameter(name = "guestDestAddress", description = "게스트 도착지 주소")
     })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "추가 성공")
     })
     @DeleteMapping("/operations")
-    public ResponseEntity carpoolDelete(HttpServletRequest request){
+    public ResponseEntity carpoolSuccess(@Auth Long id, @RequestBody @Validated CarpoolSuccessReqDto carpoolSuccessReqDto){
+
+        //TODO
+        // 예외처리 미완성
+        try {
+            carpoolRequestService.carpoolSuccess(id, carpoolSuccessReqDto);
+        } catch(Exception e){
+
+        }
         return ResponseApi.ok();
     }
 
