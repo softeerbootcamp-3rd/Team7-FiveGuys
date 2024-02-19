@@ -3,26 +3,53 @@ package com.fiveguys.robocar.service;
 import com.fiveguys.robocar.apiPayload.ResponseStatus;
 import com.fiveguys.robocar.dto.req.CarReqDto;
 import com.fiveguys.robocar.entity.Car;
+import com.fiveguys.robocar.entity.Garage;
 import com.fiveguys.robocar.models.CarState;
 import com.fiveguys.robocar.repository.CarRepository;
+import com.fiveguys.robocar.repository.GarageRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CarService {
 
     private final CarRepository carRepository;
+    private final GarageRepository garageRepository;
 
     @Transactional
-    public Car insertCar(CarReqDto carReqDto) {
-        Car car = new Car(); // 차량 객체 생성 및 carReqDto 데이터 설정 로직 필요
-        // 예: car.setCarName(carReqDto.getCarName());
-        return carRepository.save(car); // 차량 정보 데이터베이스에 저장
+    public void insertCar(CarReqDto carReqDto) {
+        // 차량 번호로 이미 등록된 차량이 있는지 확인
+        Car findCar = carRepository.findByCarNumber(carReqDto.getCarNumber())
+                .orElse(null);
+
+        if (findCar != null) {
+            throw new IllegalArgumentException(ResponseStatus.CAR_ALREADY_EXIST.getMessage());
+        }
+
+// garageId를 사용하여 Garage 엔티티 검색
+        Garage garage = garageRepository.findById(carReqDto.getGarageId())
+                .orElseThrow(() -> new IllegalArgumentException("Garage not found with id: " + carReqDto.getGarageId()));
+
+        // Car 객체 생성 및 DTO에서 받은 값 설정
+        Car car = new Car();
+        car.setGarage(garage); // Garage 엔티티 설정
+        car.setState(carReqDto.getState());
+        car.setSeatTemperature(carReqDto.getSeatTemperature());
+        car.setVentilationLevel(carReqDto.getVentilationLevel());
+        car.setAirConditionerTemperature(carReqDto.getAirConditionerTemperature());
+        car.setDoorLock(carReqDto.isDoorLock());
+        car.setCarName(carReqDto.getCarName());
+        car.setCarImage(carReqDto.getCarImage());
+        car.setCarNumber(carReqDto.getCarNumber());
+
+        // 차량 정보 저장
+        carRepository.save(car);
     }
 
     public Car getCar(Long carId) {
@@ -50,11 +77,12 @@ public class CarService {
         String updateCarImage = carReqDto.getCarImage();
         String updateCarNumber = carReqDto.getCarNumber();
 
-        //carName과 carNumber를 사용하여 동일한 차량이 존재하는지 확인
-        boolean carExists = carRepository.existsByCarNameAndCarNumber(updateCarName, updateCarNumber);
-        if (carExists && !findCar.getCarNumber().equals(updateCarNumber)) {
+        // 차량 번호로 이미 등록된 차량이 있는지 확인
+        Optional<Car> existingCar = carRepository.findByCarNumber(updateCarNumber);
+        if (existingCar.isPresent() && !existingCar.get().getId().equals(findCar.getId())) {
             throw new IllegalArgumentException(ResponseStatus.CAR_ALREADY_EXIST.getMessage());
         }
+
 
         findCar.edit(updateState, updateSeatTemperature, updateVentilationLevel,
                 updateAirConditionerTemperature, updateDoorLock,

@@ -51,7 +51,7 @@ public class CarController {
         }
 
         try {
-            Car car = carService.insertCar(carReqDto);
+            carService.insertCar(carReqDto);
         } catch (IllegalArgumentException e) {
             return ResponseApi.of(ResponseStatus.CAR_ALREADY_EXIST);
         }
