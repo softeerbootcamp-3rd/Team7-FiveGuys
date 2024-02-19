@@ -26,7 +26,7 @@
         android:textSize="@dimen/logo_text"
         android:textAlignment="center"
         android:fontFamily="@font/pretendard_semibold"
-        android:text="로고"
+        android:text="@string/logo"
         android:textColor="@color/hyundai_blue"
         android:layout_marginStart="@dimen/default_left_margin"
         android:layout_marginTop="18dp"
@@ -113,60 +113,104 @@
         app:layout_constraintTop_toBottomOf="@id/middleHorizontalGuideLine"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/recruitCarPoolButton"
-        android:background="@drawable/rectangle_yellow_200_radius_30"
+    <HorizontalScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="@dimen/default_left_margin"
-        android:layout_marginEnd="12dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="64dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/img_recruit_car_pool"
+        app:layout_constraintTop_toBottomOf="@id/carPoolTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/middleVerticalGuideLine"
-        app:layout_constraintTop_toBottomOf="@id/carPoolTitle"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/recruitCarPoolText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/recruit_car_pool"
-        android:fontFamily="@font/pretendard_semibold"
-        android:textSize="@dimen/title_text"
-        app:layout_constraintStart_toStartOf="@id/recruitCarPoolButton"
-        app:layout_constraintEnd_toEndOf="@id/recruitCarPoolButton"
-        app:layout_constraintTop_toBottomOf="@id/recruitCarPoolButton"/>
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/participateCarPoolButton"
-        android:background="@drawable/rectangle_active_blue_pms_312c_radius_30"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="@dimen/default_left_margin"
-        android:layout_marginEnd="12dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="64dp"
-        android:src="@drawable/img_participate_car_pool"
-        android:scaleType="fitCenter"
-        app:layout_constraintStart_toStartOf="@id/middleVerticalGuideLine"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/carPoolTitle"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="@dimen/default_left_margin"
+        android:layout_marginEnd="@dimen/default_right_margin">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/participate_car_pool"
-        android:fontFamily="@font/pretendard_semibold"
-        android:textSize="@dimen/title_text"
-        app:layout_constraintStart_toStartOf="@id/participateCarPoolButton"
-        app:layout_constraintEnd_toEndOf="@id/participateCarPoolButton"
-        app:layout_constraintTop_toBottomOf="@id/participateCarPoolButton"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/CarPoolTypeContainer"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/default_right_margin">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/rideAloneButton"
+                android:background="@drawable/rectangle_navy_radius_30"
+                android:layout_width="165dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="64dp"
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/img_alone_riding"
+                android:scaleType="fitCenter"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/recruitCarPoolButton"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/ride_alone"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="@dimen/title_text"
+                app:layout_constraintStart_toStartOf="@id/rideAloneButton"
+                app:layout_constraintEnd_toEndOf="@id/rideAloneButton"
+                app:layout_constraintTop_toBottomOf="@id/rideAloneButton"/>
+
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/recruitCarPoolButton"
+                android:background="@drawable/rectangle_yellow_200_radius_30"
+                android:layout_width="165dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="64dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/img_recruit_car_pool"
+                app:layout_constraintStart_toEndOf="@id/rideAloneButton"
+                app:layout_constraintEnd_toStartOf="@id/participateCarPoolButton"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/recruitCarPoolText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/recruit_car_pool"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="@dimen/title_text"
+                app:layout_constraintStart_toStartOf="@id/recruitCarPoolButton"
+                app:layout_constraintEnd_toEndOf="@id/recruitCarPoolButton"
+                app:layout_constraintTop_toBottomOf="@id/recruitCarPoolButton"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/participateCarPoolButton"
+                android:background="@drawable/rectangle_active_blue_pms_312c_radius_30"
+                android:layout_width="165dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/default_left_margin"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="64dp"
+                android:src="@drawable/img_participate_car_pool"
+                android:scaleType="fitCenter"
+                app:layout_constraintStart_toEndOf="@id/recruitCarPoolButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/participate_car_pool"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="@dimen/title_text"
+                app:layout_constraintStart_toStartOf="@id/participateCarPoolButton"
+                app:layout_constraintEnd_toEndOf="@id/participateCarPoolButton"
+                app:layout_constraintTop_toBottomOf="@id/participateCarPoolButton"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </HorizontalScrollView>
 
     <androidx.appcompat.widget.AppCompatButton
         android:layout_width="0dp"
