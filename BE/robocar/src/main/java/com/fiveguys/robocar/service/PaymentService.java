@@ -36,6 +36,7 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final UserRepository userService;
     private final TossPaymentConfig tossPaymentConfig;
+    private final RestTemplate restTemplate;
 
     @Transactional
     public PaymentResDto requestTossPayment(Long userId, PaymentReqDto paymentReqDto) {
@@ -92,8 +93,6 @@ public class PaymentService {
 
     @Transactional
     public PaymentSuccessDto acceptPaymentRequest(String paymentKey, String orderId, Long amount) throws JSONException {
-        RestTemplate restTemplate = new RestTemplate();
-
         HttpHeaders headers = setTossPaymentHeader();
         JSONObject params = setJSONParams(paymentKey, orderId, amount);
 
@@ -132,7 +131,6 @@ public class PaymentService {
     }
 
     public Map tossPaymentCancel(String paymentKey, String cancelReason, Long cancelAmount) throws JSONException {
-        RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = setTossPaymentHeader();
         JSONObject params = new JSONObject();
         params.put(TossPaymentConstants.CANCEL_REASON, cancelReason);
