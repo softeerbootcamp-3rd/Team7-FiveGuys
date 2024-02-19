@@ -18,12 +18,12 @@ import static com.fiveguys.robocar.models.TokenConstant.*;
 
 
 @Component
-public class JwtRequestFilter implements Filter {
+public class JwtAuthenticationFilter implements Filter {
     private final JwtUtil jwtUtil;
     private final List<String> unauthenticatedUrls;
 
     @Autowired
-    public JwtRequestFilter(JwtUtil jwtUtil, AuthRequestMappingScanner scanner) {
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, AuthRequestMappingScanner scanner) {
         this.jwtUtil = jwtUtil;
         this.unauthenticatedUrls = scanner.getAuthAnnotatedUrls();
     }
