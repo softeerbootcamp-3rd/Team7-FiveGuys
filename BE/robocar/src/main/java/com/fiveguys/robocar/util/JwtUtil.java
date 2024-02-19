@@ -54,7 +54,7 @@ public class JwtUtil {
     public Boolean validateToken(String token) {
         try {
             String issuer = extractIssuer(token);
-            return !isTokenExpired(token) && ISSUER.equals(issuer);
+            return !isTokenExpired(token) && ISSUER.equals(issuer) && extractId(token) != null;
         } catch(Exception e){
             return false;
         }
@@ -69,5 +69,6 @@ public class JwtUtil {
     }
 
     private String extractIssuer(String token){ return extractClaim(token, Claims::getIssuer);}
+
 
 }

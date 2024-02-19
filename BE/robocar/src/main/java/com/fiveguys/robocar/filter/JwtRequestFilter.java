@@ -1,6 +1,5 @@
 package com.fiveguys.robocar.filter;
 
-import com.fiveguys.robocar.apiPayload.ResponseApi;
 import com.fiveguys.robocar.apiPayload.ResponseStatus;
 import com.fiveguys.robocar.util.JwtUtil;
 import jakarta.servlet.*;
@@ -10,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Component
 public class JwtRequestFilter implements Filter {
-    final private List<String> whiteList = List.of("/login", "/");
+    private final String AUTHORIZATION =  "Authorization";
+    private final String BEARER = "Bearer ";
+    private final String ID = "id";
     private final JwtUtil jwtUtil;
     @Autowired
     public JwtRequestFilter(JwtUtil jwtUtil) {
@@ -25,33 +24,41 @@ public class JwtRequestFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        final String authorizationHeader = httpRequest.getHeader("Authorization");
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
+
+        String authorizationHeader = httpRequest.getHeader(AUTHORIZATION);
         String requestUrl = httpRequest.getRequestURI();
 
         String jwt = null;
 
+        //로그인 필요한 경로
+        if(isLoginCheckPath(requestUrl)){
+            if (authorizationHeader != null && authorizationHeader.startsWith(BEARER)) {
+                jwt = authorizationHeader.substring(BEARER.length());
 
-        if(isLoginCheckPath(requestUrl)) {
-            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-                jwt = authorizationHeader.substring(7);
-                // 유효한 토큰이 있으면 id를 리퀘스트에 추가
-                if (jwtUtil.validateToken(jwt)) {
+                if(jwtUtil.validateToken(jwt)){
                     String id = jwtUtil.extractId(jwt);
-                    httpRequest.setAttribute("id", id);
+                    httpRequest.setAttribute(ID, id);
                     chain.doFilter(request, response);
+                    return;
                 }
-                // 그 외엔 전부 UNAUTHORIZED
-                else {
-                    HttpServletResponse httpResponse = (HttpServletResponse) ResponseApi.of(ResponseStatus._UNAUTHORIZED);
-                }
+
             }
+            //유효한 토큰이 없는 경우
+            httpResponse.setStatus(401);
+            httpResponse.getWriter().write(ResponseStatus._UNAUTHORIZED.getMessage());
+            httpResponse.getWriter().flush();
         }
-        chain.doFilter(request, response);
+        // 로그인이 필요 없으면 그대로 통과
+        else{
+            chain.doFilter(request, response);
+        }
 
     }
 
     private boolean isLoginCheckPath(String requestURL){
-        return !whiteList.contains(requestURL);
+        return false;
     }
 }
