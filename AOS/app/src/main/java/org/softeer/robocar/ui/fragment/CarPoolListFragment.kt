@@ -22,7 +22,7 @@ class CarPoolListFragment : Fragment(), CarPoolListClickListener {
     lateinit var viewModel: CarPoolListViewModel
     private lateinit var adapter: CarPoolAdapter
     private var _binding: FragmentCarPoolListBinding? = null
-    lateinit var navController: NavController
+    private lateinit var navController: NavController
     private val binding
         get() = _binding!!
 
