@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softeer.robocar.data.model.CarPool
 import org.softeer.robocar.databinding.FragmentCarPoolDetailBinding
@@ -17,6 +19,7 @@ class CarPoolRequestDetailFragment : Fragment() {
     @Inject
     lateinit var viewModel: CarPoolDetailViewModel
     private var _binding: FragmentCarPoolDetailBinding? = null
+    private lateinit var navController: NavController
     private val binding
         get() = _binding!!
 
@@ -33,6 +36,11 @@ class CarPoolRequestDetailFragment : Fragment() {
         val carPool = arguments?.getParcelable<CarPool>("carPool")!!
         val originalCharge = arguments?.getInt("originalCharge")!!
         viewModel.setCarPoolDetail(carPool, originalCharge)
+        navController = findNavController()
+        binding.requestCarPoolButton.setOnClickListener{
+            val action = CarPoolRequestDetailFragmentDirections.actionCarPoolRequestDetailToCarPoolRequestDialog()
+            navController.navigate(action)
+        }
     }
 
     override fun onDestroyView() {
