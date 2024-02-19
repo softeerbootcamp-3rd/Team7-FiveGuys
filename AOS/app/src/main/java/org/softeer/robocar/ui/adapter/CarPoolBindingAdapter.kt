@@ -1,7 +1,10 @@
 package org.softeer.robocar.ui.adapter
 
+import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.BindingAdapter
+import com.airbnb.lottie.LottieAnimationView
+import org.softeer.robocar.data.model.CarPools
 import org.softeer.robocar.utils.convertMinutesToHoursAndMinutes
 import org.softeer.robocar.utils.formatDurationText
 import java.text.DecimalFormat
@@ -43,4 +46,10 @@ fun setCountOfPassenger(textView: AppCompatTextView, countOfMale: Int, countOfFe
 fun setCountOfCarPoolList(textView: AppCompatTextView, availableCarPoolCount: Int){
     if(availableCarPoolCount != 0)
         textView.text = "총 ${availableCarPoolCount}대의 동승 가능한 차량을 찾았어요"
+}
+
+@BindingAdapter("setAnimationVisibilityAsGone")
+fun setAnimationVisibilityAsGone(animationView: LottieAnimationView, carPools : CarPools?){
+    if(carPools != null)
+        animationView.visibility = View.GONE
 }
