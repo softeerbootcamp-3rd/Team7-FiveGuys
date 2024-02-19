@@ -8,13 +8,13 @@ import org.softeer.robocar.data.model.CarPools
 fun CarPoolInformation.toCarPool(): CarPool {
     return CarPool(
         carPoolId = hostId,
-        duration = estimatedTime.toUInt(),
+        duration = estimatedTime,
         startLocation = hostDepartAddress,
         destinationLocation = hostDestAddress,
         nickname = hostNickname,
-        expectedCharge = estimatedPrice.toUInt(),
-        countOfMen = maleCount.toUInt(),
-        countOfWomen = femaleCount.toUInt()
+        expectedCharge = estimatedPrice,
+        countOfMen = maleCount,
+        countOfWomen = femaleCount
     )
 }
 
