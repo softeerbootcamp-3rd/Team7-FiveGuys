@@ -34,7 +34,7 @@ public class JwtController {
             @ApiResponse(responseCode = "200", description = "조회 성공"),
             @ApiResponse(responseCode = "401", description = "유효하지 않은 토큰")})
     @GetMapping("/token/user-id")
-    public ResponseEntity tokenTest(@Auth Long userId) {
+    public ResponseEntity getUserIdInToken(@Auth Long userId) {
         return ResponseApi.ok(userId);
     }
 }
