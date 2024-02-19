@@ -9,8 +9,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class UserPasswordReqDto {
-    @NotNull
-    Long id;
     @Size(max = 50)
     @NotBlank
     String password;

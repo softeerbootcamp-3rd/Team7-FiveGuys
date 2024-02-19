@@ -2,6 +2,7 @@ package com.fiveguys.robocar.controller;
 
 import com.fiveguys.robocar.apiPayload.ResponseApi;
 import com.fiveguys.robocar.apiPayload.ResponseStatus;
+import com.fiveguys.robocar.controller.annotation.Auth;
 import com.fiveguys.robocar.dto.req.UserCreateReqDto;
 import com.fiveguys.robocar.dto.req.UserLoginReqDto;
 import com.fiveguys.robocar.dto.req.UserNicknameReqDto;
@@ -48,7 +49,6 @@ public class UserController {
     public ResponseEntity createUser(@RequestBody @Validated UserCreateReqDto userCreateReqDto, Errors errors){
         if(errors.hasErrors())
             return ResponseApi.invalidArguments();
-
         try{
             userService.createUser(userCreateReqDto);
         } catch(DataIntegrityViolationException e){
@@ -71,14 +71,14 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @PatchMapping("/users/nickname")
-    public ResponseEntity modifyNickname(@RequestBody @Validated UserNicknameReqDto userNicknameReqDto,Errors errors){
+    public ResponseEntity modifyNickname(@Auth Long id, @RequestBody @Validated UserNicknameReqDto userNicknameReqDto, Errors errors){
         if(errors.hasErrors())
             return ResponseApi.invalidArguments();
 
         try{
-            userService.modifyNickname(userNicknameReqDto);
+            userService.modifyNickname(userNicknameReqDto, id);
         } catch (EntityNotFoundException e){
-            return ResponseApi.of(ResponseStatus.USER_NOT_FOUND);
+            return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
         } catch (DataIntegrityViolationException e) {
             return ResponseApi.of(ResponseStatus.USER_CONFLICT);
         } catch(Exception e) {
@@ -100,14 +100,14 @@ public class UserController {
 
     })
     @PatchMapping("/users/password")
-    public ResponseEntity modifyPassword(@RequestBody @Validated UserPasswordReqDto userPasswordReqDto, Errors errors){
+    public ResponseEntity modifyPassword(@Auth Long id, @RequestBody @Validated UserPasswordReqDto userPasswordReqDto, Errors errors){
         if(errors.hasErrors())
             return ResponseApi.invalidArguments();
 
         try{
-            userService.modifyPassword(userPasswordReqDto);
+            userService.modifyPassword(userPasswordReqDto, id);
         } catch (EntityNotFoundException e){
-            return ResponseApi.of(ResponseStatus.USER_NOT_FOUND);
+            return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
         } catch(Exception e) {
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
@@ -125,15 +125,15 @@ public class UserController {
     })
     @GetMapping("/users/loginId-validation")
     public ResponseEntity checkLoginId(@RequestParam String loginId){
-        boolean isUsable;
+        boolean isUnusable;
 
         try{
-            isUsable = userService.checkLoginId(loginId);
+            isUnusable = userService.checkLoginId(loginId);
         } catch(Exception e) {
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
 
-        return ResponseApi.ok(isUsable);
+        return ResponseApi.ok(isUnusable);
     }
 
     @Operation(summary = "닉네임 중복 체크")
@@ -146,15 +146,15 @@ public class UserController {
     })
     @GetMapping("/users/nickname-validation")
     public ResponseEntity checkNickname(@RequestParam String nickname){
-        boolean isUsable;
+        boolean isUnusable;
 
         try{
-            isUsable = userService.checkNickname(nickname);
+            isUnusable = userService.checkNickname(nickname);
         } catch(Exception e) {
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
 
-        return ResponseApi.ok(isUsable);
+        return ResponseApi.ok(isUnusable);
     }
 
     @Operation(summary = "회원탈퇴")
@@ -164,12 +164,12 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @DeleteMapping("/users")
-    public ResponseEntity userResign(@RequestBody Long id){
+    public ResponseEntity userResign(@Auth Long id){
 
         try{
             userService.userResign(id);
         } catch (EntityNotFoundException e){
-            return ResponseApi.of(ResponseStatus.USER_NOT_FOUND);
+            return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
         }
         catch(Exception e){
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
@@ -178,6 +178,10 @@ public class UserController {
     }
 
     @Operation(summary = "로그인")
+    @Parameters(value = {
+            @Parameter(name = "loginId", description = "아이디"),
+            @Parameter(name = "password", description = "비밀번호")
+    })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "로그인 성공"),
             @ApiResponse(responseCode = "400", description = "로그인 실패"),
@@ -190,11 +194,8 @@ public class UserController {
         try{
             token = userService.userLogin(userLoginReqDto);
         } catch (EntityNotFoundException e){
-            return ResponseApi.of(ResponseStatus._INVALID_ARGUMENT);
-        } catch(IllegalStateException e){
-            return ResponseApi.of(ResponseStatus._BAD_REQUEST);
-        }
-        catch(Exception e){
+            return ResponseApi.of(ResponseStatus.USER_WRONG_LOGIN_INFO);
+        } catch(Exception e){
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
         return ResponseApi.ok(token);

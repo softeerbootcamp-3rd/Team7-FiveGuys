@@ -8,7 +8,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class UserLoginReqDto {
-    Long id;
     @Size(max = 50)
     @NotBlank
     String loginId;

@@ -9,7 +9,6 @@ import com.fiveguys.robocar.entity.User;
 import com.fiveguys.robocar.repository.UserRepository;
 import com.fiveguys.robocar.util.JwtUtil;
 import jakarta.persistence.EntityNotFoundException;
-import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +24,7 @@ public class UserService {
 
         this.userRepository = userRepository;
         this.jwtUtil = jwtUtil;
+
     }
     @Transactional
     public void createUser(UserCreateReqDto userCreateReqDto) {
@@ -42,14 +42,14 @@ public class UserService {
     }
 
     @Transactional
-    public void modifyNickname(UserNicknameReqDto userNicknameReqDto) {
+    public void modifyNickname(UserNicknameReqDto userNicknameReqDto, Long id) {
         String nickname = userNicknameReqDto.getNickname();
-        Long id = userNicknameReqDto.getId();
+
 
         User user = userRepository.findById(id).orElse(null);
 
         if(user == null)
-            throw new EntityNotFoundException(ResponseStatus.USER_NOT_FOUND.getMessage());
+            throw new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage());
 
         user.setNickname(nickname);
 
@@ -57,14 +57,13 @@ public class UserService {
     }
 
     @Transactional
-    public void modifyPassword(UserPasswordReqDto userPasswordReqDto) {
+    public void modifyPassword(UserPasswordReqDto userPasswordReqDto, Long id) {
         String password = userPasswordReqDto.getPassword();
-        Long id = userPasswordReqDto.getId();
 
         User user = userRepository.findById(id).orElse(null);
 
         if(user == null)
-            throw new EntityNotFoundException(ResponseStatus.USER_NOT_FOUND.getMessage());
+            throw new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage());
 
         user.setPassword(password);
         userRepository.save(user);
@@ -73,37 +72,33 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public boolean checkLoginId(String loginId) {
-        return userRepository.existsByLoginId(loginId);
+        return !userRepository.existsByLoginId(loginId);
     }
 
     @Transactional(readOnly = true)
     public boolean checkNickname(String nickname) {
-        return userRepository.existsByNickname(nickname);
+        return !userRepository.existsByNickname(nickname);
     }
 
+    @Transactional
     public void userResign(Long id) {
         User user = userRepository.findById(id).orElse(null);
 
         if(user == null)
-            throw new EntityNotFoundException(ResponseStatus.USER_NOT_FOUND.getMessage());
+            throw new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage());
 
         userRepository.deleteById(id);
     }
     @Transactional(readOnly = true)
     public String userLogin(UserLoginReqDto userLoginReqDto) {
-        Long id = userLoginReqDto.getId();
         String loginId = userLoginReqDto.getLoginId();
         String password = userLoginReqDto.getPassword();
-        if (id!=null)
-            throw new IllegalStateException(ResponseStatus._BAD_REQUEST.getMessage());
 
         User user = userRepository.findByLoginId(loginId).orElse(null);
-
         if(user == null)
-            throw new EntityNotFoundException(ResponseStatus.USER_NOT_FOUND.getMessage());
+            throw new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage());
         else if(!user.getLoginId().equals(loginId) || !user.getPassword().equals(password))
             throw new EntityNotFoundException(ResponseStatus.USER_WRONG_PASSWORD.getMessage());
-
         return jwtUtil.createToken(user.getId());
     }
 }
