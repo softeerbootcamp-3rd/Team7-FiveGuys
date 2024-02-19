@@ -20,14 +20,9 @@ public class PaymentConverter {
 
     public static PaymentResDto toPaymentResDto(Payment payment) {
         return PaymentResDto.builder()
-                .payType(payment.getPayType().getDescription())
                 .amount(payment.getAmount())
                 .orderId(payment.getOrderId())
                 .orderName(payment.getOrderName())
-                .customerId(payment.getUser().getId())
-                .customerName(payment.getUser().getLoginId())
-                .isCancel(payment.isCancel())
-                .failReason(payment.getFailReason())
                 .build();
     }
 
