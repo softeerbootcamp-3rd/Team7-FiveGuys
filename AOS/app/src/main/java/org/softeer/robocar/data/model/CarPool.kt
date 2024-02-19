@@ -1,5 +1,9 @@
 package org.softeer.robocar.data.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class CarPool(
     val carPoolId: Long,
     val duration: Int,
@@ -9,4 +13,4 @@ data class CarPool(
     val expectedCharge: Int,
     val countOfMen: Int,
     val countOfWomen: Int,
-)
+) : Parcelable
