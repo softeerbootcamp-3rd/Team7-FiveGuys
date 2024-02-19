@@ -26,6 +26,10 @@ public enum ResponseStatus {
     GARAGE_ALREADY_EXIST(CONFLICT, "중복된 차고지 위치입니다."),
     GARAGE_NOT_FOUND(BAD_REQUEST, "해당하는 차고지가 없습니다."),
 
+
+    // 차량 관련
+    CAR_ALREADY_EXIST(CONFLICT, "이미 등록된 차량입니다."),
+    CAR_NOT_FOUND(BAD_REQUEST, "해당하는 차고지가 없습니다."),
     // 결제 관련
     ORDER_NOT_FOUND(BAD_REQUEST, "해당하는 주문이 없습니다."),
     INVALID_PAYMENT_AMOUNT(BAD_REQUEST, "주문 내역의 금액과 요청한 금액이 서로 다릅니다."),
