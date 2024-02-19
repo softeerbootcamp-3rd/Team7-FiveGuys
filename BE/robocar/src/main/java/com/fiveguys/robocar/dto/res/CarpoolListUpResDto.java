@@ -39,7 +39,7 @@ public class CarpoolListUpResDto {
         CarpoolListUpResDto.CarpoolItem carpoolItem = null;
         for(CarpoolRequest req : iterableRequests){
             carpoolItem.builder()
-                    .hostId(req.getHostId())
+                    .hostId(req.getId())
                     .hostNickname(req.getHostNickname())
                     .departLongitude(req.getDepartLongitude())
                     .departLatitude(req.getDepartLatitude())

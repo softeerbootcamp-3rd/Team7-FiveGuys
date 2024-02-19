@@ -6,6 +6,7 @@ import com.fiveguys.robocar.entity.CarpoolRequest;
 import com.fiveguys.robocar.entity.User;
 import com.fiveguys.robocar.repository.CarpoolRequestRepository;
 import com.fiveguys.robocar.repository.UserRepository;
+import com.fiveguys.robocar.util.CarpoolRegisterParser;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,12 +14,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class CarpoolRequestService {
     private final CarpoolRequestRepository carpoolRequestRepository;
-    private final UserRepository userRepository;
+    private final CarpoolRegisterParser carpoolRegisterParser;
 
     @Autowired
-    public CarpoolRequestService(CarpoolRequestRepository carpoolRequestRepository, UserRepository userRepository){
+    public CarpoolRequestService(CarpoolRequestRepository carpoolRequestRepository, CarpoolRegisterParser carpoolRegisterParser){
         this.carpoolRequestRepository = carpoolRequestRepository;
-        this.userRepository = userRepository;
+        this.carpoolRegisterParser = carpoolRegisterParser;
     }
 
     public void saveCarpoolRequest(CarpoolRequest carpoolRequest){
@@ -46,17 +47,7 @@ public class CarpoolRequestService {
     }
 
     public void carPoolRegister(CarpoolRegisterReqDto carpoolRegisterReqDto) {
-        String departAddress = carpoolRegisterReqDto.getDepartAddress();
-        String destAddress = carpoolRegisterReqDto.getDestAddress();
-        Long id = carpoolRegisterReqDto.getId();
-
-        User user = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        String hostNickname = user.getNickname;
-
-
-
-
-
-
+        CarpoolRequest carpoolRequest = carpoolRegisterParser.dtoToEntity(carpoolRegisterReqDto);
+        carpoolRequestRepository.save(carpoolRequest);
     }
 }

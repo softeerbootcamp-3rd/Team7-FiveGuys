@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,8 @@ public class CarpoolController {
     public ResponseEntity carpoolRegister(@RequestBody @Validated CarpoolRegisterReqDto carpoolRegisterReqDto){
         try{
             carpoolRequestService.carPoolRegister(carpoolRegisterReqDto);
+        } catch (EntityNotFoundException e){
+            return ResponseApi.of(ResponseStatus.USER_NOT_FOUND);
         } catch (Exception e){
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
@@ -75,7 +78,7 @@ public class CarpoolController {
         return ResponseApi.ok();
     }
 
-    @Operation(summary = "호스트가 카풀 등록")
+    @Operation(summary = "게스트가 동승 차량을 선택")
     @Parameters(value = {
             @Parameter(name = "latitude", description = "위도"),
             @Parameter(name = "longitude", description = "경도"),

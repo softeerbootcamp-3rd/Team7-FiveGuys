@@ -5,17 +5,14 @@ import org.springframework.data.annotation.Id;
 import lombok.*;
 import org.springframework.data.redis.core.RedisHash;
 
-import java.time.LocalDateTime;
-
 @RedisHash("CarpoolRequest")
 @Getter
 @AllArgsConstructor
 @Builder
 public class CarpoolRequest {
     @Id
-    private Long hostId;
+    private Long id;
     private String hostNickname;
-    private LocalDateTime departTime;
 
     private Double departLatitude;
     private Double departLongitude;

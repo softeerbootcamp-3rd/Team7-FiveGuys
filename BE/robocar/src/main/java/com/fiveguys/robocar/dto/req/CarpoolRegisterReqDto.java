@@ -14,4 +14,8 @@ public class CarpoolRegisterReqDto {
     String DepartAddress;
     @NotBlank
     String DestAddress;
+    @NotNull
+    Integer maleCount;
+    @NotNull
+    Integer femaleCount;
 }
