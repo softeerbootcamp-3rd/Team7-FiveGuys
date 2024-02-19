@@ -28,5 +28,14 @@
         android:id="@+id/selectDestinationFragment"
         android:name="org.softeer.robocar.ui.fragment.SelectDestinationFragment"
         android:label="SelectDestinationFragment"
-        tools:layout="@layout/fragment_select_destination"/>
+        tools:layout="@layout/fragment_select_destination">
+        <action
+            android:id="@+id/action_selectDestinationFragment_to_internalControlFragment"
+            app:destination="@id/internalControlFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/internalControlFragment"
+        android:name="org.softeer.robocar.ui.fragment.InternalControlFragment"
+        android:label="InternalControlFragment"
+        tools:layout="@layout/fragment_internal_control"/>
 </navigation>
