@@ -1,6 +1,7 @@
 package com.fiveguys.robocar.controller;
 
 import com.fiveguys.robocar.apiPayload.ResponseApi;
+import com.fiveguys.robocar.controller.annotation.Auth;
 import com.fiveguys.robocar.dto.PaymentFailDto;
 import com.fiveguys.robocar.dto.PaymentSuccessDto;
 import com.fiveguys.robocar.dto.req.PaymentReqDto;
@@ -30,12 +31,11 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @Operation(summary = "결제 요청")
-    @Parameter(name = "id", description = "결제를 요청하는 유저의 id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "결제 요청 성공"),
             @ApiResponse(responseCode = "400", description = "필수 파라미터 누락")})
     @PostMapping("/toss-payment")
-    public ResponseEntity requestTossPayment(@RequestParam(name = "id") Long id,
+    public ResponseEntity requestTossPayment(@Auth Long id,
                                              @RequestBody @Validated PaymentReqDto paymentReqDto,
                                              Errors errors) {
         if (errors.hasErrors()) {
