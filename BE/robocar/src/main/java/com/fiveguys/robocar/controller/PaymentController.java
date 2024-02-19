@@ -104,7 +104,7 @@ public class PaymentController {
             @ApiResponse(responseCode = "400", description = "결제 요청 실패"),
             @ApiResponse(responseCode = "422", description = "결제 요청 실패"),
     })
-    @PostMapping("/toss-payment/cancel/point")
+    @PostMapping("/toss-payment/cancel")
     public ResponseEntity tossPaymentCancelPoint(@RequestParam Long id,
                                                  @RequestParam String paymentKey,
                                                  @RequestParam String cancelReason,
