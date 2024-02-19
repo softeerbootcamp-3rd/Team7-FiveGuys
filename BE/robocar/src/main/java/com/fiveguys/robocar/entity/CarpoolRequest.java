@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 
 @RedisHash("CarpoolRequest")
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class CarpoolRequest {

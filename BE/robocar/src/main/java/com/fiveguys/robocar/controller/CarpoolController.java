@@ -4,6 +4,7 @@ package com.fiveguys.robocar.controller;
 import com.fiveguys.robocar.apiPayload.ResponseApi;
 import com.fiveguys.robocar.apiPayload.ResponseStatus;
 import com.fiveguys.robocar.dto.req.CarpoolRegisterReqDto;
+import com.fiveguys.robocar.dto.res.CarpoolListUpResDto;
 import com.fiveguys.robocar.service.CarpoolRequestService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -42,10 +43,10 @@ public class CarpoolController {
     })
     @GetMapping("/operations/carpools")
     public ResponseEntity carpoolListUp(@RequestParam String guestDepartAddress, @RequestParam String guestDestAddress){
-
+        CarpoolListUpResDto carpoolListUpResDto = null;
         try {
-            carpoolRequestService.carpoolListUp(guestDepartAddress, guestDestAddress);
-            return ResponseApi.ok();
+            carpoolListUpResDto = carpoolRequestService.carpoolListUp(guestDepartAddress, guestDestAddress);
+            return ResponseApi.ok(carpoolListUpResDto);
         } catch (Exception e){
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
@@ -53,16 +54,24 @@ public class CarpoolController {
 
     @Operation(summary = "호스트가 카풀 등록")
     @Parameters(value = {
-            @Parameter(name = "latitude", description = "위도"),
-            @Parameter(name = "longitude", description = "경도"),
-
-
+            @Parameter(name = "DepartAddress", description = "출발지 주소"),
+            @Parameter(name = "DestAddress", description = "도착지 주소"),
+            @Parameter(name = "maleCount", description = "남자 탑승자 수"),
+            @Parameter(name = "femaleCount", description = "여자 탑승자 수")
     })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "추가 성공")
+            @ApiResponse(responseCode = "200", description = "추가 성공"),
+            @ApiResponse(responseCode = "400", description = "추가 실패"),
+            @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @PostMapping("/operations")
     public ResponseEntity carpoolRegister(@RequestBody @Validated CarpoolRegisterReqDto carpoolRegisterReqDto){
+        try{
+            carpoolRequestService.carPoolRegister(carpoolRegisterReqDto);
+        } catch (Exception e){
+            return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
+        }
+
         return ResponseApi.ok();
     }
 

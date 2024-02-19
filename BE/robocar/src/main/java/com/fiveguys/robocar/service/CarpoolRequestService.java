@@ -1,20 +1,24 @@
 package com.fiveguys.robocar.service;
 
+import com.fiveguys.robocar.dto.req.CarpoolRegisterReqDto;
 import com.fiveguys.robocar.dto.res.CarpoolListUpResDto;
 import com.fiveguys.robocar.entity.CarpoolRequest;
+import com.fiveguys.robocar.entity.User;
 import com.fiveguys.robocar.repository.CarpoolRequestRepository;
+import com.fiveguys.robocar.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class CarpoolRequestService {
     private final CarpoolRequestRepository carpoolRequestRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public CarpoolRequestService(CarpoolRequestRepository carpoolRequestRepository){
+    public CarpoolRequestService(CarpoolRequestRepository carpoolRequestRepository, UserRepository userRepository){
         this.carpoolRequestRepository = carpoolRequestRepository;
+        this.userRepository = userRepository;
     }
 
     public void saveCarpoolRequest(CarpoolRequest carpoolRequest){
@@ -33,25 +37,25 @@ public class CarpoolRequestService {
         CarpoolListUpResDto carpoolListUpResDto = new CarpoolListUpResDto(price);
         Iterable<CarpoolRequest> iterableRequests = carpoolRequestRepository.findAll();
 
-        CarpoolListUpResDto.CarpoolItem carpoolItem = null;
-        for(CarpoolRequest req : iterableRequests){
-            carpoolItem.builder()
-                    .hostId(req.getHostId())
-                    .hostNickname(req.getHostNickname())
-                    .departLongitude(req.getDepartLongitude())
-                    .departLatitude(req.getDepartLatitude())
-                    .hostDestLongitude(req.getHostDestLongitude())
-                    .hostDestLatitude(req.getHostDestLatitude())
-                    .hostDepartAddress(req.getHostDepartAddress())
-                    .hostDestAddress(req.getHostDestAddress())
-                    .maleCount(req.getMaleCount())
-                    .femaleCount(req.getFemaleCount())
-                    .estimatedTime(111)
-                    .estimatedPrice(111)
-                    .build();
-        }
+        carpoolListUpResDto.makeCarpoolList(iterableRequests);
+
+        carpoolListUpResDto.doSortByCoordinate(guestDepartAddress, guestDestAddress);
 
         return carpoolListUpResDto;
+
+    }
+
+    public void carPoolRegister(CarpoolRegisterReqDto carpoolRegisterReqDto) {
+        String departAddress = carpoolRegisterReqDto.getDepartAddress();
+        String destAddress = carpoolRegisterReqDto.getDestAddress();
+        Long id = carpoolRegisterReqDto.getId();
+
+        User user = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        String hostNickname = user.getNickname;
+
+
+
+
 
 
     }
