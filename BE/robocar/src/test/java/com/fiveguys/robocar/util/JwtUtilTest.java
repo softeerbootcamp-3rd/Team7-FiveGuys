@@ -22,10 +22,10 @@ class JwtUtilTest {
     @Test
     @DisplayName("토큰이 잘 생성되는지 확인")
     void testUtil(){
-        Long userId = 12312L;
-        String token = jwtUtil.createToken(userId);
+        Long id = 12312L;
+        String token = jwtUtil.createToken(id);
         log.info("token: [{}]",token);
-        log.info("userId:[{}]",jwtUtil.extractUserId(token));
-        assertEquals(userId, jwtUtil.extractUserId(token));;
+        log.info("id:[{}]",jwtUtil.extractId(token));
+        assertEquals(id, jwtUtil.extractId(token));;
     }
 }
