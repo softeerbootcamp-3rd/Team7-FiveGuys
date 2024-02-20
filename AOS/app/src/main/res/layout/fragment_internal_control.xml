@@ -436,7 +436,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@id/controlDivider2"
             app:layout_constraintEnd_toEndOf="@id/seatControl1"
             app:layout_constraintStart_toStartOf="@id/seatControl1"
@@ -491,7 +490,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@id/controlDivider2"
             app:layout_constraintEnd_toEndOf="@id/seatControl2"
             app:layout_constraintStart_toStartOf="@id/seatControl2"
@@ -584,7 +582,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"
-            android:checked="true"
             app:layout_constraintBottom_toBottomOf="@id/airConditioner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/airConditioner" />
