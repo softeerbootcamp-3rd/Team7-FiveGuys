@@ -16,7 +16,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -58,9 +57,6 @@ public class UserController {
     }
 
     @Operation(summary = "닉네임 수정")
-    @Parameters(value = {
-            @Parameter(name = "nickname", description = "닉네임"),
-    })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "닉네임 수정 성공"),
             @ApiResponse(responseCode = "400", description = "존재하지 않는 유저"),
@@ -86,9 +82,6 @@ public class UserController {
     }
 
     @Operation(summary = "비밀번호 수정")
-    @Parameters(value = {
-            @Parameter(name = "password", description = "비밀번호"),
-    })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "비밀 수정 성공"),
             @ApiResponse(responseCode = "400", description = "존재하지 않는 유저"),
@@ -98,16 +91,17 @@ public class UserController {
     })
     @PatchMapping("/users/password")
     public ResponseEntity modifyPassword(@Auth Long id, @RequestBody @Validated UserPasswordReqDto userPasswordReqDto, Errors errors){
+        System.out.println("["+ userPasswordReqDto.getPassword());
         if(errors.hasErrors())
             return ResponseApi.invalidArguments();
 
-        try{
-            userService.modifyPassword(userPasswordReqDto, id);
-        } catch (EntityNotFoundException e){
-            return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
-        } catch(Exception e) {
-            return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
-        }
+//        try{
+//            userService.modifyPassword(userPasswordReqDto, id);
+//        } catch (EntityNotFoundException e){
+//            return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
+//        } catch(Exception e) {
+//            return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
+//        }
 
         return ResponseApi.ok();
     }
@@ -160,7 +154,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "존재하지 않는 유저"),
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
-    @DeleteMapping("/users/delete")////
+    @DeleteMapping("/users/delete")
     public ResponseEntity userResign(@Auth Long id){
 
         try{
@@ -181,9 +175,7 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @PostMapping("/users/login")
-    public ResponseEntity userLogin(@RequestBody UserLoginReqDto userLoginReqDto, Errors errors){
-
-        System.out.println("[[" + userLoginReqDto.getLoginId());
+    public ResponseEntity userLogin(@RequestBody @Validated UserLoginReqDto userLoginReqDto, Errors errors){
         LoginResDto loginResDto = null;
         try{
             loginResDto = userService.userLogin(userLoginReqDto);
