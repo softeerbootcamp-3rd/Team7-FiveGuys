@@ -1,7 +1,7 @@
 package com.fiveguys.robocar.controller;
 
 import com.fiveguys.robocar.apiPayload.ResponseApi;
-import com.fiveguys.robocar.controller.annotation.Auth;
+import com.fiveguys.robocar.auth.Auth;
 import com.fiveguys.robocar.dto.PaymentFailDto;
 import com.fiveguys.robocar.dto.PaymentSuccessDto;
 import com.fiveguys.robocar.dto.req.PaymentReqDto;

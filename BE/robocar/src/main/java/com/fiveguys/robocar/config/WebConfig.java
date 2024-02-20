@@ -1,8 +1,6 @@
 package com.fiveguys.robocar.config;
 
-import com.fiveguys.robocar.controller.resolver.AuthArgumentResolver;
-import com.fiveguys.robocar.util.JwtUtil;
-import lombok.RequiredArgsConstructor;
+import com.fiveguys.robocar.auth.AuthArgumentResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

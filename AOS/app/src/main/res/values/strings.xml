@@ -62,5 +62,16 @@
     <string name="time">시간</string>
     <string name="expected_charge">예상금액</string>
     <string name="passenger_count">인원 수</string>
+    <string name="path_setting_title">어디로 갈까요?</string>
+    <string name="default_edit_destination">도착지를 입력하세요</string>
+    <string name="finish_select_destination">도착지로 설정</string>
+    <string name="lock_door">문 잠금</string>
+    <string name="unlock_door">문 열기</string>
+    <string name="departure">출발하기</string>
+    <string name="seat">좌석</string>
+    <string name="ventilation_all">전체 통풍</string>
+    <string name="heating_all">전체 열선</string>
+    <string name="off_all">전체 끄기</string>
+    <string name="air_conditioner">에어컨</string>
     <string name="apply_for_car_pool">동승 신청하기</string>
 </resources>
