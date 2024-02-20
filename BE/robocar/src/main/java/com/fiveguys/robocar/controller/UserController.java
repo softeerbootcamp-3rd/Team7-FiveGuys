@@ -11,11 +11,11 @@ import com.fiveguys.robocar.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@Tag(name = "유저")
+@Tag(name = "유저", description = "유저 입니다")
 public class UserController {
 
     private final UserService userService;
@@ -35,11 +35,6 @@ public class UserController {
     }
 
     @Operation(summary = "회원가입")
-    @Parameters(value = {
-            @Parameter(name = "loginId", description = "아이디"),
-            @Parameter(name = "nickname", description = "닉네임"),
-            @Parameter(name = "password", description = "비밀번호")
-    })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "회원가입 성공"),
             @ApiResponse(responseCode = "409", description = "아이디/닉네임 중복"),
@@ -47,6 +42,7 @@ public class UserController {
     })
     @PostMapping("/users")
     public ResponseEntity createUser(@RequestBody @Validated UserCreateReqDto userCreateReqDto, Errors errors){
+        System.out.println("]]"+userCreateReqDto.getLoginId());
         if(errors.hasErrors())
             return ResponseApi.invalidArguments();
         try{
@@ -163,7 +159,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "존재하지 않는 유저"),
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
-    @DeleteMapping("/users")
+    @DeleteMapping("/users/delete")////
     public ResponseEntity userResign(@Auth Long id){
 
         try{
@@ -178,18 +174,15 @@ public class UserController {
     }
 
     @Operation(summary = "로그인")
-    @Parameters(value = {
-            @Parameter(name = "loginId", description = "아이디"),
-            @Parameter(name = "password", description = "비밀번호")
-    })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "로그인 성공"),
             @ApiResponse(responseCode = "400", description = "로그인 실패"),
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @PostMapping("/users/login")
-    public ResponseEntity userLogin(@RequestBody UserLoginReqDto userLoginReqDto){
+    public ResponseEntity userLogin(@RequestBody UserLoginReqDto userLoginReqDto, Errors errors){
 
+        System.out.println("[[" + userLoginReqDto.getLoginId());
         String token = null;
         try{
             token = userService.userLogin(userLoginReqDto);
