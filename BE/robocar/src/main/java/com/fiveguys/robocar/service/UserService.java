@@ -68,12 +68,12 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public boolean checkLoginId(String loginId) {
+    public boolean isDuplicatedLoginId(String loginId) {
         return !userRepository.existsByLoginId(loginId);
     }
 
     @Transactional(readOnly = true)
-    public boolean checkNickname(String nickname) {
+    public boolean isDuplicatedNickname(String nickname) {
         return !userRepository.existsByNickname(nickname);
     }
 

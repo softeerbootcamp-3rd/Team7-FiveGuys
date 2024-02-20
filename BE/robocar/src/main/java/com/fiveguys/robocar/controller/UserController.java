@@ -114,11 +114,11 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @GetMapping("/users/loginId-validation")
-    public ResponseEntity checkLoginId(@RequestParam String loginId){
+    public ResponseEntity isDuplicatedLoginId(@RequestParam String loginId){
         boolean isUnusable;
 
         try{
-            isUnusable = userService.checkLoginId(loginId);
+            isUnusable = userService.isDuplicatedLoginId(loginId);
         } catch(Exception e) {
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
@@ -135,11 +135,11 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @GetMapping("/users/nickname-validation")
-    public ResponseEntity checkNickname(@RequestParam String nickname){
+    public ResponseEntity isDuplicatedNickname(@RequestParam String nickname){
         boolean isUnusable;
 
         try{
-            isUnusable = userService.checkNickname(nickname);
+            isUnusable = userService.isDuplicatedNickname(nickname);
         } catch(Exception e) {
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
