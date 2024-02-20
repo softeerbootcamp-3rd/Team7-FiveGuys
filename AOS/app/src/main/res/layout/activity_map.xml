@@ -57,7 +57,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:defaultNavHost="true"
-                app:navGraph="@navigation/nav_graph"
+                app:navGraph="@navigation/bottom_sheet_nav_graph"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"

@@ -23,6 +23,11 @@ class HeadcountDialogFragment : DialogFragment(R.layout.fragment_headcount_dialo
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentHeadcountDialogBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val builder = AlertDialog.Builder(activity)
         builder.setView(binding.root)
@@ -33,8 +38,6 @@ class HeadcountDialogFragment : DialogFragment(R.layout.fragment_headcount_dialo
         binding.finishHeadCount.setOnClickListener {
             dismiss()
         }
-
-        return binding.root
     }
 
     override fun onDestroyView() {
