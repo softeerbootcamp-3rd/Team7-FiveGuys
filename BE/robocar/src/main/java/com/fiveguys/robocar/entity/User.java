@@ -5,7 +5,6 @@ import lombok.*;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -22,5 +21,13 @@ public class User {
 
     private String password;
 
-    private String clientId;
+    private String clientToken;
+
+    public void editNickname(String nickname){
+        this.nickname = nickname;
+    }
+
+    public void editPassword(String password) {
+        this.password = password;
+    }
 }

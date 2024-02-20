@@ -33,7 +33,7 @@ public class RouteComparisonService {
     }
 
     // 최적 경로 정보를 담는 클래스
-    @Getter // Lombok 어노테이션을 사용하여 모든 필드의 getter 메서드를 자동 생성
+    @Getter
     public static class OptimalRoute {
         private final String firstDestination;
         private final String secondDestination;

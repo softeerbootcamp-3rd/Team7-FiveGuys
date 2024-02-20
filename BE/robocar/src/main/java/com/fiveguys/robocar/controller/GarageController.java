@@ -7,7 +7,6 @@ import com.fiveguys.robocar.entity.Garage;
 import com.fiveguys.robocar.service.GarageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,9 +28,6 @@ public class GarageController {
     private final GarageService garageService;
 
     @Operation(summary = "차고지 추가하기")
-    @Parameters(value = {
-            @Parameter(name = "latitude", description = "위도"),
-            @Parameter(name = "longitude", description = "경도")})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "추가 성공"),
             @ApiResponse(responseCode = "409", description = "중복된 차고지 위치로 추가")})
@@ -56,7 +52,7 @@ public class GarageController {
             @ApiResponse(responseCode = "200", description = "추가 성공"),
             @ApiResponse(responseCode = "400", description = "해당하는 차고지가 없음")})
     @GetMapping("/garage/{id}")
-    public ResponseEntity getGarage(Long id) {
+    public ResponseEntity getGarage(@PathVariable Long id) {
         Garage findGarage = null;
         try {
             findGarage = garageService.getGarage(id);
@@ -76,16 +72,13 @@ public class GarageController {
     }
 
     @Operation(summary = "차고지 위치 수정")
-    @Parameters(value = {
-            @Parameter(name = "id", description = "변경할 차고지 id"),
-            @Parameter(name = "latitude", description = "수정할 위도"),
-            @Parameter(name = "longitude", description = "수정할 경도")})
+    @Parameter(name = "id", description = "변경할 차고지 id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "변경 성공"),
             @ApiResponse(responseCode = "400", description = "해당하는 차고지가 없음"),
             @ApiResponse(responseCode = "409", description = "중복된 차고지 위치로 수정")})
     @PutMapping("/garage/{id}")
-    public ResponseEntity editGarage(Long id,
+    public ResponseEntity editGarage(@PathVariable Long id,
                                      @RequestBody @Validated GarageReqDto garageReqDto,
                                      Errors errors) {
         if (errors.hasErrors()) {
@@ -110,7 +103,7 @@ public class GarageController {
             @ApiResponse(responseCode = "200", description = "변경 성공"),
             @ApiResponse(responseCode = "400", description = "해당하는 차고지가 없음")})
     @DeleteMapping("/garage/{id}")
-    public ResponseEntity deleteGarage(Long id) {
+    public ResponseEntity deleteGarage(@PathVariable Long id) {
         try {
             garageService.deleteGarage(id);
         } catch (EntityNotFoundException e) {

@@ -5,4 +5,23 @@
         <item name="fontFamily">@font/pretendard_semibold</item>
     </style>
 
+    <style name="customToggleButton">
+        <item name="trackTint">@color/track_air_conditioner_toggle</item>
+        <item name="thumbTint">@color/white</item>
+    </style>
+
+    <style name="customSlider" parent="Widget.Material3.Slider">
+        <item name="labelStyle">@style/Widget.App.Tooltip</item>
+    </style>
+
+    <style name="Widget.App.Tooltip" parent="Widget.Material3.Tooltip">
+        <item name="android:textAppearance">@style/TextAppearance.App.Tooltip</item>
+        <item name="backgroundTint">@color/hyundai_blue</item>
+    </style>
+
+    <style name="TextAppearance.App.Tooltip" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+    </style>
+
 </resources>
