@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pathSetting"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.fragment.PathSettingFragment">
@@ -16,87 +17,87 @@
             android:id="@+id/pathSettingTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:fontFamily="@font/pretendard_semibold"
             android:text="@string/path_setting_title"
-            android:textSize="@dimen/title_text"
             android:textColor="@color/black"
-            android:fontFamily="@font/pretendard_semibold" />
+            android:textSize="@dimen/title_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <org.softeer.robocar.ui.custom.BackPressClearFocusEditText
             android:id="@+id/editOrigin"
             android:layout_width="0dp"
             android:layout_height="48dp"
-            android:hint="현 위치: 서울 강남구 학동로 171"
-            android:textColorHint="@color/black"
-            android:textColor="@color/black"
-            android:textSize="@dimen/content_text"
-            android:fontFamily="@font/pretendard_semibold"
-            android:paddingStart="40dp"
-            android:background="@drawable/rectangle_gray_200_radius_12"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pathSettingTitle"
             android:layout_margin="16dp"
+            android:background="@drawable/rectangle_gray_200_radius_12"
+            android:fontFamily="@font/pretendard_semibold"
+            android:hint="현 위치: 서울 강남구 학동로 171"
+            android:imeOptions="actionSearch"
             android:inputType="text"
-            android:imeOptions="actionSearch" />
+            android:paddingStart="40dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:textSize="@dimen/content_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pathSettingTitle" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/icon_start_location"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/editOrigin"
             app:layout_constraintStart_toStartOf="@id/editOrigin"
             app:layout_constraintTop_toTopOf="@id/editOrigin"
-            app:layout_constraintBottom_toBottomOf="@id/editOrigin"
-            android:layout_marginStart="8dp" />
+            app:srcCompat="@drawable/icon_start_location" />
 
         <org.softeer.robocar.ui.custom.BackPressClearFocusEditText
             android:id="@+id/editDestination"
             android:layout_width="0dp"
             android:layout_height="48dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/rectangle_gray_200_radius_12"
+            android:fontFamily="@font/pretendard_semibold"
             android:hint="@string/default_edit_destination"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:paddingStart="40dp"
             android:textColor="@color/black"
             android:textSize="@dimen/content_text"
-            android:fontFamily="@font/pretendard_semibold"
-            android:paddingStart="40dp"
-            android:background="@drawable/rectangle_gray_200_radius_12"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editOrigin"
-            android:layout_margin="16dp"
-            android:inputType="text"
-            android:imeOptions="actionSearch" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editOrigin" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/icon_destination_location"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/editDestination"
             app:layout_constraintStart_toStartOf="@id/editDestination"
             app:layout_constraintTop_toTopOf="@id/editDestination"
-            app:layout_constraintBottom_toBottomOf="@id/editDestination"
-            android:layout_marginStart="8dp" />
+            app:srcCompat="@drawable/icon_destination_location" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/editDestMap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/icon_map"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/editDestination"
             app:layout_constraintEnd_toEndOf="@id/editDestination"
             app:layout_constraintTop_toTopOf="@id/editDestination"
-            app:layout_constraintBottom_toBottomOf="@id/editDestination"
-            android:layout_marginEnd="8dp" />
+            app:srcCompat="@drawable/icon_map" />
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/pathSettingDivider"
             android:layout_width="0dp"
             android:layout_height="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editDestination"
             android:layout_marginTop="8dp"
-            app:dividerColor="@color/gray_200" />
+            app:dividerColor="@color/gray_200"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editDestination" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

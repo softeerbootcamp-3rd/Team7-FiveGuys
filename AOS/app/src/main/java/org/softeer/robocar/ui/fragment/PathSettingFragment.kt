@@ -15,9 +15,10 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.softeer.robocar.R
 import org.softeer.robocar.databinding.FragmentPathSettingBinding
+import org.softeer.robocar.ui.activity.MapActivity
 
 class PathSettingFragment : Fragment() {
-    private var _binding: FragmentPathSettingBinding ?= null
+    private var _binding: FragmentPathSettingBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -30,9 +31,11 @@ class PathSettingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val activity = activity as MapActivity
 
         binding.editDestMap.setOnClickListener {
-            val action = PathSettingFragmentDirections.actionPathSettingFragmentToSelectDestinationFragment()
+            val action =
+                PathSettingFragmentDirections.actionPathSettingFragmentToSelectDestinationFragment()
             findNavController().navigate(action)
         }
     }

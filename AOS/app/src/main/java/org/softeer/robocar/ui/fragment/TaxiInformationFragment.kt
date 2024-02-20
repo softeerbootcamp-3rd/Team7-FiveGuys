@@ -8,12 +8,10 @@ import android.view.ViewGroup
 import org.softeer.robocar.R
 
 class TaxiInformationFragment : Fragment() {
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_taxi_information, container, false)
     }
 }
