@@ -17,6 +17,10 @@ public class RequestMappings {
         return customRequestMappingList.contains(new CustomRequestMapping(url, method));
     }
 
+    private static ArrayList<CustomRequestMapping> newEmptyArrayList() {
+        return new ArrayList<>();
+    }
+
     @Getter
     @AllArgsConstructor
     public static class CustomRequestMapping {
@@ -31,9 +35,5 @@ public class RequestMappings {
             }
             return false;
         }
-
-    }
-    private static ArrayList<CustomRequestMapping> newEmptyArrayList() {
-        return new ArrayList<>();
     }
 }
