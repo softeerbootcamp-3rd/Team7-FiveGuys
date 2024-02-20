@@ -14,13 +14,13 @@
                 android:id="@+id/nicknameWarningMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/nickname_warning_message"
                 android:textColor="@color/red_200"
                 android:textSize="@dimen/content_text"
                 android:layout_marginTop="8dp"
                 android:visibility="gone"
+                android:layout_marginStart="24dp"
+                showNicknameAvailabilityMessage="@{signUpViewModel.isNicknameAvailable}"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nickNameInputText"/>
 
         <androidx.appcompat.widget.AppCompatButton
@@ -34,6 +34,7 @@
                 android:text="@string/check"
                 android:fontFamily="@font/pretendard_semibold"
                 activateButtonIfInputNotEmpty="@{signUpViewModel.nickname.toString()}"
+                android:onClick="@{()-> signUpViewModel.checkDuplicatedNickname(signUpViewModel.nickname)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintTop_toTopOf="@+id/nickNameInputText"
@@ -116,6 +117,7 @@
                 android:text="@string/check"
                 android:fontFamily="@font/pretendard_semibold"
                 activateButtonIfInputNotEmpty="@{signUpViewModel.userId.toString()}"
+                android:onClick="@{() -> signUpViewModel.checkDuplicatedUserId(signUpViewModel.userId)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintTop_toTopOf="@+id/idInputText"/>
@@ -221,13 +223,13 @@
                 android:id="@+id/idWarningMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/id_warning_message"
                 android:textColor="@color/red_200"
                 android:textSize="@dimen/content_text"
                 android:layout_marginTop="8dp"
+                android:layout_marginStart="24dp"
                 android:visibility="gone"
+                showIdAvailabilityMessage="@{signUpViewModel.isIdAvailable}"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/idInputText"/>
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -239,6 +241,8 @@
                 android:textSize="@dimen/content_text"
                 android:layout_marginTop="8dp"
                 android:visibility="gone"
+                passwordMatching="@{signUpViewModel.password}"
+                confirmedPasswordMatching="@{signUpViewModel.passwordConfirmation}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/passwordCheckInputText"/>
