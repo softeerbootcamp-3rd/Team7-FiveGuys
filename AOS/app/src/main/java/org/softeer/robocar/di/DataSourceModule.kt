@@ -6,7 +6,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.softeer.robocar.data.repository.CarPool.CarPoolRemoteDataSource
 import org.softeer.robocar.data.repository.CarPool.CarPoolRemoteDataSourceImpl
+import org.softeer.robocar.data.repository.route.RouteRemoteDataSource
+import org.softeer.robocar.data.repository.route.RouteRemoteDataSourceImpl
 import org.softeer.robocar.data.service.CarPool.CarPoolService
+import org.softeer.robocar.data.service.RouteService
 import javax.inject.Singleton
 
 @Module
@@ -20,4 +23,9 @@ class DataSourceModule {
     ): CarPoolRemoteDataSource {
         return CarPoolRemoteDataSourceImpl(carPoolService)
     }
+    @Provides
+    @Singleton
+    fun provideRouteRemoteDataSource(
+        routeService: RouteService
+    ): RouteRemoteDataSource = RouteRemoteDataSourceImpl(routeService)
 }
