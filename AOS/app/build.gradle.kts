@@ -27,13 +27,15 @@ android {
         val properties = Properties().apply {
             load(File(rootDir, "local.properties").inputStream())
         }
-        val kakao_native_app_key = properties["kakao_native_app_key"] as String
 
-        // 읽어온 API 키를 manifest placeholder에 설정
+        val kakao_native_app_key = properties["kakao_native_app_key"] as String
         manifestPlaceholders["kakao_native_app_key"] = kakao_native_app_key
 
         val baseUrl = properties["BASE_URL"] as String
         buildConfigField("String", "BASE_URL", baseUrl)
+
+        val kakao_rest_api_key = properties["kakao_rest_api_key"] as String
+        buildConfigField("String","kakao_rest_api_key",kakao_rest_api_key)
     }
 
     buildTypes {
