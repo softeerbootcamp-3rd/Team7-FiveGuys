@@ -45,11 +45,7 @@ public class UserService {
     public void modifyNickname(UserNicknameReqDto userNicknameReqDto, Long id) {
         String nickname = userNicknameReqDto.getNickname();
 
-
-        User user = userRepository.findById(id).orElse(null);
-
-        if(user == null)
-            throw new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage());
+        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage()));
 
         user.setNickname(nickname);
 
@@ -60,10 +56,7 @@ public class UserService {
     public void modifyPassword(UserPasswordReqDto userPasswordReqDto, Long id) {
         String password = userPasswordReqDto.getPassword();
 
-        User user = userRepository.findById(id).orElse(null);
-
-        if(user == null)
-            throw new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage());
+        User user = userRepository.findById(id).orElseThrow(()->new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage()));
 
         user.setPassword(password);
         userRepository.save(user);
@@ -82,10 +75,7 @@ public class UserService {
 
     @Transactional
     public void userResign(Long id) {
-        User user = userRepository.findById(id).orElse(null);
-
-        if(user == null)
-            throw new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage());
+        User user = userRepository.findById(id).orElseThrow(()->new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage()));
 
         userRepository.deleteById(id);
     }
@@ -94,11 +84,11 @@ public class UserService {
         String loginId = userLoginReqDto.getLoginId();
         String password = userLoginReqDto.getPassword();
 
-        User user = userRepository.findByLoginId(loginId).orElse(null);
-        if(user == null)
-            throw new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage());
-        else if(!user.getLoginId().equals(loginId) || !user.getPassword().equals(password))
+        User user = userRepository.findByLoginId(loginId).orElseThrow(()->new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage()));
+
+        if(!user.getLoginId().equals(loginId) || !user.getPassword().equals(password))
             throw new EntityNotFoundException(ResponseStatus.USER_WRONG_PASSWORD.getMessage());
+
         return jwtUtil.createToken(user.getId());
     }
 }
