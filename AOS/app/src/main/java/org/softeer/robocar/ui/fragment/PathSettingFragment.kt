@@ -30,23 +30,10 @@ class PathSettingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.editDestination.setOnEditorActionListener { _, actionId, _ ->
-            return@setOnEditorActionListener when (actionId) {
-                EditorInfo.IME_ACTION_SEARCH -> {
-                    binding.test.isVisible = true
-                    true
-                }
-
-                else -> false
-            }
-        }
-
-        binding.test.setOnClickListener {
-            findNavController().navigate(R.id.action_pathSettingFragment_to_selectDestinationFragment)
-        }
 
         binding.editDestMap.setOnClickListener {
-            findNavController().navigate(R.id.action_pathSettingFragment_to_selectDestinationFragment)
+            val action = PathSettingFragmentDirections.actionPathSettingFragmentToSelectDestinationFragment()
+            findNavController().navigate(action)
         }
     }
 
