@@ -22,7 +22,8 @@
 
         <activity
             android:name=".ui.activity.MapActivity"
-            android:exported="false" />
+            android:exported="false" >
+        </activity>
 
         <meta-data
             android:name="com.kakao.vectormap.APP_KEY"

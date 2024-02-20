@@ -5,20 +5,40 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import org.softeer.robocar.R
+import org.softeer.robocar.databinding.FragmentHeadcountDialogBinding
 
 class HeadcountDialogFragment : DialogFragment(R.layout.fragment_headcount_dialog) {
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            val builder = AlertDialog.Builder(activity)
-            builder.setView(R.layout.fragment_headcount_dialog)
+    private var _binding: FragmentHeadcountDialogBinding? = null
+    private val binding
+        get() = _binding!!
 
-            val dialog = builder.create()
-            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            return dialog
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentHeadcountDialogBinding.inflate(inflater, container, false)
+
+        val builder = AlertDialog.Builder(activity)
+        builder.setView(binding.root)
+
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        isCancelable = false
+
+        binding.finishHeadCount.setOnClickListener {
+            dismiss()
+        }
+
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
