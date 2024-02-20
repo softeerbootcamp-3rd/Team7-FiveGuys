@@ -1,10 +1,9 @@
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
         android:color="?attr/colorControlHighlight">
 <item>
-    <shape
-        android:shape="rectangle">
+    <shape android:shape="rectangle">
         <corners android:radius="30dp"/>
-        <solid android:color="@color/active_blue_pms_312C"/>
+        <solid android:color="@color/navy"/>
     </shape>
 </item>
 </ripple>
