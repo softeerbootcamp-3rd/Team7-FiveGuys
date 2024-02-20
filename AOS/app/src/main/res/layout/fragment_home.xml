@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <variable
+            name="homeViewModel"
+            type="org.softeer.robocar.ui.viewmodel.HomeViewModel"/>
 
+        <import type="org.softeer.robocar.data.model.CarPoolType"/>
+        <import type="org.softeer.robocar.data.model.TaxiType"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,7 +25,7 @@
             android:layout_width="1dp"
             android:layout_height="0dp"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.5"/>
+            app:layout_constraintGuide_percent="0.45"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/logo"
@@ -61,6 +66,8 @@
             android:src="@drawable/img_compact_taxi"
             android:scaleType="fitCenter"
             android:stateListAnimator="@animator/click_animation"
+            setTaxiTypeRadioButton="@{homeViewModel.taxiType}"
+            android:onClick="@{() -> homeViewModel.setTaxiType(TaxiType.COMPACT_TAXI)}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="@id/middleVerticalGuideLine"
             app:layout_constraintTop_toBottomOf="@id/taxiTypeTitle"
@@ -79,16 +86,18 @@
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/midsizeTaxiButton"
-            android:background="@drawable/rectangle_sky_blue_pms_radius_30"
+            android:background="@drawable/rectangle_gray_700_radius_30"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/default_left_margin"
             android:layout_marginEnd="12dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:src="@drawable/img_midsize_taxi"
+            android:src="@drawable/img_midsize_taxi_inactive"
             android:scaleType="fitCenter"
             android:stateListAnimator="@animator/click_animation"
+            setTaxiTypeRadioButton="@{homeViewModel.taxiType}"
+            android:onClick="@{() -> homeViewModel.setTaxiType(TaxiType.MID_SIZE_TAXI)}"
             app:layout_constraintStart_toStartOf="@id/middleVerticalGuideLine"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/taxiTypeTitle"
@@ -118,13 +127,20 @@
             app:layout_constraintTop_toBottomOf="@id/middleHorizontalGuideLine"
             app:layout_constraintStart_toStartOf="parent"/>
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottomHorizontalGuideLine"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.9"/>
+
         <HorizontalScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintTop_toBottomOf="@id/carPoolTitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/bottomHorizontalGuideLine"
             android:layout_marginStart="@dimen/default_left_margin"
             android:layout_marginEnd="@dimen/default_right_margin">
 
@@ -145,6 +161,8 @@
                     android:src="@drawable/img_alone_riding"
                     android:scaleType="fitCenter"
                     android:stateListAnimator="@animator/click_animation"
+                    setCarPoolTypeRadioButton="@{homeViewModel.carPoolType}"
+                    android:onClick="@{() -> homeViewModel.setCarPoolType(CarPoolType.ALONE)}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -164,7 +182,7 @@
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/recruitCarPoolButton"
-                    android:background="@drawable/rectangle_yellow_200_radius_30"
+                    android:background="@drawable/rectangle_gray_700_radius_30"
                     android:layout_width="165dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="12dp"
@@ -172,8 +190,10 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="64dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/img_recruit_car_pool"
+                    android:src="@drawable/img_recruit_car_pool_inactive"
                     android:stateListAnimator="@animator/click_animation"
+                    setCarPoolTypeRadioButton="@{homeViewModel.carPoolType}"
+                    android:onClick="@{() -> homeViewModel.setCarPoolType(CarPoolType.RECRUIT)}"
                     app:layout_constraintStart_toEndOf="@id/rideAloneButton"
                     app:layout_constraintEnd_toStartOf="@id/participateCarPoolButton"
                     app:layout_constraintTop_toTopOf="parent"
@@ -193,15 +213,17 @@
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/participateCarPoolButton"
-                    android:background="@drawable/rectangle_active_blue_pms_312c_radius_30"
+                    android:background="@drawable/rectangle_gray_700_radius_30"
                     android:layout_width="165dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="@dimen/default_left_margin"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="64dp"
-                    android:src="@drawable/img_participate_car_pool"
+                    android:src="@drawable/img_participate_car_pool_inactive"
                     android:scaleType="fitCenter"
                     android:stateListAnimator="@animator/click_animation"
+                    setCarPoolTypeRadioButton="@{homeViewModel.carPoolType}"
+                    android:onClick="@{() -> homeViewModel.setCarPoolType(CarPoolType.JOIN)}"
                     app:layout_constraintStart_toEndOf="@id/recruitCarPoolButton"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -237,6 +259,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/compactTaxiButton"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/goToRidingTaxi"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/rectangle_hyundai_blue_radius_12"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/white"
+            android:text="@string/go_to_riding_taxi"
+            android:fontFamily="@font/pretendard_semibold"
+            android:textSize="@dimen/title_text"
+            app:layout_constraintTop_toBottomOf="@id/bottomHorizontalGuideLine"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
