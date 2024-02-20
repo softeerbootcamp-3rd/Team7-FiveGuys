@@ -27,9 +27,11 @@ class LoginActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         setStatusBarTransparent(window)
 
-        binding.loginButton.setOnClickListener {
-            login()
+        with(binding) {
+            loginButton.setOnClickListener { login() }
+            signUpButton.setOnClickListener { goToSignUp() }
         }
+
     }
 
     private fun login() {
@@ -51,6 +53,11 @@ class LoginActivity : AppCompatActivity() {
         val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    private fun goToSignUp() {
+        val intent = Intent(this, RegisterActivity::class.java)
+        startActivity(intent)
     }
 
     private fun getUserIdInput(): String {
