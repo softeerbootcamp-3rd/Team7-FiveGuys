@@ -20,6 +20,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
+
     @Autowired
     UserService(UserRepository userRepository, JwtUtil jwtUtil){
 
@@ -27,16 +28,18 @@ public class UserService {
         this.jwtUtil = jwtUtil;
 
     }
+
     @Transactional
     public void createUser(UserCreateReqDto userCreateReqDto) {
         String loginId = userCreateReqDto.getLoginId();
         String password = userCreateReqDto.getPassword();
         String nickname = userCreateReqDto.getNickname();
 
-        User user = new User();
-        user.setLoginId(loginId);
-        user.setPassword(password);
-        user.setNickname(nickname);
+        User user = new User().builder()
+                .loginId(loginId)
+                .password(password)
+                .nickname(nickname)
+                .build();
 
         userRepository.save(user);
 
@@ -48,7 +51,7 @@ public class UserService {
 
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage()));
 
-        user.setNickname(nickname);
+        user.editNickname(nickname);
 
         userRepository.save(user);
     }
@@ -59,7 +62,7 @@ public class UserService {
 
         User user = userRepository.findById(id).orElseThrow(()->new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage()));
 
-        user.setPassword(password);
+        user.editPassword(password);
         userRepository.save(user);
 
     }
@@ -80,6 +83,7 @@ public class UserService {
 
         userRepository.deleteById(id);
     }
+
     @Transactional(readOnly = true)
     public LoginResDto userLogin(UserLoginReqDto userLoginReqDto) {
         String loginId = userLoginReqDto.getLoginId();

@@ -42,7 +42,7 @@ public class UserController {
     })
     @PostMapping("/users")
     public ResponseEntity createUser(@RequestBody @Validated UserCreateReqDto userCreateReqDto, Errors errors){
-        System.out.println("]]"+userCreateReqDto.getLoginId());
+
         if(errors.hasErrors())
             return ResponseApi.invalidArguments();
         try{
@@ -91,17 +91,16 @@ public class UserController {
     })
     @PatchMapping("/users/password")
     public ResponseEntity modifyPassword(@Auth Long id, @RequestBody @Validated UserPasswordReqDto userPasswordReqDto, Errors errors){
-        System.out.println("["+ userPasswordReqDto.getPassword());
         if(errors.hasErrors())
             return ResponseApi.invalidArguments();
 
-//        try{
-//            userService.modifyPassword(userPasswordReqDto, id);
-//        } catch (EntityNotFoundException e){
-//            return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
-//        } catch(Exception e) {
-//            return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
-//        }
+        try{
+            userService.modifyPassword(userPasswordReqDto, id);
+        } catch (EntityNotFoundException e){
+            return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
+        } catch(Exception e) {
+            return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
+        }
 
         return ResponseApi.ok();
     }
