@@ -22,5 +22,5 @@ public class User {
 
     private String password;
 
-    private String clientId;
+    private String clientToken;
 }

@@ -5,6 +5,7 @@ import com.fiveguys.robocar.dto.req.UserCreateReqDto;
 import com.fiveguys.robocar.dto.req.UserLoginReqDto;
 import com.fiveguys.robocar.dto.req.UserNicknameReqDto;
 import com.fiveguys.robocar.dto.req.UserPasswordReqDto;
+import com.fiveguys.robocar.dto.res.LoginResDto;
 import com.fiveguys.robocar.entity.User;
 import com.fiveguys.robocar.repository.UserRepository;
 import com.fiveguys.robocar.util.JwtUtil;
@@ -80,7 +81,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
     @Transactional(readOnly = true)
-    public String userLogin(UserLoginReqDto userLoginReqDto) {
+    public LoginResDto userLogin(UserLoginReqDto userLoginReqDto) {
         String loginId = userLoginReqDto.getLoginId();
         String password = userLoginReqDto.getPassword();
 
@@ -88,7 +89,10 @@ public class UserService {
 
         if(!user.getLoginId().equals(loginId) || !user.getPassword().equals(password))
             throw new EntityNotFoundException(ResponseStatus.USER_WRONG_PASSWORD.getMessage());
+        String token = jwtUtil.createToken(user.getId());
+        String nickname = user.getNickname();
+        Long id = user.getId();
 
-        return jwtUtil.createToken(user.getId());
+        return new LoginResDto(id, nickname,token);
     }
 }

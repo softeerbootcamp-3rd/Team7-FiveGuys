@@ -7,6 +7,7 @@ import com.fiveguys.robocar.dto.req.UserCreateReqDto;
 import com.fiveguys.robocar.dto.req.UserLoginReqDto;
 import com.fiveguys.robocar.dto.req.UserNicknameReqDto;
 import com.fiveguys.robocar.dto.req.UserPasswordReqDto;
+import com.fiveguys.robocar.dto.res.LoginResDto;
 import com.fiveguys.robocar.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -183,15 +184,15 @@ public class UserController {
     public ResponseEntity userLogin(@RequestBody UserLoginReqDto userLoginReqDto, Errors errors){
 
         System.out.println("[[" + userLoginReqDto.getLoginId());
-        String token = null;
+        LoginResDto loginResDto = null;
         try{
-            token = userService.userLogin(userLoginReqDto);
+            loginResDto = userService.userLogin(userLoginReqDto);
         } catch (EntityNotFoundException e){
             return ResponseApi.of(ResponseStatus.USER_WRONG_LOGIN_INFO);
         } catch(Exception e){
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
-        return ResponseApi.ok(token);
+        return ResponseApi.ok(loginResDto);
     }
 
 }
