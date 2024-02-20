@@ -1,7 +1,7 @@
 package com.fiveguys.robocar.controller;
 
 import com.fiveguys.robocar.apiPayload.ResponseApi;
-import com.fiveguys.robocar.controller.annotation.Auth;
+import com.fiveguys.robocar.auth.Auth;
 import com.fiveguys.robocar.util.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
