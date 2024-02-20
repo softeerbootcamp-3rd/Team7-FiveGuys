@@ -11,6 +11,9 @@ import org.softeer.robocar.data.repository.auth.AuthLocalDataSource
 import org.softeer.robocar.data.repository.auth.AuthRemoteDataSource
 import org.softeer.robocar.data.repository.auth.AuthRepository
 import org.softeer.robocar.data.repository.auth.AuthRepositoryImpl
+import org.softeer.robocar.data.repository.user.UserRemoteDataSource
+import org.softeer.robocar.data.repository.user.UserRepository
+import org.softeer.robocar.data.repository.user.UserRepositoryImpl
 import javax.inject.Singleton
 
 @Module
@@ -34,6 +37,16 @@ class RepositoryModule {
         return AuthRepositoryImpl(
             authRemoteDataSource,
             authLocalDataSource
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserRepository(
+        userRemoteDataSource: UserRemoteDataSource
+    ): UserRepository {
+        return UserRepositoryImpl(
+            userRemoteDataSource
         )
     }
 }
