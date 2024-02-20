@@ -3,21 +3,18 @@ package com.fiveguys.robocar.service;
 import com.fiveguys.robocar.dto.req.CarpoolRegisterReqDto;
 import com.fiveguys.robocar.dto.res.CarpoolListUpResDto;
 import com.fiveguys.robocar.entity.CarpoolRequest;
-import com.fiveguys.robocar.entity.User;
 import com.fiveguys.robocar.repository.CarpoolRequestRepository;
-import com.fiveguys.robocar.repository.UserRepository;
-import com.fiveguys.robocar.util.CarpoolRegisterParser;
-import jakarta.persistence.EntityNotFoundException;
+import com.fiveguys.robocar.converter.CarpoolRegisterParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CarpoolRequestService {
+public class OperationService {
     private final CarpoolRequestRepository carpoolRequestRepository;
     private final CarpoolRegisterParser carpoolRegisterParser;
 
     @Autowired
-    public CarpoolRequestService(CarpoolRequestRepository carpoolRequestRepository, CarpoolRegisterParser carpoolRegisterParser){
+    public OperationService(CarpoolRequestRepository carpoolRequestRepository, CarpoolRegisterParser carpoolRegisterParser){
         this.carpoolRequestRepository = carpoolRequestRepository;
         this.carpoolRegisterParser = carpoolRegisterParser;
     }

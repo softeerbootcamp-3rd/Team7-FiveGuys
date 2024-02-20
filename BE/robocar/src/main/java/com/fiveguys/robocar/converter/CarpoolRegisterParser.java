@@ -1,4 +1,4 @@
-package com.fiveguys.robocar.util;
+package com.fiveguys.robocar.converter;
 
 import com.fiveguys.robocar.dto.req.CarpoolRegisterReqDto;
 import com.fiveguys.robocar.entity.CarpoolRequest;

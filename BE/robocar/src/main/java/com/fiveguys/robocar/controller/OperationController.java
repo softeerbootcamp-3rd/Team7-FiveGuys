@@ -5,7 +5,7 @@ import com.fiveguys.robocar.apiPayload.ResponseApi;
 import com.fiveguys.robocar.apiPayload.ResponseStatus;
 import com.fiveguys.robocar.dto.req.CarpoolRegisterReqDto;
 import com.fiveguys.robocar.dto.res.CarpoolListUpResDto;
-import com.fiveguys.robocar.service.CarpoolRequestService;
+import com.fiveguys.robocar.service.OperationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -23,13 +23,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Carpool", description = "카풀리스트 - 등록,조회,삭제")
-public class CarpoolController {
+public class OperationController {
 
-    CarpoolRequestService carpoolRequestService;
+    OperationService operationService;
 
     @Autowired
-    CarpoolController(CarpoolRequestService carpoolRequestService){
-        this.carpoolRequestService = carpoolRequestService;
+    OperationController(OperationService operationService){
+        this.operationService = operationService;
     }
 
     @Operation(summary = "게스트 위치 기반 리스트 조회")
@@ -46,7 +46,7 @@ public class CarpoolController {
     public ResponseEntity carpoolListUp(@RequestParam String guestDepartAddress, @RequestParam String guestDestAddress){
         CarpoolListUpResDto carpoolListUpResDto = null;
         try {
-            carpoolListUpResDto = carpoolRequestService.carpoolListUp(guestDepartAddress, guestDestAddress);
+            carpoolListUpResDto = operationService.carpoolListUp(guestDepartAddress, guestDestAddress);
             return ResponseApi.ok(carpoolListUpResDto);
         } catch (Exception e){
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
@@ -68,9 +68,9 @@ public class CarpoolController {
     @PostMapping("/operations")
     public ResponseEntity carpoolRegister(@RequestBody @Validated CarpoolRegisterReqDto carpoolRegisterReqDto){
         try{
-            carpoolRequestService.carPoolRegister(carpoolRegisterReqDto);
+            operationService.carPoolRegister(carpoolRegisterReqDto);
         } catch (EntityNotFoundException e){
-            return ResponseApi.of(ResponseStatus.USER_NOT_FOUND);
+            return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
         } catch (Exception e){
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
@@ -92,10 +92,6 @@ public class CarpoolController {
     public ResponseEntity carpoolDelete(HttpServletRequest request){
         return ResponseApi.ok();
     }
-
-
-
-
 
 
 }
