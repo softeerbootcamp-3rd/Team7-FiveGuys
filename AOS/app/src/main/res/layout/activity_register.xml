@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-
+        <variable
+            name="signUpViewModel"
+            type="org.softeer.robocar.ui.viewmodel.SignUpViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -31,6 +33,7 @@
                 android:textSize="@dimen/content_text"
                 android:text="@string/check"
                 android:fontFamily="@font/pretendard_semibold"
+                activateButtonIfInputNotEmpty="@{signUpViewModel.nickname.toString()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintTop_toTopOf="@+id/nickNameInputText"
@@ -81,6 +84,7 @@
                 android:textColor="@color/black"
                 android:background="@drawable/rectangle_gray_150_radius_12"
                 android:inputType="text"
+                android:text="@={signUpViewModel.userId}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/id"
                 app:layout_constraintEnd_toStartOf="@+id/idCheckButton"/>
@@ -111,6 +115,7 @@
                 android:textSize="@dimen/content_text"
                 android:text="@string/check"
                 android:fontFamily="@font/pretendard_semibold"
+                activateButtonIfInputNotEmpty="@{signUpViewModel.userId.toString()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintTop_toTopOf="@+id/idInputText"/>
@@ -132,6 +137,7 @@
                 android:background="@drawable/rectangle_gray_150_radius_12"
                 android:inputType="textPassword"
                 android:layout_marginTop="8dp"
+                android:text="@={signUpViewModel.password}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/password"
@@ -169,6 +175,7 @@
                 android:background="@drawable/rectangle_gray_150_radius_12"
                 android:inputType="textPassword"
                 android:layout_marginTop="8dp"
+                android:text="@={signUpViewModel.passwordConfirmation}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/passwordCheck"/>
@@ -205,6 +212,7 @@
                 android:background="@drawable/rectangle_gray_150_radius_12"
                 android:inputType="text"
                 android:layout_marginTop="8dp"
+                android:text="@={signUpViewModel.nickname}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nickname"
                 app:layout_constraintEnd_toStartOf="@+id/nickNameCheckButton"/>
@@ -247,6 +255,12 @@
                 android:text="@string/sign_up_success"
                 android:fontFamily="@font/pretendard_semibold"
                 android:layout_marginTop="100dp"
+                checkIdInputValid="@{signUpViewModel.userId}"
+                checkPasswordInputValid="@{signUpViewModel.password}"
+                checkConfirmedPasswordInputValid="@{signUpViewModel.passwordConfirmation}"
+                checkNicknameInputValid="@{signUpViewModel.nickname}"
+                checkAvailableId="@{signUpViewModel.isIdAvailable}"
+                checkAvailableNickname="@{signUpViewModel.isNicknameAvailable}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nickNameInputText"
