@@ -11,8 +11,10 @@ class AuthRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun login(
         loginRequest: LoginRequest
-    ): LoginResponse {
-        return authService.login(loginRequest)
+    ): Result<LoginResponse> {
+        return runCatching {
+            authService.login(loginRequest)
+        }
     }
 
 }

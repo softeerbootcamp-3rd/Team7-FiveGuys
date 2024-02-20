@@ -13,9 +13,7 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun login(
         loginRequest: LoginRequest
     ): Result<LoginResponse> {
-        return runCatching {
-            authRemoteDataSource.login(loginRequest)
-        }
+        return authRemoteDataSource.login(loginRequest)
     }
 
     override suspend fun saveToken(

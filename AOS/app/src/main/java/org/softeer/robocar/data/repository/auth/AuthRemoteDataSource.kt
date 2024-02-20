@@ -7,6 +7,6 @@ interface AuthRemoteDataSource {
 
     suspend fun login(
         loginRequest: LoginRequest
-    ): LoginResponse
+    ): Result<LoginResponse>
 
 }
