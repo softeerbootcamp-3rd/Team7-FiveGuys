@@ -14,7 +14,10 @@ public class ResponseApi {
 
     // body가 없을 경우
     public static ResponseEntity of(ResponseStatus status) {
-        return new ResponseEntity(status.getMessage(), status.getHttpStatus());
+        Body body = Body.builder()
+                .message(status.getMessage())
+                .build();
+        return new ResponseEntity<>(body, status.getHttpStatus());
     }
 
     public static <T> ResponseEntity<T> of(ResponseStatus status, T data) {
