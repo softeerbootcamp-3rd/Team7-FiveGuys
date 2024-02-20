@@ -2,7 +2,7 @@ package com.fiveguys.robocar.controller;
 
 import com.fiveguys.robocar.apiPayload.ResponseApi;
 import com.fiveguys.robocar.apiPayload.ResponseStatus;
-import com.fiveguys.robocar.controller.annotation.Auth;
+import com.fiveguys.robocar.auth.Auth;
 import com.fiveguys.robocar.dto.req.UserCreateReqDto;
 import com.fiveguys.robocar.dto.req.UserLoginReqDto;
 import com.fiveguys.robocar.dto.req.UserNicknameReqDto;
@@ -154,7 +154,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "존재하지 않는 유저"),
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
-    @DeleteMapping("/users/delete")
+    @DeleteMapping("/users")
     public ResponseEntity userResign(@Auth Long id){
 
         try{
