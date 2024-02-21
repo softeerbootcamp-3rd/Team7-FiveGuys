@@ -1,6 +1,10 @@
 package org.softeer.robocar.data.model
 
-enum class CarPoolType {
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+enum class CarPoolType : Parcelable {
     ALONE,
     RECRUIT,
     JOIN,

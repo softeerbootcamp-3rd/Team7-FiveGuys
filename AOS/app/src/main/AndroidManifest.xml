@@ -50,5 +50,9 @@
             android:name=".ui.activity.RequestCarPoolActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".ui.activity.RegisterActivity"
+            android:exported="false"/>
+
     </application>
 </manifest>

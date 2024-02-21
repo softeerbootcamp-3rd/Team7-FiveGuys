@@ -1,6 +1,10 @@
 package org.softeer.robocar.data.model
 
-enum class TaxiType {
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+enum class TaxiType : Parcelable {
     COMPACT_TAXI,
     MID_SIZE_TAXI,
 }
