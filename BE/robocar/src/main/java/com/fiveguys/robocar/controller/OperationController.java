@@ -27,13 +27,15 @@ public class OperationController {
             @ApiResponse(responseCode = "200", description = "조회 성공"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청")})
     @GetMapping("/operations/optimized-route")
-    public ResponseEntity getOptimizedRoute(
+    public ResponseEntity<?> getOptimizedRoute(
             @Parameter(description = "출발지 주소") @RequestParam String departureAddress,
             @Parameter(description = "호스트 목적지 주소") @RequestParam String hostDestAddress,
-            @Parameter(description = "게스트 목적지 주소 (선택)") @RequestParam(required = false) String guestDestAddress) {
+            @Parameter(description = "게스트 목적지 주소 (선택)") @RequestParam(required = false) String guestDestAddress,
+            @Parameter(description = "호스트 ID") @RequestParam Long hostId,
+            @Parameter(description = "게스트 ID (선택)") @RequestParam(required = false) Long guestId) {
 
         try {
-            RouteResDto response = operationService.getOptimizedRoute(departureAddress, hostDestAddress, guestDestAddress);
+            RouteResDto response = operationService.getOptimizedRoute(departureAddress, hostDestAddress, guestDestAddress, hostId, guestId);
             return ResponseApi.ok(response);
         } catch (Exception e) {
             return ResponseApi.of(ResponseStatus._BAD_REQUEST);

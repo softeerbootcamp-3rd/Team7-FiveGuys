@@ -1,6 +1,7 @@
 package com.fiveguys.robocar.service;
 
 import com.fiveguys.robocar.apiPayload.ResponseStatus;
+import com.fiveguys.robocar.dto.RouteInfo;
 import com.fiveguys.robocar.dto.req.GarageReqDto;
 import com.fiveguys.robocar.entity.Garage;
 import com.fiveguys.robocar.repository.GarageRepository;
@@ -17,6 +18,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class GarageService {
     private final GarageRepository garageRepository;
+    private final RouteService routeService;
 
     @Transactional
     public void insertGarage(GarageReqDto garageReqDto) {
@@ -66,5 +68,24 @@ public class GarageService {
                 .orElseThrow(() -> new EntityNotFoundException(ResponseStatus.GARAGE_NOT_FOUND.getMessage()));
 
         garageRepository.delete(findGarage);
+    }
+
+    // 가장 가까운 차고지 찾기
+    public Garage findNearestGarage(String startCoordinate) {
+        List<Garage> garages = garageRepository.findAll();
+        Garage nearestGarage = null;
+        long shortestDuration = Long.MAX_VALUE;
+
+        for (Garage garage : garages) {
+            String garageCoordinate = garage.getLatitude() + "," + garage.getLongitude();
+            RouteInfo routeInfo = routeService.getRouteInfo(startCoordinate, garageCoordinate, null);
+
+            if (routeInfo.getDuration() < shortestDuration) {
+                shortestDuration = routeInfo.getDuration();
+                nearestGarage = garage;
+            }
+        }
+
+        return nearestGarage;
     }
 }
