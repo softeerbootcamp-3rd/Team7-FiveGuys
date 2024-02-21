@@ -3,6 +3,7 @@ package com.fiveguys.robocar.controller;
 
 import com.fiveguys.robocar.apiPayload.ResponseApi;
 import com.fiveguys.robocar.apiPayload.ResponseStatus;
+import com.fiveguys.robocar.auth.Auth;
 import com.fiveguys.robocar.dto.req.CarpoolRegisterReqDto;
 import com.fiveguys.robocar.dto.res.CarpoolListUpResDto;
 import com.fiveguys.robocar.service.OperationService;
@@ -66,9 +67,9 @@ public class OperationController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @PostMapping("/operations")
-    public ResponseEntity carpoolRegister(@RequestBody @Validated CarpoolRegisterReqDto carpoolRegisterReqDto){
+    public ResponseEntity carpoolRegister(@RequestBody @Validated CarpoolRegisterReqDto carpoolRegisterReqDto, @Auth Long id){
         try{
-            operationService.carPoolRegister(carpoolRegisterReqDto);
+            operationService.carPoolRegister(carpoolRegisterReqDto, id);
         } catch (EntityNotFoundException e){
             return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
         } catch (Exception e){
