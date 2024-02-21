@@ -29,17 +29,6 @@ public class CarController {
     private final CarService carService;
 
     @Operation(summary = "차량 추가하기")
-    @Parameters(value = {
-            @Parameter(name = "garageId", description = "차고지 ID"),
-            @Parameter(name = "state", description = "운행 상태"),
-            @Parameter(name = "seatTemperature", description = "시트 온도"),
-            @Parameter(name = "ventilationLevel", description = "통풍 레벨"),
-            @Parameter(name = "airConditionerTemperature", description = "에어컨 온도"),
-            @Parameter(name = "doorLock", description = "문 잠금"),
-            @Parameter(name = "carName", description = "차량 이름"),
-            @Parameter(name = "carImage", description = "차량 이미지"),
-            @Parameter(name = "carNumber", description = "차량 번호")
-    })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "등록 성공"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청")
@@ -84,18 +73,6 @@ public class CarController {
     }
 
     @Operation(summary = "차량 정보 수정")
-    @Parameters(value = {
-            @Parameter(name = "id", description = "수정할 차량 ID"),
-            @Parameter(name = "garageId", description = "차고지 ID"),
-            @Parameter(name = "state", description = "운행 상태"),
-            @Parameter(name = "seatTemperature", description = "시트 온도"),
-            @Parameter(name = "ventilationLevel", description = "통풍 레벨"),
-            @Parameter(name = "airConditionerTemperature", description = "에어컨 온도"),
-            @Parameter(name = "doorLock", description = "문 잠금"),
-            @Parameter(name = "carName", description = "차량 이름"),
-            @Parameter(name = "carImage", description = "차량 이미지"),
-            @Parameter(name = "carNumber", description = "차량 번호")
-    })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "변경 성공"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청 또는 유효하지 않은 차량 정보"),

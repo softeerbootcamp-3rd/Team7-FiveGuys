@@ -37,7 +37,7 @@ dependencies {
 	//redis 연동
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-  // JSON
+  	// JSON
 	implementation group: 'org.json', name: 'json', version: '20090211'
 
 	//jwt 관련
