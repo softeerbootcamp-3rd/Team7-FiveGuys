@@ -6,6 +6,7 @@ import com.fiveguys.robocar.dto.req.UserLoginReqDto;
 import com.fiveguys.robocar.dto.req.UserNicknameReqDto;
 import com.fiveguys.robocar.dto.req.UserPasswordReqDto;
 import com.fiveguys.robocar.dto.res.LoginResDto;
+import com.fiveguys.robocar.dto.res.UserAvailableResDto;
 import com.fiveguys.robocar.entity.User;
 import com.fiveguys.robocar.repository.UserRepository;
 import com.fiveguys.robocar.util.JwtUtil;
@@ -68,13 +69,14 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public boolean isDuplicatedLoginId(String loginId) {
-        return !userRepository.existsByLoginId(loginId);
+    public UserAvailableResDto isAvailableLoginId(String loginId) {
+
+        return new UserAvailableResDto(!userRepository.existsByLoginId(loginId));
     }
 
     @Transactional(readOnly = true)
-    public boolean isDuplicatedNickname(String nickname) {
-        return !userRepository.existsByNickname(nickname);
+    public UserAvailableResDto isAvailableNickname(String nickname) {
+        return new UserAvailableResDto(!userRepository.existsByNickname(nickname));
     }
 
     @Transactional

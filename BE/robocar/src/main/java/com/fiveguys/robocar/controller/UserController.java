@@ -8,6 +8,7 @@ import com.fiveguys.robocar.dto.req.UserLoginReqDto;
 import com.fiveguys.robocar.dto.req.UserNicknameReqDto;
 import com.fiveguys.robocar.dto.req.UserPasswordReqDto;
 import com.fiveguys.robocar.dto.res.LoginResDto;
+import com.fiveguys.robocar.dto.res.UserAvailableResDto;
 import com.fiveguys.robocar.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -78,7 +79,7 @@ public class UserController {
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
 
-        return ResponseApi.ok();
+        return ResponseApi.ok(null);
     }
 
     @Operation(summary = "비밀번호 수정")
@@ -102,7 +103,7 @@ public class UserController {
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
 
-        return ResponseApi.ok();
+        return ResponseApi.ok(null);
     }
 
     @Operation(summary = "아이디 중복 체크")
@@ -114,16 +115,19 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @GetMapping("/users/loginId-validation")
-    public ResponseEntity isDuplicatedLoginId(@RequestParam String loginId){
-        boolean isUnusable;
+    public ResponseEntity isAvailableLoginId(@RequestParam String loginId){
+
+        UserAvailableResDto userAvailableResDto;
 
         try{
-            isUnusable = userService.isDuplicatedLoginId(loginId);
+            userAvailableResDto = userService.isAvailableLoginId(loginId);
+
         } catch(Exception e) {
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
 
-        return ResponseApi.ok(isUnusable);
+        return ResponseApi.ok(userAvailableResDto);
+
     }
 
     @Operation(summary = "닉네임 중복 체크")
@@ -135,16 +139,16 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @GetMapping("/users/nickname-validation")
-    public ResponseEntity isDuplicatedNickname(@RequestParam String nickname){
-        boolean isUnusable;
+    public ResponseEntity isAvailableNickname(@RequestParam String nickname){
 
+        UserAvailableResDto userAvailableResDto;
         try{
-            isUnusable = userService.isDuplicatedNickname(nickname);
+            userAvailableResDto = userService.isAvailableNickname(nickname);
         } catch(Exception e) {
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
 
-        return ResponseApi.ok(isUnusable);
+        return ResponseApi.ok(userAvailableResDto);
     }
 
     @Operation(summary = "회원탈퇴")
@@ -164,7 +168,7 @@ public class UserController {
         catch(Exception e){
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
-        return ResponseApi.ok();
+        return ResponseApi.ok(null);
     }
 
     @Operation(summary = "로그인")

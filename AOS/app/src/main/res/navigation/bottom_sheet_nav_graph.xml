@@ -2,19 +2,9 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
+    android:id="@+id/bottom_sheet_nav_graph"
     app:startDestination="@id/pathSettingFragment">
 
-    <fragment
-        android:id="@+id/home"
-        android:name="org.softeer.robocar.ui.fragment.HomeFragment"
-        android:label="HomeFragment"
-        tools:layout="@layout/fragment_home" />
-    <fragment
-        android:id="@+id/myPage"
-        android:name="org.softeer.robocar.ui.fragment.MyPageFragment"
-        android:label="MyPageFragment"
-        tools:layout="@layout/fragment_my_page" />
     <fragment
         android:id="@+id/pathSettingFragment"
         android:name="org.softeer.robocar.ui.fragment.PathSettingFragment"
@@ -38,4 +28,5 @@
         android:name="org.softeer.robocar.ui.fragment.InternalControlFragment"
         android:label="InternalControlFragment"
         tools:layout="@layout/fragment_internal_control"/>
+
 </navigation>

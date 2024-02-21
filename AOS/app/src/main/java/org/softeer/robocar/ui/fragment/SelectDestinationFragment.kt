@@ -25,7 +25,8 @@ class SelectDestinationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         binding.finishSelectDest.setOnClickListener {
-            findNavController().navigate(R.id.action_selectDestinationFragment_to_internalControlFragment)
+            val action = SelectDestinationFragmentDirections.actionSelectDestinationFragmentToInternalControlFragment()
+            findNavController().navigate(action)
         }
     }
 
