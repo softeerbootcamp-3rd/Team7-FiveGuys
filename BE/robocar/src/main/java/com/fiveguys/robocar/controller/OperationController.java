@@ -66,7 +66,7 @@ public class OperationController {
             @ApiResponse(responseCode = "400", description = "추가 실패"),
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
-    @PostMapping("/operations/carpool")
+    @PostMapping("/operations/carpools")
     public ResponseEntity carpoolRegister(@RequestBody @Validated CarpoolRegisterReqDto carpoolRegisterReqDto, @Auth Long id){
         try{
             operationService.carPoolRegister(carpoolRegisterReqDto, id);
