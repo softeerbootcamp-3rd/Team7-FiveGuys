@@ -32,6 +32,13 @@ android {
         // 읽어온 API 키를 manifest placeholder에 설정
         manifestPlaceholders["kakao_native_app_key"] = kakao_native_app_key
 
+        //네이버맵 관련
+        val naverMapClientId = properties["naver_map_client_id"] as String
+        val naverMapClientSecret = properties["naver_map_client_secret"] as String
+
+        manifestPlaceholders["naver_map_client_id"] = naverMapClientId
+        manifestPlaceholders["naver_map_client_secret"] = naverMapClientSecret
+
         val baseUrl = properties["BASE_URL"] as String
         buildConfigField("String", "BASE_URL", baseUrl)
     }
@@ -74,6 +81,7 @@ dependencies {
 
     implementation("com.kakao.maps.open:android:2.6.0") // 카카오내비
 
+    implementation("com.naver.maps:map-sdk:3.17.0") //네이버맵
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

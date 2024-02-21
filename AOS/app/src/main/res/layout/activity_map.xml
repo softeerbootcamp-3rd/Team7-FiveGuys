@@ -18,10 +18,12 @@
             android:layout_height="match_parent"
             tools:context=".ui.activity.MapActivity">
 
-            <com.kakao.vectormap.MapView
-                android:id="@+id/mapView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+            <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/map_fragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:name="com.naver.maps.map.MapFragment" />
+
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/taxiInformationFragmentContainer"

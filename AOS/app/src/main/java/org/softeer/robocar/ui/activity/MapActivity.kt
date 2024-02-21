@@ -1,51 +1,50 @@
 package org.softeer.robocar.ui.activity
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.ViewGroup.MarginLayoutParams
-import android.view.inputmethod.EditorInfo
-import androidx.activity.enableEdgeToEdge
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isVisible
-import androidx.core.view.updateLayoutParams
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.add
-import androidx.fragment.app.commit
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.kakao.vectormap.KakaoMap
-import com.kakao.vectormap.KakaoMapReadyCallback
-import com.kakao.vectormap.MapLifeCycleCallback
-import com.kakao.vectormap.MapView
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.OnMapReadyCallback
+import com.naver.maps.map.MapFragment
+import com.naver.maps.map.NaverMap
+import com.naver.maps.map.overlay.PathOverlay
+import com.naver.maps.map.overlay.ArrowheadPathOverlay
 import org.softeer.robocar.R
-import org.softeer.robocar.databinding.ActivityMapBinding
-import org.softeer.robocar.ui.fragment.HeadcountDialogFragment
-import org.softeer.robocar.ui.fragment.PathSettingFragment
 
-class MapActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMapBinding
-    private lateinit var mapView: MapView
+class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_map)
+        setContentView(R.layout.activity_map)
 
-        mapView = binding.mapView
-        mapView.start(object : MapLifeCycleCallback() {
-            override fun onMapDestroy() {
-                // 지도 API가 정상적으로 종료될 때 호출됨
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map_fragment) as MapFragment?
+            ?: MapFragment.newInstance().also {
+                supportFragmentManager.beginTransaction().add(R.id.map_fragment, it).commit()
             }
 
-            override fun onMapError(error: Exception) {
-                // 인증 실패 및 지도 사용 중 에러가 발생할 때 호출됨
-            }
-        }, object : KakaoMapReadyCallback() {
-            override fun onMapReady(kakaoMap: KakaoMap) {
-                // 인증 후 API가 정상적으로 실행될 때 호출됨
-            }
-        })
+        mapFragment.getMapAsync(this)
+    }
 
-        HeadcountDialogFragment().show(supportFragmentManager, "headCount")
+    override fun onMapReady(naverMap: NaverMap) {
+        // 경로선 추가
+        val path = PathOverlay()
+        path.coords = listOf(
+            LatLng(37.57152, 126.97714),
+            LatLng(37.56607, 126.98268),
+            LatLng(37.56445, 126.97707),
+            LatLng(37.55855, 126.97822)
+        )
+        path.map = naverMap
+
+        // 화살표 추가
+        val arrowheadPath = ArrowheadPathOverlay()
+        arrowheadPath.coords = listOf(
+            LatLng(37.568003, 126.9772503),
+            LatLng(37.5701573, 126.9772503),
+            LatLng(37.5701573, 126.9793745)
+        )
+        arrowheadPath.width = 20 // 화살표 두께 설정
+        arrowheadPath.color = Color.GREEN // 화살표 색상 설정
+        arrowheadPath.map = naverMap
     }
 }

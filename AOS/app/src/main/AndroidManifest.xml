@@ -22,12 +22,22 @@
 
         <activity
             android:name=".ui.activity.MapActivity"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <meta-data
             android:name="com.kakao.vectormap.APP_KEY"
             android:value="${kakao_native_app_key}" />
-
+        <meta-data
+                android:name="com.naver.maps.map.CLIENT_ID"
+                android:value="${naver_map_client_id}" />
+        <meta-data
+                android:name="com.naver.maps.map.CLIENT_SECRET"
+                android:value="${naver_map_client_secret}"/>
         <activity
             android:name=".ui.activity.LoadingActivity"
             android:exported="false" />
@@ -40,10 +50,10 @@
         <activity
             android:name=".ui.activity.LoginActivity"
             android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
 
         <activity
