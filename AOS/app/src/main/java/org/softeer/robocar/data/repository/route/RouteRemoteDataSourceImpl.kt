@@ -1,6 +1,6 @@
 package org.softeer.robocar.data.repository.route
 
-import org.softeer.robocar.data.service.RouteService
+import org.softeer.robocar.data.service.route.RouteService
 import org.softeer.robocar.data.mapper.toRoute
 import org.softeer.robocar.data.model.Route
 import javax.inject.Inject

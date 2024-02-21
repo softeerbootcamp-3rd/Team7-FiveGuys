@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+                name="viewModel"
+                type="org.softeer.robocar.ui.viewmodel.RouteViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -38,43 +40,38 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/taxiImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:src="@drawable/img_departure"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                android:id="@+id/taxiImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:src="@{viewModel.route.carImageUrl}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/taxiCarType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/pretendard_semibold"
-            android:text="현대 아이오닉5 로보택시"
-            android:textColor="@color/black"
-            android:textSize="@dimen/content_text"
-            app:layout_constraintEnd_toEndOf="@id/taxiImage"
-            app:layout_constraintStart_toStartOf="@id/taxiImage"
-            app:layout_constraintTop_toBottomOf="@id/taxiImage" />
+                android:id="@+id/taxiCarType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@{viewModel.route.vehicleModel}"
+                android:textColor="@color/black"
+                android:textSize="@dimen/content_text"
+                app:layout_constraintEnd_toEndOf="@id/taxiImage"
+                app:layout_constraintStart_toStartOf="@id/taxiImage"
+                app:layout_constraintTop_toBottomOf="@id/taxiImage" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/taxiLicensePlate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@color/hyundai_blue"
-            android:fontFamily="@font/pretendard_semibold"
-            android:text="서울 31사 1234"
-            android:textColor="@color/white"
-            android:textSize="@dimen/content_text"
-            app:layout_constraintEnd_toStartOf="@id/taxiEstimatedTime"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/taxiCarType" />
+                android:id="@+id/taxiLicensePlate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@{viewModel.route.vehicleRegistrationNumber}"
+                android:textColor="@color/white"
+                android:textSize="@dimen/content_text"
+                app:layout_constraintEnd_toStartOf="@id/taxiEstimatedTime"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/taxiCarType" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/taxiEstimatedTime"

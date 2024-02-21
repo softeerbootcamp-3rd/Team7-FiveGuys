@@ -17,7 +17,7 @@ import org.softeer.robocar.data.repository.route.RouteRemoteDataSourceImpl
 import org.softeer.robocar.data.repository.user.UserRemoteDataSource
 import org.softeer.robocar.data.repository.user.UserRemoteDataSourceImpl
 import org.softeer.robocar.data.service.CarPool.CarPoolService
-import org.softeer.robocar.data.service.RouteService
+import org.softeer.robocar.data.service.route.RouteService
 import org.softeer.robocar.data.service.auth.AuthService
 import org.softeer.robocar.data.service.user.UserService
 import javax.inject.Singleton

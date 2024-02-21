@@ -11,8 +11,9 @@ import org.softeer.robocar.R
 import org.softeer.robocar.databinding.ActivityMapBinding
 import org.softeer.robocar.ui.fragment.HeadcountDialogFragment
 import java.util.*
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MapActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMapBinding
     private lateinit var mapView: MapView
