@@ -1,27 +1,17 @@
+
 package org.softeer.robocar.ui.activity
 
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Color
 import android.os.Bundle
-import android.view.ViewGroup.MarginLayoutParams
-import android.view.inputmethod.EditorInfo
-import androidx.activity.enableEdgeToEdge
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isVisible
-import androidx.core.view.updateLayoutParams
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.add
-import androidx.fragment.app.commit
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.kakao.vectormap.KakaoMap
-import com.kakao.vectormap.KakaoMapReadyCallback
-import com.kakao.vectormap.MapLifeCycleCallback
-import com.kakao.vectormap.MapView
+import com.kakao.vectormap.*
+import com.kakao.vectormap.route.*
 import org.softeer.robocar.R
 import org.softeer.robocar.databinding.ActivityMapBinding
 import org.softeer.robocar.ui.fragment.HeadcountDialogFragment
-import org.softeer.robocar.ui.fragment.PathSettingFragment
+import java.util.*
+
 
 class MapActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMapBinding
@@ -42,7 +32,28 @@ class MapActivity : AppCompatActivity() {
             }
         }, object : KakaoMapReadyCallback() {
             override fun onMapReady(kakaoMap: KakaoMap) {
-                // 인증 후 API가 정상적으로 실행될 때 호출됨
+
+                // 1. RouteLineLayer 가져오기
+                val layer = kakaoMap.routeLineManager!!.layer
+
+
+                val stylesSet = RouteLineStylesSet.from(
+                    "blueStyles",
+                    RouteLineStyles.from(RouteLineStyle.from(16f, Color.BLUE))
+                )
+
+                val segment = RouteLineSegment.from(
+                    Arrays.asList(
+                        LatLng.from(37.3597049, 127.1059979),
+                        LatLng.from(37.3597031, 127.1059979),
+                    )
+                )
+                    .setStyles(stylesSet.getStyles(0))
+
+                val options = RouteLineOptions.from(segment)
+                    .setStylesSet(stylesSet)
+
+                val routeLine = layer.addRouteLine(options)
             }
         })
 
