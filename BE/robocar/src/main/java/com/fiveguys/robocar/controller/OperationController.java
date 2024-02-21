@@ -66,7 +66,7 @@ public class OperationController {
             @ApiResponse(responseCode = "400", description = "추가 실패"),
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
-    @PostMapping("/operations")
+    @PostMapping("/operations/carpool")
     public ResponseEntity carpoolRegister(@RequestBody @Validated CarpoolRegisterReqDto carpoolRegisterReqDto, @Auth Long id){
         try{
             operationService.carPoolRegister(carpoolRegisterReqDto, id);
@@ -76,7 +76,7 @@ public class OperationController {
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
 
-        return ResponseApi.ok();
+        return ResponseApi.ok(null);
     }
 
     @Operation(summary = "게스트가 동승 차량을 선택")
