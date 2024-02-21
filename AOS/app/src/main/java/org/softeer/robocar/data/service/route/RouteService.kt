@@ -5,7 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface RouteService {
-    @GET("routes/optimized-route")
+    @GET("operations/optimized-route")
     suspend fun getRoute(
         @Query("departureAddress") startPoint: String,
         @Query("hostDestAddress") hostGoal: String,
