@@ -36,23 +36,23 @@ public class OperationService {
         RouteInfo routeInfoHost = routeService.getRouteInfo(start.toString(), optimalRoute.getFirstDestination(), optimalRoute.getSecondDestination());
         RouteInfo routeInfoGuest = guestDest != null ? routeService.getRouteInfo(start.toString(), optimalRoute.getSecondDestination(), null) : null;
 
-        // 결과를 RouteResDto 객체로 매핑
         return new RouteResDto(
                 hostId,
                 guestId,
-                availableCar.getCarImage(), // 차량 이미지 URL
-                routeInfoHost.getDuration(), // 호스트 목적지까지의 예상 소요 시간
-                routeInfoGuest != null ? routeInfoGuest.getDuration() : null, // 게스트 목적지까지의 예상 소요 시간, 게스트가 없으면 null
-                availableCar.getCarNumber(), // 차량 번호
-                availableCar.getCarName(), // 차량 이름
-                convertCoordinatesToNodes(routeInfoHost.getPathCoordinates()), // 호스트 목적지까지의 경로 노드
-                routeInfoGuest != null ? convertCoordinatesToNodes(routeInfoGuest.getPathCoordinates()) : null // 게스트 목적지까지의 경로 노드, 게스트가 없으면 null
+                availableCar.getCarImage(),
+                routeInfoHost.getDuration(),
+                routeInfoGuest != null ? routeInfoGuest.getDuration() : null,
+                availableCar.getCarNumber(),
+                availableCar.getCarName(),
+                convertCoordinatesToNodes(routeInfoHost.getPathCoordinates()),
+                routeInfoGuest != null ? convertCoordinatesToNodes(routeInfoGuest.getPathCoordinates()) : null
         );
     }
+
     private List<RouteResDto.Node> convertCoordinatesToNodes(List<Coordinate> coordinates) {
-        // Coordinate 리스트를 Node 리스트로 변환하는 로직 구현
-        return coordinates.stream()
+        List<RouteResDto.Node> nodes = coordinates.stream()
                 .map(coordinate -> new RouteResDto.Node(coordinate.getLatitude(), coordinate.getLongitude()))
                 .collect(Collectors.toList());
+        return nodes;
     }
 }

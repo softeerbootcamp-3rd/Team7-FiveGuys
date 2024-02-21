@@ -38,7 +38,7 @@ public class OperationController {
             RouteResDto response = operationService.getOptimizedRoute(departureAddress, hostDestAddress, guestDestAddress, hostId, guestId);
             return ResponseApi.ok(response);
         } catch (Exception e) {
-            return ResponseApi.of(ResponseStatus._BAD_REQUEST);
+            return ResponseApi.of(ResponseStatus.OPERATION_NOT_FOUND);
         }
     }
 }

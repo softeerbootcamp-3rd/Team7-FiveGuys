@@ -77,7 +77,7 @@ public class GarageService {
         long shortestDuration = Long.MAX_VALUE;
 
         for (Garage garage : garages) {
-            String garageCoordinate = garage.getLatitude() + "," + garage.getLongitude();
+            String garageCoordinate = garage.getLongitude() + "," + garage.getLatitude();
             RouteInfo routeInfo = routeService.getRouteInfo(startCoordinate, garageCoordinate, null);
 
             if (routeInfo.getDuration() < shortestDuration) {
