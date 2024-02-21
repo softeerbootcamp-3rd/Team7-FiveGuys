@@ -30,7 +30,7 @@
 
         <activity
             android:name=".ui.activity.LoadingActivity"
-            android:exported="false"/>
+            android:exported="false" />
 
         <activity
             android:name=".ui.activity.HomeActivity"
@@ -44,12 +44,11 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-      
         </activity>
 
         <activity
             android:name=".ui.activity.RequestCarPoolActivity"
-            android:exported="false"/>
+            android:exported="false" />
 
     </application>
 </manifest>

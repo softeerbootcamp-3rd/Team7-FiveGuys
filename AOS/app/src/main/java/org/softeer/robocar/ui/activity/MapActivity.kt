@@ -28,19 +28,8 @@ class MapActivity : AppCompatActivity() {
     private lateinit var mapView: MapView
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        //enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_map)
-
-//        status bar를 투명화하는 코드, bottom sheet와 충돌이 있어서 주석 처리함
-//        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, windowInsets ->
-//            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            v.updateLayoutParams<MarginLayoutParams> {
-//                bottomMargin = insets.bottom
-//            }
-//
-//            WindowInsetsCompat.CONSUMED
-//        }
 
         mapView = binding.mapView
         mapView.start(object : MapLifeCycleCallback() {
@@ -56,8 +45,6 @@ class MapActivity : AppCompatActivity() {
                 // 인증 후 API가 정상적으로 실행될 때 호출됨
             }
         })
-
-        val behavior = BottomSheetBehavior.from(binding.destinationLayout)
 
         HeadcountDialogFragment().show(supportFragmentManager, "headCount")
     }
