@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CarpoolDeleteReqDto {
-    @NotNull
-    Long id;
+public class CarpoolSuccessReqDto {
     @NotNull
     Long guestId;
     @NotBlank

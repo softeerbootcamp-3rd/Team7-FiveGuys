@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CarpoolRegisterReqDto {
-    @NotNull
-    Long id;
     @NotBlank
     String DepartAddress;
     @NotBlank
