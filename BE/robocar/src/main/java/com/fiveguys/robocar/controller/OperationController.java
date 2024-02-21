@@ -82,8 +82,6 @@ public class OperationController {
     @Parameters(value = {
             @Parameter(name = "latitude", description = "위도"),
             @Parameter(name = "longitude", description = "경도"),
-
-
     })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "추가 성공")

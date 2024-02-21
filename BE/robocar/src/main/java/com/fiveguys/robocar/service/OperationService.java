@@ -5,6 +5,7 @@ import com.fiveguys.robocar.dto.res.CarpoolListUpResDto;
 import com.fiveguys.robocar.entity.CarpoolRequest;
 import com.fiveguys.robocar.repository.CarpoolRequestRepository;
 import com.fiveguys.robocar.converter.CarpoolRegisterParser;
+import com.fiveguys.robocar.util.CreateCarpoolListUpResDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +13,19 @@ import org.springframework.stereotype.Service;
 public class OperationService {
     private final CarpoolRequestRepository carpoolRequestRepository;
     private final CarpoolRegisterParser carpoolRegisterParser;
+    private final RouteService routeService;
+    private final MapService mapService;
+    private final RouteComparisonService routeComparisonService;
+    private final CreateCarpoolListUpResDto createCarpoolListUpResDto;
 
     @Autowired
-    public OperationService(CarpoolRequestRepository carpoolRequestRepository, CarpoolRegisterParser carpoolRegisterParser){
+    public OperationService(CarpoolRequestRepository carpoolRequestRepository, CarpoolRegisterParser carpoolRegisterParser, MapService mapService,RouteService routeService,RouteComparisonService routeComparisonService,CreateCarpoolListUpResDto createCarpoolListUpResDto){
         this.carpoolRequestRepository = carpoolRequestRepository;
         this.carpoolRegisterParser = carpoolRegisterParser;
+        this.mapService = mapService;
+        this.routeService = routeService;
+        this.routeComparisonService = routeComparisonService;
+        this.createCarpoolListUpResDto = createCarpoolListUpResDto;
     }
 
     public void saveCarpoolRequest(CarpoolRequest carpoolRequest){
@@ -29,18 +38,8 @@ public class OperationService {
 
     public CarpoolListUpResDto carpoolListUp(String guestDepartAddress, String guestDestAddress) {
         //TODO
-        // 예상 비용 함수로 price값 구하기
-        Integer price = 1000;
-
-        CarpoolListUpResDto carpoolListUpResDto = new CarpoolListUpResDto(price);
-        Iterable<CarpoolRequest> iterableRequests = carpoolRequestRepository.findAll();
-
-        carpoolListUpResDto.makeCarpoolList(iterableRequests);
-
-        carpoolListUpResDto.doSortByCoordinate(guestDepartAddress, guestDestAddress);
-
-        return carpoolListUpResDto;
-
+        // 인원수 제한은 설정 안되어 있음
+        return createCarpoolListUpResDto.create(guestDepartAddress,guestDestAddress);
     }
 
     public void carPoolRegister(CarpoolRegisterReqDto carpoolRegisterReqDto) {
