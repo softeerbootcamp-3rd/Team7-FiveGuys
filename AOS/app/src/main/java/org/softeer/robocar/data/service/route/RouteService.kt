@@ -1,4 +1,4 @@
-package org.softeer.robocar.data.service
+package org.softeer.robocar.data.service.route
 
 import org.softeer.robocar.data.dto.route.response.RouteResponse
 import retrofit2.http.GET
