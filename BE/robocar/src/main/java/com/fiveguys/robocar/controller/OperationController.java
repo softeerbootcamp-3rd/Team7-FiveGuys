@@ -1,6 +1,5 @@
 package com.fiveguys.robocar.controller;
 
-
 import com.fiveguys.robocar.apiPayload.ResponseApi;
 import com.fiveguys.robocar.apiPayload.ResponseStatus;
 import com.fiveguys.robocar.auth.Auth;
@@ -15,14 +14,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequiredArgsConstructor
 @Tag(name = "Operation", description = "Operation 도메인 관련 API")
 public class OperationController {
 
@@ -55,20 +54,13 @@ public class OperationController {
     }
 
     @Operation(summary = "호스트가 카풀 등록")
-    @Parameters(value = {
-            @Parameter(name = "DepartAddress", description = "출발지 주소"),
-            @Parameter(name = "DestAddress", description = "도착지 주소"),
-            @Parameter(name = "maleCount", description = "남자 탑승자 수"),
-            @Parameter(name = "femaleCount", description = "여자 탑승자 수"),
-            @Parameter(name = "carType", description = "자동차 타입(소형,중형)")
-    })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "추가 성공"),
             @ApiResponse(responseCode = "400", description = "추가 실패"),
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @PostMapping("/operations/carpools")
-    public ResponseEntity carpoolRegister(@RequestBody @Validated CarpoolRegisterReqDto carpoolRegisterReqDto, @Auth Long id){
+    public ResponseEntity carpoolRegister(@RequestBody @Validated CarpoolRegisterReqDto carpoolRegisterReqDto, @Auth Long id, Errors errors){
         try{
             operationService.carpoolRegister(carpoolRegisterReqDto, id);
         } catch (EntityNotFoundException e){
