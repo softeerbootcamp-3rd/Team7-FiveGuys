@@ -1,5 +1,6 @@
 package com.fiveguys.robocar.entity;
 
+import com.fiveguys.robocar.models.CarType;
 import org.springframework.data.annotation.Id;
 
 import lombok.*;
@@ -25,5 +26,7 @@ public class CarpoolRequest {
 
     private Integer maleCount;
     private Integer femaleCount;
+
+    private CarType carType;
 
 }

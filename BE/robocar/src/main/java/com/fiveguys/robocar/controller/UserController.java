@@ -25,7 +25,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@Tag(name = "유저", description = "유저 입니다")
+@Tag(name = "User", description = "User 도메인 API")
 public class UserController {
 
     private final UserService userService;

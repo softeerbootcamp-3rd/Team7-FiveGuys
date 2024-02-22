@@ -1,5 +1,6 @@
 package com.fiveguys.robocar.dto.req;
 
+import com.fiveguys.robocar.models.CarType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -18,4 +19,6 @@ public class CarpoolRegisterReqDto {
     Integer maleCount;
     @NotNull
     Integer femaleCount;
+    @NotNull
+    CarType carType;
 }
