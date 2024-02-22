@@ -15,7 +15,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -70,7 +69,7 @@ public class OperationController {
     @PostMapping("/operations/carpools")
     public ResponseEntity carpoolRegister(@RequestBody @Validated CarpoolRegisterReqDto carpoolRegisterReqDto, @Auth Long id){
         try{
-            operationService.carPoolRegister(carpoolRegisterReqDto, id);
+            operationService.carpoolRegister(carpoolRegisterReqDto, id);
         } catch (EntityNotFoundException e){
             return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
         } catch (Exception e){
@@ -86,14 +85,19 @@ public class OperationController {
             @Parameter(name = "longitude", description = "경도"),
     })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "추가 성공")
+            @ApiResponse(responseCode = "200", description = "삭제 요청 성공"),
+            @ApiResponse(responseCode = "400", description = "이미 삭제된 동승 정보"),
+            @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @DeleteMapping("/operations/carpools")
     public ResponseEntity carpoolSuccess(CarpoolSuccessReqDto carpoolSuccessReqDto, @Auth Long id){
 
         try {
             operationService.carpoolSuccess(id, carpoolSuccessReqDto);
-        } catch (Exception e ){
+        } catch(EntityNotFoundException e){
+            return ResponseApi.of(ResponseStatus.CARPOOL_NOT_FOUND);
+        }
+        catch (Exception e ){
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
         return ResponseApi.ok(null);
