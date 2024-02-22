@@ -12,9 +12,9 @@ import com.fiveguys.robocar.models.TossPaymentConstants;
 import com.fiveguys.robocar.repository.PaymentRepository;
 import com.fiveguys.robocar.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -30,13 +30,22 @@ import java.util.Map;
 import static com.fiveguys.robocar.apiPayload.ResponseStatus.*;
 
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final UserRepository userRepository;
     private final TossPaymentConfig tossPaymentConfig;
     private final RestTemplate restTemplate;
+    private final HttpHeaders tossPaymentHeader;
+
+    @Autowired
+    public PaymentService(PaymentRepository paymentRepository, UserRepository userRepository, TossPaymentConfig tossPaymentConfig, RestTemplate restTemplate) {
+        this.paymentRepository = paymentRepository;
+        this.userRepository = userRepository;
+        this.tossPaymentConfig = tossPaymentConfig;
+        this.restTemplate = restTemplate;
+        tossPaymentHeader = setDefaultTossPaymentHeader();
+    }
 
     @Transactional
     public PaymentResDto requestTossPayment(Long userId, PaymentReqDto paymentReqDto) {
@@ -93,12 +102,11 @@ public class PaymentService {
 
     @Transactional
     public PaymentSuccessDto acceptPaymentRequest(String paymentKey, String orderId, Long amount) throws JSONException {
-        HttpHeaders headers = setTossPaymentHeader();
         JSONObject params = setJSONParams(paymentKey, orderId, amount);
 
         PaymentSuccessDto result = null;
         try {
-            HttpEntity<String> request = new HttpEntity<>(params.toString(), headers);
+            HttpEntity<String> request = new HttpEntity<>(params.toString(), tossPaymentHeader);
             result = restTemplate.postForObject(TossPaymentConfig.PAYMENT_ACCEPT_URL,
                     request,
                     PaymentSuccessDto.class);
@@ -131,13 +139,12 @@ public class PaymentService {
     }
 
     public Map tossPaymentCancel(String paymentKey, String cancelReason, Long cancelAmount) throws JSONException {
-        HttpHeaders headers = setTossPaymentHeader();
         JSONObject params = new JSONObject();
         params.put(TossPaymentConstants.CANCEL_REASON, cancelReason);
         params.put(TossPaymentConstants.CANCEL_AMOUNT, cancelAmount);
 
         return restTemplate.postForObject(TossPaymentConfig.URL + paymentKey + "/cancel",
-                new HttpEntity<>(params.toString(), headers),
+                new HttpEntity<>(params.toString(), tossPaymentHeader),
                 Map.class);
     }
     private static JSONObject setJSONParams(String paymentKey, String orderId, Long amount) throws JSONException {
@@ -148,7 +155,7 @@ public class PaymentService {
         return params;
     }
 
-    private HttpHeaders setTossPaymentHeader() {
+    private HttpHeaders setDefaultTossPaymentHeader() {
         HttpHeaders headers = new HttpHeaders();
         String encodedAuthKey = new String(
                 Base64.getEncoder().encode((tossPaymentConfig.getTestSecretKey() + ":").getBytes(StandardCharsets.UTF_8)));
