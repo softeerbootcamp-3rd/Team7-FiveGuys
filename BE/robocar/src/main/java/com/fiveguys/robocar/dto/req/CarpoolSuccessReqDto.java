@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CarpoolSuccessReqDto {
     @NotNull
-    Long guestId;
+    Long hostId;
     @NotBlank
     String guestDestAddress;
 }

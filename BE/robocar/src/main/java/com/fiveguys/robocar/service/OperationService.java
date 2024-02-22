@@ -52,7 +52,7 @@ public class OperationService {
     @Transactional
     public void carpoolSuccess(Long id, CarpoolSuccessReqDto carpoolSuccessReqDto) {
 
-        Long guestId = carpoolSuccessReqDto.getGuestId();
+        Long guestId = carpoolSuccessReqDto.getHostId();
         String guestDestAddress = carpoolSuccessReqDto.getGuestDestAddress();
 
         carpoolRequestRepository.findById(String.valueOf(id)).orElseThrow(EntityNotFoundException::new);
