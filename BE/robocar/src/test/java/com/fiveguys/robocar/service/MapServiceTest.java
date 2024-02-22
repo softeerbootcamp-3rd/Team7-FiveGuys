@@ -35,7 +35,7 @@ public class MapServiceTest {
     @Test
     public void testConvertAddressToCoordinates() {
         // 주소 예시: "분당구 불정로 6"
-        String address = "분당구 불정로 6";
+        String address = "서울 광진구 천호대로 584 능동주유소";
         Coordinate coordinate = mapService.convertAddressToCoordinates(address);
 
         // 좌표 출력

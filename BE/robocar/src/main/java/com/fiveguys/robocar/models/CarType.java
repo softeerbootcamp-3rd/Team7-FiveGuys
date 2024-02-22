@@ -2,8 +2,8 @@ package com.fiveguys.robocar.models;
 
 public enum CarType {
 
-    SMALL(5),
-    MEIDUM(8);
+    SMALL(4),
+    MEIDUM(6);
 
     int capacity;
 

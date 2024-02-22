@@ -29,6 +29,9 @@ public enum ResponseStatus {
     // 동승 관련
     CARPOOL_NOT_FOUND(BAD_REQUEST,"이미 삭제된 동승 정보입니다"),
 
+    // 지도 관련
+    ADDRESS_INPUT_INVALID(BAD_REQUEST,"잘못된 주소 입력 입니다"),
+
     // 차고지 관련
     GARAGE_ALREADY_EXIST(CONFLICT, "중복된 차고지 위치입니다."),
     GARAGE_NOT_FOUND(BAD_REQUEST, "해당하는 차고지가 없습니다."),

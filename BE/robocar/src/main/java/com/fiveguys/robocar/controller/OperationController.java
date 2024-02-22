@@ -43,11 +43,14 @@ public class OperationController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @GetMapping("/operations/carpools")
-    public ResponseEntity carpoolListUp(@RequestParam String guestDepartAddress, @RequestParam String guestDestAddress){
-        CarpoolListUpResDto carpoolListUpResDto = null;
+    public ResponseEntity carpoolListUp(@RequestParam String guestDepartAddress, @RequestParam String guestDestAddress,@RequestParam int maleCount,@RequestParam int femaleCount){
+        CarpoolListUpResDto carpoolListUpResDto;
+
         try {
-            carpoolListUpResDto = operationService.carpoolListUp(guestDepartAddress, guestDestAddress);
+            carpoolListUpResDto = operationService.carpoolListUp(guestDepartAddress, guestDestAddress,maleCount, femaleCount);
             return ResponseApi.ok(carpoolListUpResDto);
+        } catch (IllegalArgumentException e) {
+            return ResponseApi.of(ResponseStatus.ADDRESS_INPUT_INVALID);
         } catch (Exception e){
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
@@ -61,8 +64,13 @@ public class OperationController {
     })
     @PostMapping("/operations/carpools")
     public ResponseEntity carpoolRegister(@RequestBody @Validated CarpoolRegisterReqDto carpoolRegisterReqDto, @Auth Long id, Errors errors){
+        if(errors.hasErrors())
+            return ResponseApi.of(ResponseStatus._INVALID_ARGUMENT);
+
         try{
             operationService.carpoolRegister(carpoolRegisterReqDto, id);
+        } catch (IllegalArgumentException e){
+            return ResponseApi.of(ResponseStatus.ADDRESS_INPUT_INVALID);
         } catch (EntityNotFoundException e){
             return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
         } catch (Exception e){
