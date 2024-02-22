@@ -38,7 +38,10 @@ public class CreateCarpoolListUpResDto {
         String guestDepartCoordinate = String.format("%f,%f",coordinate.getLongitude(),coordinate.getLatitude());
         coordinate = mapService.convertAddressToCoordinates(guestDestAddress);
         String guestDestCoordinate = String.format("%f,%f",coordinate.getLongitude(),coordinate.getLatitude());
+        if(guestDestCoordinate.equals(guestDepartCoordinate))
+            throw new IllegalArgumentException();
         Long price = routeService.getRouteInfo(guestDepartCoordinate, guestDestCoordinate, null).getTaxiFare();
+
 
         CarpoolListUpResDto carpoolListUpResDto = new CarpoolListUpResDto(price);
 
@@ -82,7 +85,6 @@ public class CreateCarpoolListUpResDto {
 
         carpoolListUpResDto.doSortByEstimatedTime();
         carpoolListUpResDto.trimByLengthOf(MAX_LIST_LENGTH);
-
         return carpoolListUpResDto;
     }
 

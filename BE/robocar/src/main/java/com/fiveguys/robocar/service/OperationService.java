@@ -40,8 +40,7 @@ public class OperationService {
     }
 
     public CarpoolListUpResDto carpoolListUp(String guestDepartAddress, String guestDestAddress) {
-        //TODO
-        // 인원수 제한은 설정 안되어 있음
+
         return createCarpoolListUpResDto.create(guestDepartAddress,guestDestAddress);
     }
 
