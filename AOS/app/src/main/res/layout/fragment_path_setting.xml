@@ -102,5 +102,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/editDestination" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/placeList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            tools:listitem="@layout/item_place"
+            app:layout_constraintTop_toBottomOf="@id/pathSettingDivider"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
