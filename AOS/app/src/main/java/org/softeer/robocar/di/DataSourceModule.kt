@@ -12,9 +12,12 @@ import org.softeer.robocar.data.repository.auth.AuthLocalDataSource
 import org.softeer.robocar.data.repository.auth.AuthLocalDataSourceImpl
 import org.softeer.robocar.data.repository.auth.AuthRemoteDataSource
 import org.softeer.robocar.data.repository.auth.AuthRemoteDataSourceImpl
+import org.softeer.robocar.data.repository.route.RouteRemoteDataSource
+import org.softeer.robocar.data.repository.route.RouteRemoteDataSourceImpl
 import org.softeer.robocar.data.repository.user.UserRemoteDataSource
 import org.softeer.robocar.data.repository.user.UserRemoteDataSourceImpl
 import org.softeer.robocar.data.service.CarPool.CarPoolService
+import org.softeer.robocar.data.service.route.RouteService
 import org.softeer.robocar.data.service.auth.AuthService
 import org.softeer.robocar.data.service.user.UserService
 import javax.inject.Singleton
@@ -53,5 +56,13 @@ class DataSourceModule {
         userService: UserService
     ): UserRemoteDataSource {
         return UserRemoteDataSourceImpl(userService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRouteRemoteDataSource(
+        routeService: RouteService
+    ): RouteRemoteDataSource {
+        return RouteRemoteDataSourceImpl(routeService)
     }
 }

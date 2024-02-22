@@ -1,5 +1,6 @@
 package org.softeer.robocar.data.repository.CarPool
 
+import org.softeer.robocar.data.dto.carpool.request.RequestCarPoolRequest
 import org.softeer.robocar.data.model.CarPools
 
 interface CarPoolRemoteDataSource {
@@ -10,5 +11,9 @@ interface CarPoolRemoteDataSource {
         countOfMen: Int,
         countOfFemale: Int,
     ): CarPools
+
+    suspend fun requestCarPool(
+        request: RequestCarPoolRequest
+    ): Result<Unit>
 
 }
