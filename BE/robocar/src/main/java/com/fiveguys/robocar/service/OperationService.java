@@ -7,6 +7,7 @@ import com.fiveguys.robocar.entity.CarpoolRequest;
 import com.fiveguys.robocar.repository.CarpoolRequestRepository;
 import com.fiveguys.robocar.converter.CarpoolRegisterParser;
 import com.fiveguys.robocar.util.CreateCarpoolListUpResDto;
+import jakarta.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,6 +56,7 @@ public class OperationService {
         Long guestId = carpoolSuccessReqDto.getGuestId();
         String guestDestAddress = carpoolSuccessReqDto.getGuestDestAddress();
 
+        carpoolRequestRepository.findById(String.valueOf(id)).orElseThrow(EntityExistsException::new);
         //TODO
         // 주소 기반으로 운행정보 생성 후 운행정보 디비에 저장
         // 게스트와 호스트에게 호출정보 푸시

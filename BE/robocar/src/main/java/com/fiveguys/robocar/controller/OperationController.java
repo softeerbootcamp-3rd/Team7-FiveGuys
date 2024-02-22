@@ -5,6 +5,7 @@ import com.fiveguys.robocar.apiPayload.ResponseApi;
 import com.fiveguys.robocar.apiPayload.ResponseStatus;
 import com.fiveguys.robocar.auth.Auth;
 import com.fiveguys.robocar.dto.req.CarpoolRegisterReqDto;
+import com.fiveguys.robocar.dto.req.CarpoolSuccessReqDto;
 import com.fiveguys.robocar.dto.res.CarpoolListUpResDto;
 import com.fiveguys.robocar.service.OperationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -87,9 +88,15 @@ public class OperationController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "추가 성공")
     })
-    @DeleteMapping("/operations")
-    public ResponseEntity carpoolDelete(HttpServletRequest request){
-        return ResponseApi.ok();
+    @DeleteMapping("/operations/carpools")
+    public ResponseEntity carpoolSuccess(CarpoolSuccessReqDto carpoolSuccessReqDto, @Auth Long id){
+
+        try {
+            operationService.carpoolSuccess(id, carpoolSuccessReqDto);
+        } catch (Exception e ){
+            return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
+        }
+        return ResponseApi.ok(null);
     }
 
 
