@@ -7,15 +7,17 @@ import kotlinx.parcelize.Parcelize
 
 @Serializable
 data class RouteResponse(
-    @SerialName("host_id") val hostId: Long,
-    @SerialName("car_image") val carImage: String,
-    @SerialName("host_estimated_arrival_time") val hostEstimatedArrivalTime: Long,
-    @SerialName("guest_estimated_arrival_time") val guestEstimatedArrivalTime: Long,
-    @SerialName("car_number") val carNumber: String,
-    @SerialName("car_name") val carName: String,
-    @SerialName("host_nodes") val hostNodes: List<Coordinate>,
-    @SerialName("guest_nodes") val guestNodes: List<Coordinate>
+    @SerialName("hostId") val hostId: Long, // JSON 필드 이름에 맞게 수정
+    @SerialName("guestId") val guestId: Long,
+    @SerialName("carImage") val carImage: String,
+    @SerialName("hostEstimatedArrivalTime") val hostEstimatedArrivalTime: Long,
+    @SerialName("guestEstimatedArrivalTime") val guestEstimatedArrivalTime: Long,
+    @SerialName("carNumber") val carNumber: String,
+    @SerialName("carName") val carName: String,
+    @SerialName("hostNodes") val hostNodes: List<Coordinate>,
+    @SerialName("guestNodes") val guestNodes: List<Coordinate>
 )
+
 
 @Serializable
 @Parcelize

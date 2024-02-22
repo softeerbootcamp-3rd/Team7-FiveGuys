@@ -10,8 +10,10 @@ class GetOptimizedRouteUseCase @Inject constructor(
     suspend operator fun invoke(
         departureAddress: String,
         hostDestAddress: String,
-        guestDestAddress: String
+        guestDestAddress: String,
+        hostId: Long,
+        guestId: Long
     ): Route {
-        return routeRepository.getOptimizedRoute(departureAddress, hostDestAddress, guestDestAddress)
+        return routeRepository.getOptimizedRoute(departureAddress, hostDestAddress, guestDestAddress, hostId, guestId)
     }
 }

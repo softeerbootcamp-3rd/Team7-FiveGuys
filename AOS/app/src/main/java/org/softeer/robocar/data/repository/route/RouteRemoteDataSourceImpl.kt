@@ -12,12 +12,16 @@ class RouteRemoteDataSourceImpl @Inject constructor(
     override suspend fun getRoute(
         departureAddress: String,
         hostDestAddress: String,
-        guestDestAddress: String
+        guestDestAddress: String,
+        hostId: Long,
+        guestId: Long,
     ): Route {
         return routeService.getRoute(
             departureAddress,
             hostDestAddress,
-            guestDestAddress
+            guestDestAddress,
+            hostId,
+            guestId
         ).toRoute()
     }
 }

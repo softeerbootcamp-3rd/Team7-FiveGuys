@@ -10,13 +10,17 @@ class RouteRepositoryImpl @Inject constructor(
     override suspend fun getOptimizedRoute(
         startPoint: String,
         hostGoal: String,
-        guestGoal: String
+        guestGoal: String,
+        hostId: Long,
+        guestId: Long
     ): Route {
 
         return dataSource.getRoute(
             departureAddress = startPoint,
             hostDestAddress = hostGoal,
-            guestDestAddress = guestGoal
+            guestDestAddress = guestGoal,
+            hostId = hostId,
+            guestId =guestId
         )
     }
 }

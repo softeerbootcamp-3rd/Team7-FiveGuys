@@ -10,41 +10,44 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        tools:context=".ui.fragment.TaxiInformationFragment">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            tools:context=".ui.fragment.TaxiInformationFragment">
 
         <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/homeTaxiInformation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:backgroundTint="@android:color/transparent"
-            android:padding="0dp"
-            android:src="@drawable/icon_home"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                android:id="@+id/homeTaxiInformation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:backgroundTint="@android:color/transparent"
+                android:padding="0dp"
+                android:src="@drawable/icon_home"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/phoneTaxiInformation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="16dp"
-            android:backgroundTint="@android:color/transparent"
-            android:padding="0dp"
-            android:src="@drawable/icon_phone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/taxiImage"
+                android:id="@+id/phoneTaxiInformation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:src="@{viewModel.route.carImageUrl}"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="@android:color/transparent"
+                android:padding="0dp"
+                android:src="@drawable/icon_phone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/taxiImage"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="32dp"
+                android:adjustViewBounds="true"
+                app:layout_constraintWidth_percent="1"
+                app:layout_constraintHeight_percent="0.3"
+                app:imageUrl="@{viewModel.route.carImageUrl}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -54,6 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:fontFamily="@font/pretendard_semibold"
                 android:text="@{viewModel.route.vehicleModel}"
                 android:textColor="@color/black"
                 android:textSize="@dimen/content_text"
@@ -66,27 +70,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/hyundai_blue"
+                android:fontFamily="@font/pretendard_semibold"
                 android:text="@{viewModel.route.vehicleRegistrationNumber}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/content_text"
                 app:layout_constraintEnd_toStartOf="@id/taxiEstimatedTime"
+                app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/taxiCarType" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/taxiEstimatedTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:fontFamily="@font/pretendard_semibold"
-            android:text="예상 소요 시간"
-            android:textColor="@color/black"
-            android:textSize="@dimen/content_text"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/taxiLicensePlate"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/taxiLicensePlate"
-            app:layout_constraintTop_toTopOf="@id/taxiLicensePlate" />
+                android:id="@+id/taxiEstimatedTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/pretendard_semibold"
+                android:text="예상 소요 시간"
+                android:textColor="@color/black"
+                android:textSize="@dimen/content_text"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/taxiLicensePlate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/taxiLicensePlate"
+                app:layout_constraintTop_toTopOf="@id/taxiLicensePlate" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

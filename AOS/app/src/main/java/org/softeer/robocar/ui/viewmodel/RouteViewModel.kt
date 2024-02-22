@@ -21,10 +21,12 @@ class RouteViewModel @Inject constructor(
     fun getOptimizedRoute(
         departureAddress: String,
         hostDestAddress: String,
-        guestDestAddress: String
+        guestDestAddress: String,
+        hostId: Long,
+        guestId: Long
     ) {
         viewModelScope.launch {
-            val optimizedRoute = getOptimizedRouteUseCase(departureAddress, hostDestAddress, guestDestAddress)
+            val optimizedRoute = getOptimizedRouteUseCase(departureAddress, hostDestAddress, guestDestAddress, hostId, guestId)
             _route.value = optimizedRoute
         }
     }

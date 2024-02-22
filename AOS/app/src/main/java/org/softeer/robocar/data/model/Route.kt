@@ -7,6 +7,7 @@ import org.softeer.robocar.data.dto.route.response.Coordinate
 @Parcelize
 data class Route(
     val hostId: Long,
+    val guestId: Long,
     val carImageUrl: String,
     val hostEstimatedArrivalTime: Long,
     val guestEstimatedArrivalTime: Long,

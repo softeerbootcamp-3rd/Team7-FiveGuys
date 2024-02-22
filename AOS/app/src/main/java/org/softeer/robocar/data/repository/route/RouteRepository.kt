@@ -6,6 +6,8 @@ interface RouteRepository {
     suspend fun getOptimizedRoute(
         startPoint: String,
         hostGoal: String,
-        guestGoal: String
+        guestGoal: String,
+        hostId: Long,
+        guestId: Long
     ): Route
 }

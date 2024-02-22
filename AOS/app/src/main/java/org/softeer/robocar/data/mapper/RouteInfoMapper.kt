@@ -6,6 +6,7 @@ import org.softeer.robocar.data.model.Route
 fun RouteResponse.toRoute(): Route {
     return Route(
         hostId = hostId,
+        guestId = guestId,
         carImageUrl = carImage, // 'carImage'를 'carImageUrl'로 매핑
         hostEstimatedArrivalTime = hostEstimatedArrivalTime,
         guestEstimatedArrivalTime = guestEstimatedArrivalTime,

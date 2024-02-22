@@ -6,6 +6,8 @@ interface RouteRemoteDataSource {
     suspend fun getRoute(
         departureAddress: String,
         hostDestAddress: String,
-        guestDestAddress: String
+        guestDestAddress: String,
+        hostId: Long,
+        guestId: Long,
     ): Route
 }

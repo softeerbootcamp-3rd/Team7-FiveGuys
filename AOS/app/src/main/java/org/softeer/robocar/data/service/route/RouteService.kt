@@ -9,6 +9,8 @@ interface RouteService {
     suspend fun getRoute(
         @Query("departureAddress") startPoint: String,
         @Query("hostDestAddress") hostGoal: String,
-        @Query("guestDestAddress") guestGoal: String
+        @Query("guestDestAddress") guestGoal: String,
+        @Query("hostId") hostId: Long,
+        @Query("guestId") guestId: Long
     ): RouteResponse
 }
