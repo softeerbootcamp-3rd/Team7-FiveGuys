@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -80,11 +81,8 @@ public class OperationController {
         return ResponseApi.ok(null);
     }
 
-    @Operation(summary = "게스트가 동승 차량을 선택")
-    @Parameters(value = {
-            @Parameter(name = "latitude", description = "위도"),
-            @Parameter(name = "longitude", description = "경도"),
-    })
+    @Operation(summary = "호스트가 요청을 수락")
+
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "삭제 요청 성공"),
             @ApiResponse(responseCode = "400", description = "이미 삭제된 동승 정보"),
@@ -97,12 +95,14 @@ public class OperationController {
             operationService.carpoolSuccess(id, carpoolSuccessReqDto);
         } catch(EntityNotFoundException e){
             return ResponseApi.of(ResponseStatus.CARPOOL_NOT_FOUND);
-        }
-        catch (Exception e ){
+        } catch (JSONException e){
+          return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
+        } catch (Exception e ){
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
         return ResponseApi.ok(null);
     }
+
 
 
 }

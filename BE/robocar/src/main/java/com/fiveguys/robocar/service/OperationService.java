@@ -4,13 +4,18 @@ import com.fiveguys.robocar.dto.req.CarpoolRegisterReqDto;
 import com.fiveguys.robocar.dto.req.CarpoolSuccessReqDto;
 import com.fiveguys.robocar.dto.res.CarpoolListUpResDto;
 import com.fiveguys.robocar.entity.CarpoolRequest;
+import com.fiveguys.robocar.entity.InOperation;
 import com.fiveguys.robocar.repository.CarpoolRequestRepository;
 import com.fiveguys.robocar.converter.CarpoolRegisterParser;
+import com.fiveguys.robocar.repository.InOperationRepository;
 import com.fiveguys.robocar.util.CreateCarpoolListUpResDto;
 import jakarta.persistence.EntityNotFoundException;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
 public class OperationService {
@@ -20,15 +25,27 @@ public class OperationService {
     private final MapService mapService;
     private final RouteComparisonService routeComparisonService;
     private final CreateCarpoolListUpResDto createCarpoolListUpResDto;
+    private final InOperationRepository inOperationRepository;
 
+    private final FirebaseCloudMessageService firebaseCloudMessageService;
     @Autowired
-    public OperationService(CarpoolRequestRepository carpoolRequestRepository, CarpoolRegisterParser carpoolRegisterParser, MapService mapService,RouteService routeService,RouteComparisonService routeComparisonService,CreateCarpoolListUpResDto createCarpoolListUpResDto){
+    public OperationService(CarpoolRequestRepository carpoolRequestRepository,
+                            CarpoolRegisterParser carpoolRegisterParser,
+                            MapService mapService,RouteService routeService,
+                            RouteComparisonService routeComparisonService,
+                            CreateCarpoolListUpResDto createCarpoolListUpResDto,
+                            InOperationRepository inOperationRepository,
+                            FirebaseCloudMessageService firebaseCloudMessageService){
+
         this.carpoolRequestRepository = carpoolRequestRepository;
         this.carpoolRegisterParser = carpoolRegisterParser;
         this.mapService = mapService;
         this.routeService = routeService;
         this.routeComparisonService = routeComparisonService;
         this.createCarpoolListUpResDto = createCarpoolListUpResDto;
+        this.inOperationRepository = inOperationRepository;
+        this.firebaseCloudMessageService = firebaseCloudMessageService;
+
     }
 
     public void saveCarpoolRequest(CarpoolRequest carpoolRequest){
@@ -50,20 +67,30 @@ public class OperationService {
     }
 
     @Transactional
-    public void carpoolSuccess(Long id, CarpoolSuccessReqDto carpoolSuccessReqDto) {
+    public void carpoolSuccess(Long id, CarpoolSuccessReqDto carpoolSuccessReqDto) throws JSONException {
 
         Long guestId = carpoolSuccessReqDto.getGuestId();
         String guestDestAddress = carpoolSuccessReqDto.getGuestDestAddress();
 
-        carpoolRequestRepository.findById(String.valueOf(id)).orElseThrow(EntityNotFoundException::new);
-        //TODO
-        // 주소 기반으로 운행정보 생성 후 운행정보 디비에 저장
-        // 게스트와 호스트에게 호출정보 푸시
-        // inoperation에 저장
-        //
+        CarpoolRequest carpoolRequest = carpoolRequestRepository.findById(String.valueOf(id)).orElseThrow(EntityNotFoundException::new);
 
-        //호스트랑 게스트에게 공통으로 보낼 것:
-        //hostid, guestid,출발주소, 호스트도착주소, 게스트 도착주소
+        InOperation inOperation = InOperation.builder()
+                .departureAddress(carpoolRequest.getHostDepartAddress())
+                .hostDestAddress(carpoolRequest.getHostDestAddress())
+                .guestDestAddress(guestDestAddress)
+                .hostId(id)
+                .guestId(guestId)
+                .departureTime(LocalDateTime.now())
+                // 아래는 별도의 로직이 필요
+                .carId(1111L)
+                .estimatedHostArrivalTime(LocalDateTime.now())
+                .estimatedGuestArrivalTime(LocalDateTime.now())
+                .build();
+
+
+        Long inOperationId = inOperationRepository.save(inOperation).getId();
+
+        firebaseCloudMessageService.pushCarpoolAccept(guestId,inOperationId);
 
         carpoolRequestRepository.deleteById(String.valueOf(id));
 

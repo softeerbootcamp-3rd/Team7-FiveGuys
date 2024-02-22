@@ -8,6 +8,7 @@ import com.fiveguys.robocar.dto.res.CarpoolListUpResDto;
 import com.fiveguys.robocar.entity.CarpoolRequest;
 import com.fiveguys.robocar.models.CarType;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +83,7 @@ class OperationServiceTest {
 
     @Test
     @DisplayName("carpoolSuccess 테스트")
-    public void redisDelete(){
+    public void redisDelete() throws JSONException {
         //given
         service.saveCarpoolRequest(carpoolRequest);
 
