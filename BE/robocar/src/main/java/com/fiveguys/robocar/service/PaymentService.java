@@ -34,13 +34,13 @@ import static com.fiveguys.robocar.apiPayload.ResponseStatus.*;
 @Transactional(readOnly = true)
 public class PaymentService {
     private final PaymentRepository paymentRepository;
-    private final UserRepository userService;
+    private final UserRepository userRepository;
     private final TossPaymentConfig tossPaymentConfig;
     private final RestTemplate restTemplate;
 
     @Transactional
     public PaymentResDto requestTossPayment(Long userId, PaymentReqDto paymentReqDto) {
-        User user = userService.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage()));
 
         Payment payment = PaymentConverter.toPaymentEntity(paymentReqDto);
