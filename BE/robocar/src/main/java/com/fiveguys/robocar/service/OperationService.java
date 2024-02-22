@@ -39,9 +39,9 @@ public class OperationService {
         return carpoolRequestRepository.findById(String.valueOf(id)).orElse(null);
     }
 
-    public CarpoolListUpResDto carpoolListUp(String guestDepartAddress, String guestDestAddress) {
+    public CarpoolListUpResDto carpoolListUp(String guestDepartAddress, String guestDestAddress,int maleCount, int femaleCount) {
 
-        return createCarpoolListUpResDto.create(guestDepartAddress,guestDestAddress);
+        return createCarpoolListUpResDto.create(guestDepartAddress,guestDestAddress, maleCount,femaleCount);
     }
 
     public void carpoolRegister(CarpoolRegisterReqDto carpoolRegisterReqDto, Long id) {

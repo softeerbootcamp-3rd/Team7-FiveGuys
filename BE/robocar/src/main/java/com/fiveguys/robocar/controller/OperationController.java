@@ -43,11 +43,11 @@ public class OperationController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @GetMapping("/operations/carpools")
-    public ResponseEntity carpoolListUp(@RequestParam String guestDepartAddress, @RequestParam String guestDestAddress){
+    public ResponseEntity carpoolListUp(@RequestParam String guestDepartAddress, @RequestParam String guestDestAddress,@RequestParam int maleCount,@RequestParam int femaleCount){
         CarpoolListUpResDto carpoolListUpResDto;
 
         try {
-            carpoolListUpResDto = operationService.carpoolListUp(guestDepartAddress, guestDestAddress);
+            carpoolListUpResDto = operationService.carpoolListUp(guestDepartAddress, guestDestAddress,maleCount, femaleCount);
             return ResponseApi.ok(carpoolListUpResDto);
         } catch (IllegalArgumentException e) {
             return ResponseApi.of(ResponseStatus.ADDRESS_INPUT_INVALID);
