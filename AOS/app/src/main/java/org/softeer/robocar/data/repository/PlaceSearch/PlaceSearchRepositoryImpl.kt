@@ -8,10 +8,10 @@ class PlaceSearchRepositoryImpl @Inject constructor(
 ): PlaceSearchRepository {
 
     override suspend fun getSearchResult(
-        Authorization: String,
+        key: String,
         query: String
     ): Result<PlaceSearchResponse> {
-        return placeSearchRemoteDataSource.getSearchResult(Authorization, query)
+        return placeSearchRemoteDataSource.getSearchResult(key, query)
     }
 
 }

@@ -39,4 +39,15 @@ class NetworkModule {
             .build()
     }
 
+    @Provides
+    @Singleton
+    fun provideRetrofitKakao(
+        okHttpClient: OkHttpClient
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://dapi.kakao.com/")
+            .client(okHttpClient)
+            .addConverterFactory(Json.asConverterFactory(("application/json").toMediaType()))
+            .build()
+    }
 }

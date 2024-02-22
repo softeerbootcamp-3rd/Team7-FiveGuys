@@ -7,7 +7,7 @@ import javax.inject.Inject
 class SearchPlaceUseCase @Inject constructor(
     private val placeSearchRepository: PlaceSearchRepository
 ) {
-    suspend operator fun invoke(Authorization: String, query: String): Result<PlaceSearchResponse> {
-        return placeSearchRepository.getSearchResult(Authorization, query)
+    suspend operator fun invoke(key: String, query: String): Result<PlaceSearchResponse> {
+        return placeSearchRepository.getSearchResult(key, query)
     }
 }

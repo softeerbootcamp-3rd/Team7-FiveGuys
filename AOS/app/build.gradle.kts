@@ -28,14 +28,14 @@ android {
             load(File(rootDir, "local.properties").inputStream())
         }
 
-        val kakao_native_app_key = properties["kakao_native_app_key"] as String
-        manifestPlaceholders["kakao_native_app_key"] = kakao_native_app_key
+        val kakaoNativeAppKey = properties["kakao_native_app_key"] as String
+        manifestPlaceholders["kakao_native_app_key"] = kakaoNativeAppKey
 
         val baseUrl = properties["BASE_URL"] as String
         buildConfigField("String", "BASE_URL", baseUrl)
 
-        val kakao_rest_api_key = properties["kakao_rest_api_key"] as String
-        buildConfigField("String","kakao_rest_api_key",kakao_rest_api_key)
+        val kakaoRestApiKey = properties["kakao_rest_api_key"] as String
+        buildConfigField("String","kakao_rest_api_key",kakaoRestApiKey)
     }
 
     buildTypes {
@@ -70,6 +70,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

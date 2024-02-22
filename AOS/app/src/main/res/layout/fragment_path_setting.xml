@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="pathSettingViewModel"
+            type="org.softeer.robocar.ui.viewmodel.PathSettingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -61,6 +63,7 @@
             android:background="@drawable/rectangle_gray_200_radius_12"
             android:fontFamily="@font/pretendard_semibold"
             android:hint="@string/default_edit_destination"
+            android:text="@{pathSettingViewModel.keyWord}"
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:paddingStart="40dp"

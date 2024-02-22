@@ -4,7 +4,7 @@ import org.softeer.robocar.data.dto.placesearch.PlaceSearchResponse
 
 interface PlaceSearchRemoteDataSource {
     suspend fun getSearchResult(
-        Authorization: String,
+        key: String,
         query: String
     ): Result<PlaceSearchResponse>
 }
