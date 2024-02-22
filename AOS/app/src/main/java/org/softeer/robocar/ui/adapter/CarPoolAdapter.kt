@@ -51,7 +51,7 @@ class CarPoolViewHolder(
                 carPoolListClickListener.onClickDetailButton(adapterPosition)
             }
             carPoolRequestButton.setOnClickListener{
-                carPoolListClickListener.onClickRequestCarPoolButton(carPool.carPoolId)
+                carPoolListClickListener.onClickRequestCarPoolButton(carPool)
             }
         }
     }
