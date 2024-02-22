@@ -8,13 +8,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class CarpoolRegisterReqDto {
     @NotBlank
-    String DepartAddress;
+    String departAddress;
     @NotBlank
-    String DestAddress;
+    String destAddress;
     @NotNull
     Integer maleCount;
     @NotNull
