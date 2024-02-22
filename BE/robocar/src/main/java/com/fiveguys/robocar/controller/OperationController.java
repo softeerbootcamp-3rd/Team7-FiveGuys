@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Carpool", description = "카풀리스트 - 등록,조회,삭제")
+@Tag(name = "Operation", description = "Operation 도메인 관련 API")
 public class OperationController {
 
     OperationService operationService;
@@ -59,7 +59,8 @@ public class OperationController {
             @Parameter(name = "DepartAddress", description = "출발지 주소"),
             @Parameter(name = "DestAddress", description = "도착지 주소"),
             @Parameter(name = "maleCount", description = "남자 탑승자 수"),
-            @Parameter(name = "femaleCount", description = "여자 탑승자 수")
+            @Parameter(name = "femaleCount", description = "여자 탑승자 수"),
+            @Parameter(name = "carType", description = "자동차 타입(소형,중형)")
     })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "추가 성공"),

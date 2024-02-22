@@ -3,6 +3,7 @@ package com.fiveguys.robocar.converter;
 import com.fiveguys.robocar.dto.req.CarpoolRegisterReqDto;
 import com.fiveguys.robocar.entity.CarpoolRequest;
 import com.fiveguys.robocar.entity.User;
+import com.fiveguys.robocar.models.CarType;
 import com.fiveguys.robocar.repository.UserRepository;
 import com.fiveguys.robocar.service.MapService;
 import com.fiveguys.robocar.util.JsonParserUtil;
@@ -32,6 +33,7 @@ public class CarpoolRegisterParser {
         Double departLatitude = coordinate.getLatitude();
         Double departLongitude = coordinate.getLongitude();
 
+
         String hostDestAddress = carpoolRegisterReqDto.getDestAddress();
         coordinate = mapService.convertAddressToCoordinates(hostDestAddress);
         Double hostDestLatitude = coordinate.getLatitude();
@@ -42,6 +44,8 @@ public class CarpoolRegisterParser {
 
         Integer maleCount = carpoolRegisterReqDto.getMaleCount();
         Integer femaleCount = carpoolRegisterReqDto.getFemaleCount();
+
+        CarType carType = carpoolRegisterReqDto.getCarType();
 
         CarpoolRequest carpoolRequest = CarpoolRequest.builder()
                 .id(id)
@@ -54,6 +58,7 @@ public class CarpoolRegisterParser {
                 .hostDestAddress(hostDestAddress)
                 .maleCount(maleCount)
                 .femaleCount(femaleCount)
+                .carType(carType)
                 .build();
         return carpoolRequest;
     }
