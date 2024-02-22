@@ -28,6 +28,12 @@ class TaxiInformationFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // ViewModel을 통해 최적화된 경로를 가져오는 API 호출을 시작
+        viewModel.getOptimizedRoute("서울특별시 강남구 역삼동 858", "율전동 280-15", "장안구 정자동 50-3", 12,34)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
