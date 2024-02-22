@@ -7,6 +7,8 @@ interface CarPoolRepository {
     suspend fun getCarPoolList(
         startLocation: String,
         destinationLocation: String,
+        countOfMen: Int,
+        countOfFemale: Int,
     ): CarPools
 
 }

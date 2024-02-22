@@ -21,7 +21,7 @@ class CarPoolCallFragment : Fragment(R.layout.fragment_car_pool_call) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.getCarPoolList("서울 강남구 학동로 180","서울 강남구 학동로 119")
+        viewModel.getCarPoolList("서울 강남구 학동로 180","서울 강남구 학동로 119",2,2)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

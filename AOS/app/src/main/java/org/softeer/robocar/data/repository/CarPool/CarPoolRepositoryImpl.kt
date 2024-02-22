@@ -10,11 +10,15 @@ class CarPoolRepositoryImpl @Inject constructor(
     override suspend fun getCarPoolList(
         startLocation: String,
         destinationLocation: String,
+        countOfMen: Int,
+        countOfFemale: Int,
     ): CarPools {
 
         return dataSource.getCarPoolList(
             guestStartLocation = startLocation,
-            guestDestinationLocation = destinationLocation
+            guestDestinationLocation = destinationLocation,
+            countOfMen,
+            countOfFemale,
         )
     }
 

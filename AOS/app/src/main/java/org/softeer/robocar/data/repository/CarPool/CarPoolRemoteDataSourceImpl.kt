@@ -11,11 +11,15 @@ class CarPoolRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getCarPoolList(
         guestStartLocation: String,
-        guestDestinationLocation: String
+        guestDestinationLocation: String,
+        countOfMen: Int,
+        countOfFemale: Int,
     ): CarPools {
         return carPoolService.getCarPoolList(
             guestStartLocation,
-            guestDestinationLocation
+            guestDestinationLocation,
+            countOfMen,
+            countOfFemale,
         ).toCarPools()
     }
 }

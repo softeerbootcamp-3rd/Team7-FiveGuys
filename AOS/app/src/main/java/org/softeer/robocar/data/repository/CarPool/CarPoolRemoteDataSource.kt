@@ -7,6 +7,8 @@ interface CarPoolRemoteDataSource {
     suspend fun getCarPoolList(
         guestStartLocation: String,
         guestDestinationLocation: String,
+        countOfMen: Int,
+        countOfFemale: Int,
     ): CarPools
 
 }

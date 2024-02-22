@@ -20,10 +20,17 @@ class CarPoolListViewModel @Inject constructor(
 
     fun getCarPoolList(
         startLocation : String,
-        destinationLocation : String
+        destinationLocation : String,
+        countOfMen: Int,
+        countOfFemale: Int,
     ) {
         viewModelScope.launch{
-           val carPools = getCarPoolListUseCase(startLocation, destinationLocation)
+           val carPools = getCarPoolListUseCase(
+               startLocation,
+               destinationLocation,
+               countOfMen,
+               countOfFemale,
+               )
             _carPoolList.value = carPools
         }
     }

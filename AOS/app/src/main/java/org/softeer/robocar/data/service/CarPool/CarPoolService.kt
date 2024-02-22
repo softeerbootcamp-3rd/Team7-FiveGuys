@@ -9,7 +9,9 @@ interface CarPoolService {
     @GET("operations/carpools")
     suspend fun getCarPoolList(
         @Query("guestDepartAddress") startLocation: String,
-        @Query("guestDestAddress") destinationLocation: String
+        @Query("guestDestAddress") destinationLocation: String,
+        @Query("maleCount") countOfMen: Int,
+        @Query("femaleCount") countOfFemale: Int,
     ): CarPoolListResponse
 
 }
