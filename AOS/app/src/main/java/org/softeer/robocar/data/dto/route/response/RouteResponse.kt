@@ -20,8 +20,7 @@ data class RouteResponse(
 
 
 @Serializable
-@Parcelize
 data class Coordinate(
     @SerialName("latitude") val latitude: Double,
     @SerialName("longitude") val longitude: Double
-) : Parcelable
+)

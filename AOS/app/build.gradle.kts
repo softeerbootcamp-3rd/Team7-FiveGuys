@@ -87,9 +87,9 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.48")
 
     // Glide 라이브러리
-    implementation("com.github.bumptech.glide:glide:4.13.0")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
     // Glide를 사용하기 위한 어노테이션 프로세서
-    annotationProcessor("com.github.bumptech.glide:compiler:4.13.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 }
 
 kapt {

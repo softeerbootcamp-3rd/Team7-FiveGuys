@@ -90,7 +90,7 @@ class MapActivity : AppCompatActivity() {
 
         // 위치 업데이트 요청
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 10f, locationListener, Looper.getMainLooper())
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10, 10f, locationListener, Looper.getMainLooper())
         }
     }
 
