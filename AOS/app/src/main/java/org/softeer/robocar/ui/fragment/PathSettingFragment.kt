@@ -9,11 +9,13 @@ import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.softeer.robocar.BuildConfig
 import org.softeer.robocar.databinding.FragmentPathSettingBinding
 import org.softeer.robocar.ui.viewmodel.PathSettingViewModel
 
+@AndroidEntryPoint
 class PathSettingFragment : Fragment() {
     private var _binding: FragmentPathSettingBinding? = null
     private val binding get() = _binding!!
@@ -31,10 +33,10 @@ class PathSettingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.pathSettingViewModel = viewModel
         binding.lifecycleOwner = this@PathSettingFragment
-        binding.editDestination.setOnEditorActionListener { v, actionId, event ->
+        binding.editDestination.setOnEditorActionListener { _, actionId, _ ->
             return@setOnEditorActionListener when (actionId) {
                 EditorInfo.IME_ACTION_SEARCH -> {
-                    getSearchResult(BuildConfig.kakao_rest_api_key,binding.editDestination.text.toString())
+                    getSearchResult()
                     true
                 }
                 else -> false
@@ -53,9 +55,9 @@ class PathSettingFragment : Fragment() {
         _binding = null
     }
 
-    private fun getSearchResult(key: String, query: String) {
+    private fun getSearchResult() {
         lifecycleScope.launch {
-            viewModel.getSearchResult(key, query)
+            viewModel.getSearchResult()
         }
     }
 }

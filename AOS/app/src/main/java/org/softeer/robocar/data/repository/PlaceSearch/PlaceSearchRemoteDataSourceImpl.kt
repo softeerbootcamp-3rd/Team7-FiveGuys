@@ -7,14 +7,14 @@ import javax.inject.Inject
 
 class PlaceSearchRemoteDataSourceImpl @Inject constructor(
     private val placeSearchService: PlaceSearchService
-): PlaceSearchRemoteDataSource {
+) : PlaceSearchRemoteDataSource {
 
     override suspend fun getSearchResult(
         key: String,
         query: String
     ): Result<PlaceSearchResponse> {
         return runCatching {
-            placeSearchService.getSearchResult(key,query)
+            placeSearchService.getSearchResult(key, query)
         }
     }
 

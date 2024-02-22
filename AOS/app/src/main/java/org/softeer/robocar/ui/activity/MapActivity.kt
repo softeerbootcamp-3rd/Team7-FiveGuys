@@ -18,11 +18,13 @@ import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.MapLifeCycleCallback
 import com.kakao.vectormap.MapView
+import dagger.hilt.android.AndroidEntryPoint
 import org.softeer.robocar.R
 import org.softeer.robocar.databinding.ActivityMapBinding
 import org.softeer.robocar.ui.fragment.HeadcountDialogFragment
 import org.softeer.robocar.ui.fragment.PathSettingFragment
 
+@AndroidEntryPoint
 class MapActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMapBinding
     private lateinit var mapView: MapView

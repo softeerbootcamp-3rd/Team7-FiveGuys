@@ -16,12 +16,12 @@ class ServiceModule {
     @Provides
     @Singleton
     fun provideCarPoolService(
-        retrofit: Retrofit
+        @BaseRetrofit retrofit: Retrofit
     ): CarPoolService = retrofit.create(CarPoolService::class.java)
 
     @Provides
     @Singleton
     fun providePlaceSearchService(
-        retrofit: Retrofit
+        @KakaoRetrofit retrofit: Retrofit
     ): PlaceSearchService = retrofit.create(PlaceSearchService::class.java)
 }
