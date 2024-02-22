@@ -6,10 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import org.softeer.robocar.R
-import org.softeer.robocar.databinding.FragmentPathSettingBinding
 import org.softeer.robocar.databinding.FragmentSelectDestinationBinding
-import org.softeer.robocar.ui.activity.MapActivity
 
 class SelectDestinationFragment : Fragment() {
     private var _binding: FragmentSelectDestinationBinding? = null
@@ -25,10 +22,8 @@ class SelectDestinationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.finishSelectDest.setOnClickListener {
-            val action =
-                SelectDestinationFragmentDirections.actionSelectDestinationFragmentToInternalControlFragment()
+            val action =SelectDestinationFragmentDirections.actionSelectDestinationFragmentToRequestCarPoolActivity()
             findNavController().navigate(action)
         }
     }
