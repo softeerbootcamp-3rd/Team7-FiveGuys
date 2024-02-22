@@ -1,6 +1,7 @@
 package org.softeer.robocar.data.service.CarPool
 
 import org.softeer.robocar.data.dto.carpool.request.RequestCarPoolRequest
+import org.softeer.robocar.data.dto.carpool.request.registerCarPoolRequest
 import org.softeer.robocar.data.dto.carpool.response.CarPoolListResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -20,6 +21,11 @@ interface CarPoolService {
     @POST("operations")
     suspend fun requestCarPool(
         @Body requestCarPoolRequest: RequestCarPoolRequest
+    )
+
+    @POST("operations/carpools")
+    suspend fun registerCarPool(
+        @Body registerCarPoolRequest: registerCarPoolRequest
     )
 
 }
