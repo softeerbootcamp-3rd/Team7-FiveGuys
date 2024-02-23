@@ -90,11 +90,16 @@ public class UserService {
     public LoginResDto userLogin(UserLoginReqDto userLoginReqDto) {
         String loginId = userLoginReqDto.getLoginId();
         String password = userLoginReqDto.getPassword();
+        String FCMToken = userLoginReqDto.getFCMToken();
 
         User user = userRepository.findByLoginId(loginId).orElseThrow(()->new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage()));
 
+        user.editClientToken(FCMToken);
+
         if(!user.getLoginId().equals(loginId) || !user.getPassword().equals(password))
             throw new EntityNotFoundException(ResponseStatus.USER_WRONG_PASSWORD.getMessage());
+
+        userRepository.save(user);
         String token = jwtUtil.createToken(user.getId());
         String nickname = user.getNickname();
         Long id = user.getId();
