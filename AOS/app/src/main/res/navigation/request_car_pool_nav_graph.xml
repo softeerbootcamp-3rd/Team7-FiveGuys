@@ -39,6 +39,8 @@
               android:name="org.softeer.robocar.ui.fragment.CarPoolMatchingFragment"
               android:label="CarPoolMatchingFragment"
               tools:layout="@layout/fragment_car_pool_matching">
+        <action android:id="@+id/action_carPoolMatchingFragment_to_receivedCarPoolRequestDialogFragment"
+                app:destination="@id/receivedCarPoolRequestDialogFragment"/>
     </fragment>
 
     <fragment android:id="@+id/rideTypeSelectionFragment"
@@ -70,5 +72,16 @@
               android:name="org.softeer.robocar.ui.fragment.NoAvailableCarPoolFragment"
               android:label="NoAvailableCarPoolFragment"
               tools:layout="@layout/fragment_no_available_car_pool"/>
+
+    <dialog android:id="@+id/receivedCarPoolRequestDialogFragment"
+            android:name="org.softeer.robocar.ui.fragment.ReceivedCarPoolRequestDialogFragment"
+            android:label="ReceivedCarPoolRequestDialogFragment"
+            tools:layout="@layout/fragment_dialog_received_car_pool_request">
+        <argument android:name="guestId" app:argType="long"/>
+        <argument android:name="guestAddress" app:argType="string"/>
+        <argument android:name="maleCount" app:argType="integer"/>
+        <argument android:name="femaleCount" app:argType="integer"/>
+        <argument android:name="nickname" app:argType="string"/>
+    </dialog>
 
 </navigation>
