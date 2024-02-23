@@ -19,7 +19,6 @@ import com.fiveguys.robocar.auth.Auth;
 import com.fiveguys.robocar.dto.req.CarpoolRegisterReqDto;
 import com.fiveguys.robocar.dto.req.CarpoolSuccessReqDto;
 import com.fiveguys.robocar.dto.res.CarpoolListUpResDto;
-import io.swagger.v3.oas.annotations.Parameters;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
@@ -53,6 +52,7 @@ public class OperationController {
         }
 
     }
+
     @Operation(summary = "게스트 위치 기반 리스트 조회")
     @Parameters(value = {
             @Parameter(name = "guestDepartAddress", description = "게스트 출발지"),
