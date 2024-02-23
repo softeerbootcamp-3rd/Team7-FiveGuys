@@ -4,6 +4,8 @@ import com.fiveguys.robocar.dto.RouteInfo;
 import com.fiveguys.robocar.dto.res.RouteResDto;
 import com.fiveguys.robocar.entity.Car;
 import com.fiveguys.robocar.entity.Garage;
+import com.fiveguys.robocar.models.CarState;
+import com.fiveguys.robocar.repository.CarRepository;
 import com.fiveguys.robocar.service.RouteComparisonService.OptimalRoute;
 import com.fiveguys.robocar.util.JsonParserUtil.Coordinate;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +21,6 @@ import com.fiveguys.robocar.repository.InOperationRepository;
 import com.fiveguys.robocar.util.CreateCarpoolListUpResDto;
 import jakarta.persistence.EntityNotFoundException;
 import org.json.JSONException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -41,7 +41,7 @@ public class OperationService {
     private final CarpoolRegisterParser carpoolRegisterParser;
     private final CreateCarpoolListUpResDto createCarpoolListUpResDto;
     private final InOperationRepository inOperationRepository;
-
+    private final CarRepository carRepository;
     private final FirebaseCloudMessageService firebaseCloudMessageService;
 
     public RouteResDto getOptimizedRoute(String startAddress, String hostDestAddress, String guestDestAddress, Long hostId, Long guestId) {
@@ -107,19 +107,29 @@ public class OperationService {
 
     @Transactional
     public void carpoolRegister(CarpoolRegisterReqDto carpoolRegisterReqDto, Long id) {
-        // 여기서 자동차 매칭 시켜야 함
-        // 주변 차고지에서 차량 아이디 리턴 + 자동차 상태 변경
+
+        String departAddress = carpoolRegisterReqDto.getDepartAddress();
+        Garage garage = garageService.findNearestGarage(departAddress);
+        Car car = carService.findAvailableCar(garage.getId());
+
+        car.editCarState(CarState.HOLD);
+        carRepository.save(car);
+
         CarpoolRequest carpoolRequest = carpoolRegisterParser.dtoToEntity(carpoolRegisterReqDto, id);
         carpoolRequestRepository.save(carpoolRequest);
     }
 
     @Transactional
-    public void carpoolSuccess(Long id, CarpoolSuccessReqDto carpoolSuccessReqDto) throws JSONException {
+    public Long carpoolSuccess(Long id, CarpoolSuccessReqDto carpoolSuccessReqDto) throws JSONException {
 
         Long guestId = carpoolSuccessReqDto.getGuestId();
         String guestDestAddress = carpoolSuccessReqDto.getGuestDestAddress();
 
         CarpoolRequest carpoolRequest = carpoolRequestRepository.findById(String.valueOf(id)).orElseThrow(EntityNotFoundException::new);
+
+        // car State를 IN_USE로 변경
+        Car car = carRepository.findById(carpoolRequest.getCarId()).orElseThrow(EntityNotFoundException::new);
+        car.editCarState(CarState.IN_OPERATION);
 
         InOperation inOperation = InOperation.builder()
                 .departureAddress(carpoolRequest.getHostDepartAddress())
@@ -131,18 +141,28 @@ public class OperationService {
                 .carId(carpoolRequest.getCarId())
                 //TODO
                 // 얼마나 갈리는지 아래부분 추가
-                .estimatedHostArrivalTime(LocalDateTime.now())
-                .estimatedGuestArrivalTime(LocalDateTime.now())
+//                .estimatedHostArrivalTime()
+//                .estimatedGuestArrivalTime()
                 .build();
 
-
-
-
+        //리턴값 필요함( 호스트에게 )
         Long inOperationId = inOperationRepository.save(inOperation).getId();
 
         firebaseCloudMessageService.pushCarpoolAccept(guestId,inOperationId);
 
         carpoolRequestRepository.deleteById(String.valueOf(id));
 
+        return inOperationId;
+    }
+
+    @Transactional
+    public void carpoolRequestCancel(Long id) {
+
+        CarpoolRequest carpoolRequest= carpoolRequestRepository.findById(String.valueOf(id)).orElseThrow(EntityNotFoundException::new);
+        carpoolRequestRepository.deleteById(String.valueOf(id));
+        Car car = carRepository.findById(carpoolRequest.getCarId()).orElseThrow(EntityNotFoundException::new);
+        car.editCarState(CarState.READY);
+        // 락 해제
+        carRepository.save(car);
     }
 }

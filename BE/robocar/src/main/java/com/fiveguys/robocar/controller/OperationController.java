@@ -56,7 +56,9 @@ public class OperationController {
     @Operation(summary = "게스트 위치 기반 리스트 조회")
     @Parameters(value = {
             @Parameter(name = "guestDepartAddress", description = "게스트 출발지"),
-            @Parameter(name = "guestDestAddress", description = "게스트 도착지")
+            @Parameter(name = "guestDestAddress", description = "게스트 도착지"),
+            @Parameter(name = "maleCount", description = "남성 인원수"),
+            @Parameter(name = "femaleCount", description = "여성 인원수"),
     })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공"),
@@ -109,17 +111,32 @@ public class OperationController {
     })
     @DeleteMapping("/operations/carpools")
     public ResponseEntity carpoolSuccess(CarpoolSuccessReqDto carpoolSuccessReqDto, @Auth Long id){
-
+        Long inOperationId;
         try {
-            operationService.carpoolSuccess(id, carpoolSuccessReqDto);
+            inOperationId = operationService.carpoolSuccess(id, carpoolSuccessReqDto);
         } catch(EntityNotFoundException e){
             return ResponseApi.of(ResponseStatus.CARPOOL_NOT_FOUND);
         }
         catch (Exception e ){
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
-        return ResponseApi.ok(null);
+        return ResponseApi.ok(inOperationId);
     }
 
+    @Operation(summary = "호스트가 매칭을 취소")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "삭제 요청 성공"),
+            @ApiResponse(responseCode = "400", description = "이미 삭제된 동승 정보"),
+            @ApiResponse(responseCode = "500", description = "서버 에러")
+    })
+    @DeleteMapping("/operations/carpools/cancel")
+    public ResponseEntity carpoolRequestCancel(@Auth Long id){
+        try{
+            operationService.carpoolRequestCancel(id);
+        } catch(Exception e){
+            return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
+        }
+        return ResponseApi.ok(null);
+    }
 
 }
