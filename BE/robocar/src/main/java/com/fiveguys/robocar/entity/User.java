@@ -21,7 +21,7 @@ public class User {
 
     private String password;
 
-    private String FCMToken;
+    private String clientToken;
 
     public void editNickname(String nickname){
         this.nickname = nickname;
@@ -30,6 +30,4 @@ public class User {
     public void editPassword(String password) {
         this.password = password;
     }
-
-    public void editClientToken(String clientToken){this.FCMToken = clientToken; }
 }
