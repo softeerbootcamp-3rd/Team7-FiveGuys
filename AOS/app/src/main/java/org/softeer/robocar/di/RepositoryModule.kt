@@ -11,6 +11,9 @@ import org.softeer.robocar.data.repository.auth.AuthLocalDataSource
 import org.softeer.robocar.data.repository.auth.AuthRemoteDataSource
 import org.softeer.robocar.data.repository.auth.AuthRepository
 import org.softeer.robocar.data.repository.auth.AuthRepositoryImpl
+import org.softeer.robocar.data.repository.route.RouteRemoteDataSource
+import org.softeer.robocar.data.repository.route.RouteRepository
+import org.softeer.robocar.data.repository.route.RouteRepositoryImpl
 import org.softeer.robocar.data.repository.user.UserRemoteDataSource
 import org.softeer.robocar.data.repository.user.UserRepository
 import org.softeer.robocar.data.repository.user.UserRepositoryImpl
@@ -48,5 +51,13 @@ class RepositoryModule {
         return UserRepositoryImpl(
             userRemoteDataSource
         )
+    }
+
+    @Provides
+    @Singleton
+    fun provideRouteRepository(
+        routeRemoteDataSource: RouteRemoteDataSource
+    ): RouteRepository {
+        return RouteRepositoryImpl(routeRemoteDataSource)
     }
 }

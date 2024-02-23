@@ -1,5 +1,13 @@
 package com.fiveguys.robocar.service;
 
+import com.fiveguys.robocar.dto.RouteInfo;
+import com.fiveguys.robocar.dto.res.RouteResDto;
+import com.fiveguys.robocar.entity.Car;
+import com.fiveguys.robocar.entity.Garage;
+import com.fiveguys.robocar.service.RouteComparisonService.OptimalRoute;
+import com.fiveguys.robocar.util.JsonParserUtil.Coordinate;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import com.fiveguys.robocar.dto.req.CarpoolRegisterReqDto;
 import com.fiveguys.robocar.dto.req.CarpoolSuccessReqDto;
 import com.fiveguys.robocar.dto.res.CarpoolListUpResDto;
@@ -8,41 +16,69 @@ import com.fiveguys.robocar.repository.CarpoolRequestRepository;
 import com.fiveguys.robocar.converter.CarpoolRegisterParser;
 import com.fiveguys.robocar.util.CreateCarpoolListUpResDto;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
+@RequiredArgsConstructor
 public class OperationService {
+
+    private final MapService mapService;
+    private final GarageService garageService;
+    private final RouteComparisonService routeComparisonService;
+    private final RouteService routeService;
+    private final CarService carService;
     private final CarpoolRequestRepository carpoolRequestRepository;
     private final CarpoolRegisterParser carpoolRegisterParser;
-    private final RouteService routeService;
-    private final MapService mapService;
-    private final RouteComparisonService routeComparisonService;
     private final CreateCarpoolListUpResDto createCarpoolListUpResDto;
 
-    @Autowired
-    public OperationService(CarpoolRequestRepository carpoolRequestRepository, CarpoolRegisterParser carpoolRegisterParser, MapService mapService,RouteService routeService,RouteComparisonService routeComparisonService,CreateCarpoolListUpResDto createCarpoolListUpResDto){
-        this.carpoolRequestRepository = carpoolRequestRepository;
-        this.carpoolRegisterParser = carpoolRegisterParser;
-        this.mapService = mapService;
-        this.routeService = routeService;
-        this.routeComparisonService = routeComparisonService;
-        this.createCarpoolListUpResDto = createCarpoolListUpResDto;
+
+    public RouteResDto getOptimizedRoute(String startAddress, String hostDestAddress, String guestDestAddress, Long hostId, Long guestId) {
+        Coordinate start = mapService.convertAddressToCoordinates(startAddress);
+        Coordinate hostDest = mapService.convertAddressToCoordinates(hostDestAddress);
+        Coordinate guestDest = guestDestAddress != null ? mapService.convertAddressToCoordinates(guestDestAddress) : null;
+        Garage nearestGarage = garageService.findNearestGarage(start.toString());
+        Car availableCar = carService.findAvailableCar(nearestGarage.getId());
+        // 최적의 경로 결정
+        OptimalRoute optimalRoute = routeComparisonService.determineOptimalRoute(start.toString(), hostDest.toString(), guestDest != null ? guestDest.toString() : null);
+
+        // 최적 경로에 대한 상세 정보 조회
+        RouteInfo routeInfoHost = routeService.getRouteInfo(start.toString(), optimalRoute.getFirstDestination(), optimalRoute.getSecondDestination());
+        RouteInfo routeInfoGuest = guestDest != null ? routeService.getRouteInfo(start.toString(), optimalRoute.getSecondDestination(), null) : null;
+
+        return new RouteResDto(
+                hostId,
+                guestId,
+                availableCar.getCarImage(),
+                routeInfoHost.getDuration(),
+                routeInfoGuest != null ? routeInfoGuest.getDuration() : null,
+                availableCar.getCarNumber(),
+                availableCar.getCarName(),
+                convertCoordinatesToNodes(routeInfoHost.getPathCoordinates()),
+                routeInfoGuest != null ? convertCoordinatesToNodes(routeInfoGuest.getPathCoordinates()) : null
+        );
     }
 
-    public void saveCarpoolRequest(CarpoolRequest carpoolRequest){
+    private List<RouteResDto.Node> convertCoordinatesToNodes(List<Coordinate> coordinates) {
+        List<RouteResDto.Node> nodes = coordinates.stream()
+                .map(coordinate -> new RouteResDto.Node(coordinate.getLatitude(), coordinate.getLongitude()))
+                .collect(Collectors.toList());
+        return nodes;
+    }
+
+    public void saveCarpoolRequest(CarpoolRequest carpoolRequest) {
         carpoolRequestRepository.save(carpoolRequest);
     }
 
-    public CarpoolRequest findCarpoolRequestById(Long id){
+    public CarpoolRequest findCarpoolRequestById(Long id) {
         return carpoolRequestRepository.findById(String.valueOf(id)).orElse(null);
     }
 
-    public CarpoolListUpResDto carpoolListUp(String guestDepartAddress, String guestDestAddress) {
-        //TODO
-        // 인원수 제한은 설정 안되어 있음
-        return createCarpoolListUpResDto.create(guestDepartAddress,guestDestAddress);
+    public CarpoolListUpResDto carpoolListUp(String guestDepartAddress, String guestDestAddress, int maleCount, int femaleCount) {
+
+        return createCarpoolListUpResDto.create(guestDepartAddress, guestDestAddress, maleCount, femaleCount);
     }
 
     public void carpoolRegister(CarpoolRegisterReqDto carpoolRegisterReqDto, Long id) {

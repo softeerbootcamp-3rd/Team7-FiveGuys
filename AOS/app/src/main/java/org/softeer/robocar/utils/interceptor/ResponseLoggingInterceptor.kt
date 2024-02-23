@@ -18,19 +18,27 @@ class ResponseLoggingInterceptor : Interceptor {
             prettyPrint = true
             ignoreUnknownKeys = true
         }
-
-        val rawResponseBody = response.body!!.string()
-        val responseBody = json.decodeFromString<BaseResponse<JsonElement>>(rawResponseBody)
-
-        Log.d(TAG, "------------------------------------------")
-        Log.d(TAG, "Response Log: ")
-        Log.d(TAG, "status: " + response.code)
-        Log.d(TAG, "message: " + responseBody.message)
-        Log.d(TAG, "data: " + json.encodeToString(responseBody.data))
-        Log.d(TAG, "------------------------------------------")
+        var responseBody : BaseResponse<JsonElement>? = null
+        val rawResponseBody = response.body?.string()
+        runCatching {
+            responseBody = json.decodeFromString<BaseResponse<JsonElement>>(rawResponseBody!!)
+        }.onSuccess {
+            Log.d(TAG, "------------------------------------------")
+            Log.d(TAG, "Response Log: ")
+            Log.d(TAG, "status: " + response.code)
+            Log.d(TAG, "message: " + responseBody?.message)
+            Log.d(TAG, "data: " + json.encodeToString(responseBody?.data))
+            Log.d(TAG, "------------------------------------------")
+        }.onFailure {
+            Log.d(TAG, "------------------------------------------")
+            Log.d(TAG, "Response Log: ")
+            Log.d(TAG, "status: " + response.code)
+            Log.d(TAG, "body: $rawResponseBody")
+            Log.d(TAG, "------------------------------------------")
+        }
 
         return response.newBuilder()
-            .body(rawResponseBody.toResponseBody(response.body?.contentType()))
+            .body(rawResponseBody?.toResponseBody(response.body?.contentType()))
             .build()
     }
 

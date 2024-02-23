@@ -55,9 +55,9 @@ public class JsonParserUtil {
 
         if (addressesArray != null && addressesArray.size() > 0) {
             JsonObject addressObject = addressesArray.get(0).getAsJsonObject();
-            double latitude = addressObject.get("y").getAsDouble();
-            double longitude = addressObject.get("x").getAsDouble();
-            return new Coordinate(latitude, longitude);
+            double latitude = addressObject.get("x").getAsDouble();
+            double longtitude = addressObject.get("y").getAsDouble();
+            return new Coordinate(longtitude, latitude);
         }
         throw new GeneralException(ResponseStatus.ADDRESS_TO_COORDINATE_CONVERSION_FAILED);
     }
@@ -78,6 +78,11 @@ public class JsonParserUtil {
 
         public double getLongitude() {
             return longitude;
+        }
+
+        @Override
+        public String toString() {
+            return longitude + "," + latitude;
         }
     }
 }

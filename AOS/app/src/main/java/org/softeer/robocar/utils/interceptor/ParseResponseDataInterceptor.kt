@@ -14,19 +14,22 @@ class ParseResponseDataInterceptor : Interceptor {
         val json = Json {
             ignoreUnknownKeys = true
         }
-        val rawResponseBody = response.body!!.string()
-        val responseBody = json.decodeFromString<BaseResponse<JsonElement>>(rawResponseBody)
-        val data = responseBody.data
+        val rawResponseBody = response.body?.string()
+        var responseBody :BaseResponse<JsonElement>? = null
 
-        if (data is Map<*, *>) {
-            val newBody = data.toString().toResponseBody(response.body?.contentType())
-            return response.newBuilder()
-                .body(newBody)
-                .build()
+        runCatching {
+             responseBody = json.decodeFromString<BaseResponse<JsonElement>>(rawResponseBody!!)
         }
+            .onSuccess {
+                val data = responseBody?.data
+                val newBody = data.toString().toResponseBody(response.body?.contentType())
+                return response.newBuilder()
+                    .body(newBody)
+                    .build()
+            }
 
         return response.newBuilder()
-            .body(rawResponseBody.toResponseBody(response.body?.contentType()))
+            .body(rawResponseBody?.toResponseBody(response.body?.contentType()))
             .build()
     }
 }
