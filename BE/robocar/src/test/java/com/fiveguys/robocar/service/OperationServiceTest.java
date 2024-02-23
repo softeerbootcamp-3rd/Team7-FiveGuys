@@ -27,7 +27,7 @@ class OperationServiceTest {
 
 
     CarpoolRequest carpoolRequest = CarpoolRequest.builder()
-            .id(1L)
+            .id(11L)
             .hostNickname("hihi")
             .departLatitude(37.5564966)
             .departLongitude(127.0803692)
@@ -38,14 +38,14 @@ class OperationServiceTest {
             .maleCount(1)
             .femaleCount(0)
             .carType(CarType.SMALL)
+            .carId(1L)
             .build();
     @Test
-    @DisplayName("redis 연결성 + repository 테스트")
+    @DisplayName("redis에 데이터 3개 주입")
     public void redisSave(){
 
-
         CarpoolRequest carpoolRequest2 = CarpoolRequest.builder()
-                .id(2L)
+                .id(12L)
                 .hostNickname("hihi2")
                 .departLatitude(37.5564966)
                 .departLongitude(127.0803692)
@@ -56,10 +56,11 @@ class OperationServiceTest {
                 .maleCount(1)
                 .femaleCount(0)
                 .carType(CarType.MEIDUM)
+                .carId(2L)
                 .build();
 
         CarpoolRequest carpoolRequest3 = CarpoolRequest.builder()
-                .id(3L)
+                .id(13L)
                 .hostNickname("hihi3")
                 .departLatitude(37.5564966)
                 .departLongitude(127.0803692)
@@ -70,12 +71,13 @@ class OperationServiceTest {
                 .maleCount(1)
                 .femaleCount(0)
                 .carType(CarType.SMALL)
+                .carId(3L)
                 .build();
         service.saveCarpoolRequest(carpoolRequest);
         service.saveCarpoolRequest(carpoolRequest2);
         service.saveCarpoolRequest(carpoolRequest3);
 
-        CarpoolRequest carpoolRequest1 = service.findCarpoolRequestById(1L);
+        CarpoolRequest carpoolRequest1 = service.findCarpoolRequestById(11L);
         log.info(carpoolRequest1.getHostNickname());
         assertEquals(carpoolRequest.getDepartLatitude(),carpoolRequest1.getDepartLatitude());
     }
@@ -88,8 +90,9 @@ class OperationServiceTest {
         service.saveCarpoolRequest(carpoolRequest);
 
         //when
-        Long id = 1L;
-        CarpoolSuccessReqDto carpoolSuccessReqDto = new CarpoolSuccessReqDto(2L, "서울시 강남구");
+        // 게스트가 호스트에게 동승 요청을 보냈을 떄
+        Long id = 11L;
+        CarpoolSuccessReqDto carpoolSuccessReqDto = new CarpoolSuccessReqDto(12L, "서울 광진구 능동 237-3");
         service.carpoolSuccess(id, carpoolSuccessReqDto);
         CarpoolRequest carpoolRequest = service.findCarpoolRequestById(id);
 

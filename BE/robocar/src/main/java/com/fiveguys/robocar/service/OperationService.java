@@ -127,7 +127,7 @@ public class OperationService {
 
         CarpoolRequest carpoolRequest = carpoolRequestRepository.findById(String.valueOf(id)).orElseThrow(EntityNotFoundException::new);
 
-        // car State를 IN_USE로 변경
+        // car State를 IN_OPERATION으로 변경
         Car car = carRepository.findById(carpoolRequest.getCarId()).orElseThrow(EntityNotFoundException::new);
         car.editCarState(CarState.IN_OPERATION);
 
