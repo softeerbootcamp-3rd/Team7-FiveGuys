@@ -90,11 +90,11 @@ public class UserService {
     public LoginResDto userLogin(UserLoginReqDto userLoginReqDto) {
         String loginId = userLoginReqDto.getLoginId();
         String password = userLoginReqDto.getPassword();
-        String FCMToken = userLoginReqDto.getFCMToken();
+        String clientToken = userLoginReqDto.getClientToken();
 
         User user = userRepository.findByLoginId(loginId).orElseThrow(()->new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage()));
 
-        user.editClientToken(FCMToken);
+        user.editClientToken(clientToken);
 
         if(!user.getLoginId().equals(loginId) || !user.getPassword().equals(password))
             throw new EntityNotFoundException(ResponseStatus.USER_WRONG_PASSWORD.getMessage());
