@@ -86,7 +86,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public LoginResDto userLogin(UserLoginReqDto userLoginReqDto) {
         String loginId = userLoginReqDto.getLoginId();
         String password = userLoginReqDto.getPassword();
