@@ -1,5 +1,6 @@
 package org.softeer.robocar.data.service.CarPool
 
+import org.softeer.robocar.data.dto.carpool.request.RejectCarPoolRequest
 import org.softeer.robocar.data.dto.carpool.request.RequestCarPoolRequest
 import org.softeer.robocar.data.dto.carpool.request.registerCarPoolRequest
 import org.softeer.robocar.data.dto.carpool.response.CarPoolListResponse
@@ -26,6 +27,11 @@ interface CarPoolService {
     @POST("operations/carpools")
     suspend fun registerCarPool(
         @Body registerCarPoolRequest: registerCarPoolRequest
+    )
+
+    @POST("push/carpool/reject")
+    suspend fun rejectCarPoolRequest(
+        @Body rejectCarPoolRequest: RejectCarPoolRequest
     )
 
 }
