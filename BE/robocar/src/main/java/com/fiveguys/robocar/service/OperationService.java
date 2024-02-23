@@ -41,13 +41,28 @@ public class OperationService {
         Coordinate guestDest = guestDestAddress != null ? mapService.convertAddressToCoordinates(guestDestAddress) : null;
         Garage nearestGarage = garageService.findNearestGarage(start.toString());
         Car availableCar = carService.findAvailableCar(nearestGarage.getId());
-        // 최적의 경로 결정
-        OptimalRoute optimalRoute = routeComparisonService.determineOptimalRoute(start.toString(), hostDest.toString(), guestDest != null ? guestDest.toString() : null);
 
-        // 최적 경로에 대한 상세 정보 조회
-        RouteInfo routeInfoHost = routeService.getRouteInfo(start.toString(), optimalRoute.getFirstDestination(), optimalRoute.getSecondDestination());
-        RouteInfo routeInfoGuest = guestDest != null ? routeService.getRouteInfo(start.toString(), optimalRoute.getSecondDestination(), null) : null;
+        RouteInfo routeInfoHost;
+        RouteInfo routeInfoGuest = null;
 
+        if (guestDest != null) {
+            // 최적의 경로 결정
+            OptimalRoute optimalRoute = routeComparisonService.determineOptimalRoute(start.toString(), hostDest.toString(), guestDest.toString());
+
+            boolean isFirstDestinationHost = optimalRoute.getFirstDestination().equals(hostDest.toString());
+            if (isFirstDestinationHost) {
+                // 첫 번째 목적지가 호스트의 목적지와 일치
+                routeInfoHost = routeService.getRouteInfo(start.toString(), optimalRoute.getFirstDestination(), null);
+                routeInfoGuest = routeService.getRouteInfo(start.toString(), optimalRoute.getSecondDestination(), optimalRoute.getFirstDestination());
+            } else {
+                // 두 번째 목적지가 호스트의 목적지와 일치
+                routeInfoHost = routeService.getRouteInfo(start.toString(), optimalRoute.getSecondDestination(), optimalRoute.getFirstDestination());
+                routeInfoGuest = routeService.getRouteInfo(start.toString(), optimalRoute.getFirstDestination(), null);
+            }
+        } else {
+            // 게스트 목적지 없이 호스트의 경로만 조회
+            routeInfoHost = routeService.getRouteInfo(start.toString(), hostDest.toString(), null);
+        }
         return new RouteResDto(
                 hostId,
                 guestId,
