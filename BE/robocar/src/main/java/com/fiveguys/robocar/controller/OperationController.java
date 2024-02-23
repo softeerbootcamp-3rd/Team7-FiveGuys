@@ -2,14 +2,17 @@ package com.fiveguys.robocar.controller;
 
 import com.fiveguys.robocar.apiPayload.ResponseApi;
 import com.fiveguys.robocar.apiPayload.ResponseStatus;
+import com.fiveguys.robocar.dto.req.CarpoolRequestDto;
 import com.fiveguys.robocar.dto.res.RouteResDto;
-import com.fiveguys.robocar.service.OperationService;
+import com.fiveguys.robocar.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONException;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +33,35 @@ import org.springframework.web.bind.annotation.*;
 public class OperationController {
 
     private final OperationService operationService;
+    private final FirebaseCloudMessageService fcmService;
+
+    @Operation(summary = "게스트 -> 호스트로 동승 요청 보내기")
+    @PostMapping("/operations/carpool/request")
+    public ResponseEntity carpoolRequest(@Auth Long guestId, @RequestBody CarpoolRequestDto carpoolRequestDto) throws JSONException {
+        String fcmMessage = null;
+        try {
+            fcmMessage = fcmService.pushCarpoolRequest(guestId, carpoolRequestDto);
+        } catch (EntityNotFoundException e) {
+            return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
+        }
+        return ResponseApi.ok(fcmMessage);
+    }
+
+    @Operation(summary = "호스트 -> 게스트로 동승 거절 보내기")
+    @Parameter(name = "guestId", description = "동승 요청이 거절됐음을 알림 받을 guest의 id", example = "3")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "push 성공"),
+            @ApiResponse(responseCode = "400", description = "해당하는 유저가 존재하지 않음")})
+    @PostMapping("/operations/carpool/reject")
+    public HttpEntity carpoolReject(@Auth Long hostId, @RequestParam Long guestId) throws JSONException {
+        String response = null;
+        try {
+            response = fcmService.pushCarpoolReject(guestId);
+        } catch (EntityNotFoundException e) {
+            return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
+        }
+        return ResponseApi.ok(response);
+    }
 
     @Operation(summary = "최적화된 경로 조회")
     @ApiResponses(value = {
@@ -50,6 +82,7 @@ public class OperationController {
             return ResponseApi.of(ResponseStatus.OPERATION_NOT_FOUND);
         }
     }
+
     @Operation(summary = "게스트 위치 기반 리스트 조회")
     @Parameters(value = {
             @Parameter(name = "guestDepartAddress", description = "게스트 출발지"),
@@ -61,15 +94,15 @@ public class OperationController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @GetMapping("/operations/carpools")
-    public ResponseEntity carpoolListUp(@RequestParam String guestDepartAddress, @RequestParam String guestDestAddress,@RequestParam int maleCount,@RequestParam int femaleCount){
+    public ResponseEntity carpoolListUp(@RequestParam String guestDepartAddress, @RequestParam String guestDestAddress, @RequestParam int maleCount, @RequestParam int femaleCount) {
         CarpoolListUpResDto carpoolListUpResDto;
 
         try {
-            carpoolListUpResDto = operationService.carpoolListUp(guestDepartAddress, guestDestAddress,maleCount, femaleCount);
+            carpoolListUpResDto = operationService.carpoolListUp(guestDepartAddress, guestDestAddress, maleCount, femaleCount);
             return ResponseApi.ok(carpoolListUpResDto);
         } catch (IllegalArgumentException e) {
             return ResponseApi.of(ResponseStatus.ADDRESS_INPUT_INVALID);
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
     }
@@ -81,17 +114,17 @@ public class OperationController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @PostMapping("/operations/carpools")
-    public ResponseEntity carpoolRegister(@RequestBody @Validated CarpoolRegisterReqDto carpoolRegisterReqDto, @Auth Long id, Errors errors){
-        if(errors.hasErrors())
+    public ResponseEntity carpoolRegister(@RequestBody @Validated CarpoolRegisterReqDto carpoolRegisterReqDto, @Auth Long id, Errors errors) {
+        if (errors.hasErrors())
             return ResponseApi.of(ResponseStatus._INVALID_ARGUMENT);
 
-        try{
+        try {
             operationService.carpoolRegister(carpoolRegisterReqDto, id);
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return ResponseApi.of(ResponseStatus.ADDRESS_INPUT_INVALID);
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
 
@@ -109,16 +142,16 @@ public class OperationController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @DeleteMapping("/operations/carpools")
-    public ResponseEntity carpoolSuccess(CarpoolSuccessReqDto carpoolSuccessReqDto, @Auth Long id){
+    public ResponseEntity carpoolSuccess(CarpoolSuccessReqDto carpoolSuccessReqDto, @Auth Long id) {
 
         try {
             operationService.carpoolSuccess(id, carpoolSuccessReqDto);
-        } catch(EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             return ResponseApi.of(ResponseStatus.CARPOOL_NOT_FOUND);
-        }
-        catch (Exception e ){
+        } catch (Exception e) {
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
         return ResponseApi.ok(null);
     }
+
 }
