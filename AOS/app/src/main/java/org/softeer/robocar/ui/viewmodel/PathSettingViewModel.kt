@@ -32,7 +32,6 @@ class PathSettingViewModel @Inject constructor(
             searchPlaceUseCase(key, keyWord.value!!)
                 .onSuccess {
                     _placeList.value = it.documents
-                    Log.d("result", it.toString())
                 }
                 .onFailure {
                     Log.d("Error", it.toString())

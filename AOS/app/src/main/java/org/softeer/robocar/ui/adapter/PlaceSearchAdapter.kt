@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.softeer.robocar.data.dto.placesearch.Place
 import org.softeer.robocar.data.model.CarPool
+import org.softeer.robocar.data.model.PlaceItem
 import org.softeer.robocar.databinding.ItemPlaceBinding
 
 class PlaceSearchAdapter(
@@ -46,12 +47,13 @@ class PlaceViewHolder(
         with(binding) {
             itemTitle.text = place.place_name
             placeItem.setOnClickListener {
-                itemClickListener.toSelectDestination()
+                val placeItem = PlaceItem(place.place_name,place.address_name)
+                itemClickListener.toSelectDestination(placeItem)
             }
         }
     }
 }
 
 interface ItemClickListener {
-    fun toSelectDestination()
+    fun toSelectDestination(placeItem: PlaceItem)
 }

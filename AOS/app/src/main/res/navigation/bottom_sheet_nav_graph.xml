@@ -14,15 +14,22 @@
             android:id="@+id/action_pathSettingFragment_to_selectDestinationFragment"
             app:destination="@id/selectDestinationFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/selectDestinationFragment"
         android:name="org.softeer.robocar.ui.fragment.SelectDestinationFragment"
         android:label="SelectDestinationFragment"
         tools:layout="@layout/fragment_select_destination">
+        <argument
+            android:name="placeItem"
+            app:argType="org.softeer.robocar.data.model.PlaceItem"
+            app:nullable="true"
+            android:defaultValue="@null" />
         <action
             android:id="@+id/action_selectDestinationFragment_to_internalControlFragment"
             app:destination="@id/internalControlFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/internalControlFragment"
         android:name="org.softeer.robocar.ui.fragment.InternalControlFragment"

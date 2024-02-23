@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import org.softeer.robocar.data.model.PlaceItem
 import org.softeer.robocar.databinding.FragmentPathSettingBinding
 import org.softeer.robocar.ui.adapter.ItemClickListener
 import org.softeer.robocar.ui.adapter.PlaceSearchAdapter
@@ -47,7 +48,6 @@ class PathSettingFragment : Fragment(), ItemClickListener{
             return@setOnEditorActionListener when (actionId) {
                 EditorInfo.IME_ACTION_SEARCH -> {
                     getSearchResult()
-                    adapter.notifyDataSetChanged()
                     viewModel.placeList.observe(viewLifecycleOwner){
                         adapter.submitList(it)
                     }
@@ -57,9 +57,10 @@ class PathSettingFragment : Fragment(), ItemClickListener{
             }
         }
 
-        binding.editDestMap.setOnClickListener {
-            toSelectDestination()
-        }
+
+//        binding.editDestMap.setOnClickListener {
+//            toSelectDestination()
+//        }
     }
 
     override fun onDestroy() {
@@ -74,9 +75,9 @@ class PathSettingFragment : Fragment(), ItemClickListener{
         }
     }
 
-    override fun toSelectDestination(){
+    override fun toSelectDestination(placeItem: PlaceItem){
         val action =
-            PathSettingFragmentDirections.actionPathSettingFragmentToSelectDestinationFragment()
-        findNavController().navigate(action)
+            PathSettingFragmentDirections.actionPathSettingFragmentToSelectDestinationFragment(placeItem)
+       findNavController().navigate(action)
     }
 }
