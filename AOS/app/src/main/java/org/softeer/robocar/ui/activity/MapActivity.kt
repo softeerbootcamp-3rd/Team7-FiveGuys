@@ -97,39 +97,64 @@ class MapActivity : AppCompatActivity() {
         routeLineManager.layer.addRouteLine(options)
     }
     private fun setupLocationUpdates() {
+        Log.d("MapActivity", "setupLocationUpdates called")
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val locationListener = LocationListener { location ->
-            Log.d("MapActivity: ", "Current location: Lat=${location.latitude}, Lon=${location.longitude}")
+            Log.d("MapActivity", "Location updated: Lat=${location.latitude}, Lon=${location.longitude}")
             currentLocation = location
             addCurrentLocationLabel(location.latitude, location.longitude)
-            // 받은 위치 정보로 지도의 카메라를 업데이트하지만, 사용자가 버튼을 누를 때만 카메라를 이동시킵니다.
+            updateCameraToCurrentLocation()
         }
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10, 10f, locationListener, Looper.getMainLooper())
+            val lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            if (lastKnownLocation != null) {
+                Log.d("MapActivity", "Last known location: Lat=${lastKnownLocation.latitude}, Lon=${lastKnownLocation.longitude}")
+                currentLocation = lastKnownLocation
+                addCurrentLocationLabel(lastKnownLocation.latitude, lastKnownLocation.longitude)
+                updateCameraToCurrentLocation()
+            } else {
+                Log.d("MapActivity", "Last known location is null")
+            }
+        } else {
+            Log.d("MapActivity", "Location permission not granted")
         }
     }
-    private fun addCurrentLocationLabel(lat: Double, lon: Double) {
-        val labelManager = kakaoMap?.getLabelManager()
-        val labelLayer = labelManager?.getLayer()
 
-        // 스타일 정의
-        val labelStyles = LabelStyles.from("myCurrentLocationStyle",
-            LabelStyle.from(R.drawable.icon_car_location)
-                .setTextStyles(15, Color.BLACK, 1, Color.WHITE) // 텍스트 크기, 색상, 테두리 두께, 테두리 색상 설정
-                )
-
-        // 스타일 추가
-        val styles = labelManager?.addLabelStyles(labelStyles)
-
-        // 라벨 옵션 설정
-        val options = LabelOptions.from(LatLng.from(lat, lon))
-            .setStyles(styles)
-            .setTexts("현재 위치", "Here") // 표시할 텍스트 설정
-
-        // 라벨 추가
-        val label = labelLayer?.addLabel(options)
+    private fun updateCameraToCurrentLocation() {
+        currentLocation?.let { location ->
+            kakaoMap?.let { map ->
+                val cameraUpdate = CameraUpdateFactory.newCenterPosition(LatLng.from(location.latitude, location.longitude))
+                map.moveCamera(cameraUpdate, CameraAnimation.from(10, true, true))
+            } ?: Log.d("MapActivity", "kakaoMap is null, cannot update camera to current location")
+        }
     }
+
+    private fun addCurrentLocationLabel(lat: Double, lon: Double) {
+        kakaoMap?.let { map ->
+            val labelManager = map.getLabelManager()
+            val labelLayer = labelManager?.getLayer()
+
+            // 스타일 정의
+            val labelStyles = LabelStyles.from("myCurrentLocationStyle",
+                LabelStyle.from(R.drawable.icon_car_location)
+                    .setTextStyles(15, Color.BLACK, 1, Color.WHITE) // 텍스트 크기, 색상, 테두리 두께, 테두리 색상 설정
+            )
+
+            // 스타일 추가
+            val styles = labelManager?.addLabelStyles(labelStyles)
+
+            // 라벨 옵션 설정
+            val options = LabelOptions.from(LatLng.from(lat, lon))
+                .setStyles(styles)
+                .setTexts("현재 위치", "Here") // 표시할 텍스트 설정
+
+            // 라벨 추가
+            val label = labelLayer?.addLabel(options)
+        } ?: Log.d("MapActivity", "kakaoMap is null, cannot add current location label")
+    }
+
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
