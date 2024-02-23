@@ -79,7 +79,6 @@ public class CarController {
             @ApiResponse(responseCode = "404", description = "해당하는 차량이 없음"),
             @ApiResponse(responseCode = "409", description = "중복된 차량 정보로 수정")
     })
-    //Put?Patch?
     @PutMapping("/cars/{id}")
     public ResponseEntity<?> updateCar(@PathVariable Long id, @RequestBody @Valid CarReqDto carReqDto, Errors errors) {
         if (errors.hasErrors()) {
