@@ -76,7 +76,7 @@ public class CreateCarpoolListUpResDto {
             routeInfo = routeService.getRouteInfo(hostDepartCoordinate, optimalRoute.getFirstDestination(), optimalRoute.getSecondDestination());
             duration = routeInfo.getDuration()/60/1000;
 
-            taxifare = routeInfo.getTaxiFare();
+            taxifare = routeInfo.getTaxiFare()/2;
             carpoolItem = CarpoolListUpResDto.CarpoolItem.builder()
                     .hostId(req.getId())
                     .hostNickname(req.getHostNickname())
