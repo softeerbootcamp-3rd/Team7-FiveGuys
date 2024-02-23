@@ -17,8 +17,4 @@ public class UserLoginReqDto {
     @Size(max = 50)
     @NotBlank
     String password;
-
-    @Size(max = 100)
-    @NotBlank
-    String FCMToken;
 }
