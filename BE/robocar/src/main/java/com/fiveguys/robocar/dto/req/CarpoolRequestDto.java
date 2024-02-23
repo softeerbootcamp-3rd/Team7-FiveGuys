@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class CarpoolRequestDTO {
+public class CarpoolRequestDto {
     @Schema(description = "동승 요청 push 알림 받을 host의 주소", example = "1")
     private Long hostId;
 
