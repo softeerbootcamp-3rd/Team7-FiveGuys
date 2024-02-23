@@ -82,7 +82,6 @@ public class OperationController {
     }
 
     @Operation(summary = "호스트가 요청을 수락")
-
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "삭제 요청 성공"),
             @ApiResponse(responseCode = "400", description = "이미 삭제된 동승 정보"),
@@ -102,6 +101,7 @@ public class OperationController {
         }
         return ResponseApi.ok(null);
     }
+
 
 
 

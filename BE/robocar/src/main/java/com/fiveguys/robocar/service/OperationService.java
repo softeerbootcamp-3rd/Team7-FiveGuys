@@ -61,7 +61,10 @@ public class OperationService {
         return createCarpoolListUpResDto.create(guestDepartAddress,guestDestAddress, maleCount,femaleCount);
     }
 
+    @Transactional
     public void carpoolRegister(CarpoolRegisterReqDto carpoolRegisterReqDto, Long id) {
+        // 여기서 자동차 매칭 시켜야 함
+        // 주변 차고지에서 차량 아이디 리턴 + 자동차 상태 변경
         CarpoolRequest carpoolRequest = carpoolRegisterParser.dtoToEntity(carpoolRegisterReqDto, id);
         carpoolRequestRepository.save(carpoolRequest);
     }
@@ -81,11 +84,14 @@ public class OperationService {
                 .hostId(id)
                 .guestId(guestId)
                 .departureTime(LocalDateTime.now())
-                // 아래는 별도의 로직이 필요
-                .carId(1111L)
+                .carId(carpoolRequest.getCarId())
+                //TODO
+                // 얼마나 갈리는지 아래부분 추가
                 .estimatedHostArrivalTime(LocalDateTime.now())
                 .estimatedGuestArrivalTime(LocalDateTime.now())
                 .build();
+
+
 
 
         Long inOperationId = inOperationRepository.save(inOperation).getId();
