@@ -1,5 +1,13 @@
 package com.fiveguys.robocar.service;
 
+import com.fiveguys.robocar.dto.RouteInfo;
+import com.fiveguys.robocar.dto.res.RouteResDto;
+import com.fiveguys.robocar.entity.Car;
+import com.fiveguys.robocar.entity.Garage;
+import com.fiveguys.robocar.service.RouteComparisonService.OptimalRoute;
+import com.fiveguys.robocar.util.JsonParserUtil.Coordinate;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import com.fiveguys.robocar.dto.req.CarpoolRegisterReqDto;
 import com.fiveguys.robocar.dto.req.CarpoolSuccessReqDto;
 import com.fiveguys.robocar.dto.res.CarpoolListUpResDto;
@@ -15,50 +23,86 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import java.time.LocalDateTime;
 
 @Service
+@RequiredArgsConstructor
 public class OperationService {
+
+    private final MapService mapService;
+    private final GarageService garageService;
+    private final RouteComparisonService routeComparisonService;
+    private final RouteService routeService;
+    private final CarService carService;
     private final CarpoolRequestRepository carpoolRequestRepository;
     private final CarpoolRegisterParser carpoolRegisterParser;
-    private final RouteService routeService;
-    private final MapService mapService;
-    private final RouteComparisonService routeComparisonService;
     private final CreateCarpoolListUpResDto createCarpoolListUpResDto;
     private final InOperationRepository inOperationRepository;
 
     private final FirebaseCloudMessageService firebaseCloudMessageService;
-    @Autowired
-    public OperationService(CarpoolRequestRepository carpoolRequestRepository,
-                            CarpoolRegisterParser carpoolRegisterParser,
-                            MapService mapService,RouteService routeService,
-                            RouteComparisonService routeComparisonService,
-                            CreateCarpoolListUpResDto createCarpoolListUpResDto,
-                            InOperationRepository inOperationRepository,
-                            FirebaseCloudMessageService firebaseCloudMessageService){
 
-        this.carpoolRequestRepository = carpoolRequestRepository;
-        this.carpoolRegisterParser = carpoolRegisterParser;
-        this.mapService = mapService;
-        this.routeService = routeService;
-        this.routeComparisonService = routeComparisonService;
-        this.createCarpoolListUpResDto = createCarpoolListUpResDto;
-        this.inOperationRepository = inOperationRepository;
-        this.firebaseCloudMessageService = firebaseCloudMessageService;
+    public RouteResDto getOptimizedRoute(String startAddress, String hostDestAddress, String guestDestAddress, Long hostId, Long guestId) {
+        Coordinate start = mapService.convertAddressToCoordinates(startAddress);
+        Coordinate hostDest = mapService.convertAddressToCoordinates(hostDestAddress);
+        Coordinate guestDest = guestDestAddress != null ? mapService.convertAddressToCoordinates(guestDestAddress) : null;
+        Garage nearestGarage = garageService.findNearestGarage(start.toString());
+        Car availableCar = carService.findAvailableCar(nearestGarage.getId());
 
+        RouteInfo routeInfoHost;
+        RouteInfo routeInfoGuest = null;
+
+        if (guestDest != null) {
+            // 최적의 경로 결정
+            OptimalRoute optimalRoute = routeComparisonService.determineOptimalRoute(start.toString(), hostDest.toString(), guestDest.toString());
+
+            boolean isFirstDestinationHost = optimalRoute.getFirstDestination().equals(hostDest.toString());
+            if (isFirstDestinationHost) {
+                // 첫 번째 목적지가 호스트의 목적지와 일치
+                routeInfoHost = routeService.getRouteInfo(start.toString(), optimalRoute.getFirstDestination(), null);
+                routeInfoGuest = routeService.getRouteInfo(start.toString(), optimalRoute.getSecondDestination(), optimalRoute.getFirstDestination());
+            } else {
+                // 두 번째 목적지가 호스트의 목적지와 일치
+                routeInfoHost = routeService.getRouteInfo(start.toString(), optimalRoute.getSecondDestination(), optimalRoute.getFirstDestination());
+                routeInfoGuest = routeService.getRouteInfo(start.toString(), optimalRoute.getFirstDestination(), null);
+            }
+        } else {
+            // 게스트 목적지 없이 호스트의 경로만 조회
+            routeInfoHost = routeService.getRouteInfo(start.toString(), hostDest.toString(), null);
+        }
+        return new RouteResDto(
+                hostId,
+                guestId,
+                availableCar.getCarImage(),
+                routeInfoHost.getDuration(),
+                routeInfoGuest != null ? routeInfoGuest.getDuration() : null,
+                availableCar.getCarNumber(),
+                availableCar.getCarName(),
+                convertCoordinatesToNodes(routeInfoHost.getPathCoordinates()),
+                routeInfoGuest != null ? convertCoordinatesToNodes(routeInfoGuest.getPathCoordinates()) : null
+        );
     }
 
-    public void saveCarpoolRequest(CarpoolRequest carpoolRequest){
+    private List<RouteResDto.Node> convertCoordinatesToNodes(List<Coordinate> coordinates) {
+        List<RouteResDto.Node> nodes = coordinates.stream()
+                .map(coordinate -> new RouteResDto.Node(coordinate.getLatitude(), coordinate.getLongitude()))
+                .collect(Collectors.toList());
+        return nodes;
+
+
+    public void saveCarpoolRequest(CarpoolRequest carpoolRequest) {
         carpoolRequestRepository.save(carpoolRequest);
     }
 
-    public CarpoolRequest findCarpoolRequestById(Long id){
+    public CarpoolRequest findCarpoolRequestById(Long id) {
         return carpoolRequestRepository.findById(String.valueOf(id)).orElse(null);
     }
 
-    public CarpoolListUpResDto carpoolListUp(String guestDepartAddress, String guestDestAddress,int maleCount, int femaleCount) {
+    public CarpoolListUpResDto carpoolListUp(String guestDepartAddress, String guestDestAddress, int maleCount, int femaleCount) {
 
-        return createCarpoolListUpResDto.create(guestDepartAddress,guestDestAddress, maleCount,femaleCount);
+        return createCarpoolListUpResDto.create(guestDepartAddress, guestDestAddress, maleCount, femaleCount);
     }
 
     @Transactional

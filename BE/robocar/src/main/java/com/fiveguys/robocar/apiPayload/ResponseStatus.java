@@ -49,6 +49,12 @@ public enum ResponseStatus {
     EXTERNAL_SERVICE_ERROR(INTERNAL_SERVER_ERROR, "외부 서비스 호출 중 오류가 발생했습니다."),
     ADDRESS_TO_COORDINATE_CONVERSION_FAILED(BAD_REQUEST, "주소를 좌표로 변환할 수 없습니다."),
 
+    // 운행중 관련
+    OPERATION_NOT_FOUND(BAD_REQUEST, "찾을수 없는 운행정보 입니다."),
+
+    // 경로관련
+    ROUTE_NOT_FOUND(BAD_REQUEST, "찾을수 없는 경로정보 입니다."),
+
     // 테스트용
     TEST_EXCEPTION(BAD_REQUEST, "Error 테스트");
 

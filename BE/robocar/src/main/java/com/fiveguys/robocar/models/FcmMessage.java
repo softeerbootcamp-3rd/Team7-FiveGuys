@@ -62,9 +62,10 @@ public class FcmMessage {
             return new JSONObject().put("in_operation_id", String.valueOf(id));
         }
 
-        public static JSONObject of(Long guestId, CarpoolRequestDTO carpoolRequestDTO) throws JSONException {
+        public static JSONObject of(Long guestId, String guestNickname, CarpoolRequestDTO carpoolRequestDTO) throws JSONException {
             return new JSONObject()
                     .put("guestId", String.valueOf(guestId))
+                    .put("guestNickname", guestNickname)
                     .put("guestDestAddress", carpoolRequestDTO.getGuestDestAddress())
                     .put("maleCount", String.valueOf(carpoolRequestDTO.getMaleCount()))
                     .put("femaleCount", String.valueOf(carpoolRequestDTO.getFemaleCount()));

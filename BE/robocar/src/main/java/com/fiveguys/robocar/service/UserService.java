@@ -86,15 +86,20 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public LoginResDto userLogin(UserLoginReqDto userLoginReqDto) {
         String loginId = userLoginReqDto.getLoginId();
         String password = userLoginReqDto.getPassword();
+        String clientToken = userLoginReqDto.getClientToken();
 
         User user = userRepository.findByLoginId(loginId).orElseThrow(()->new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage()));
 
+        user.editClientToken(clientToken);
+
         if(!user.getLoginId().equals(loginId) || !user.getPassword().equals(password))
             throw new EntityNotFoundException(ResponseStatus.USER_WRONG_PASSWORD.getMessage());
+
+        userRepository.save(user);
         String token = jwtUtil.createToken(user.getId());
         String nickname = user.getNickname();
         Long id = user.getId();
