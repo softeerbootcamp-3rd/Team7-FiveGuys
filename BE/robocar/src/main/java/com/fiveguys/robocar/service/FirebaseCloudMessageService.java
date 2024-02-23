@@ -2,7 +2,7 @@ package com.fiveguys.robocar.service;
 
 import com.fiveguys.robocar.apiPayload.ResponseStatus;
 import com.fiveguys.robocar.config.FCMConfig;
-import com.fiveguys.robocar.dto.req.CarpoolRequestDTO;
+import com.fiveguys.robocar.dto.req.CarpoolRequestDto;
 import com.fiveguys.robocar.entity.User;
 import com.fiveguys.robocar.models.FcmNotificationType;
 import com.fiveguys.robocar.repository.UserRepository;
@@ -42,7 +42,7 @@ public class FirebaseCloudMessageService {
         fcmHeader = setDefaultFCMHeader();
     }
 
-    public String pushCarpoolRequest(Long guestId, CarpoolRequestDTO carpoolRequestDTO) throws JSONException {
+    public String pushCarpoolRequest(Long guestId, CarpoolRequestDto carpoolRequestDTO) throws JSONException {
         User hostUser = userRepository.findById(carpoolRequestDTO.getHostId())
                 .orElseThrow(() -> new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage()));
         User guestUser = userRepository.findById(guestId)

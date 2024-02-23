@@ -1,6 +1,6 @@
 package com.fiveguys.robocar.models;
 
-import com.fiveguys.robocar.dto.req.CarpoolRequestDTO;
+import com.fiveguys.robocar.dto.req.CarpoolRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -62,7 +62,7 @@ public class FcmMessage {
             return new JSONObject().put("in_operation_id", String.valueOf(id));
         }
 
-        public static JSONObject of(Long guestId, String guestNickname, CarpoolRequestDTO carpoolRequestDTO) throws JSONException {
+        public static JSONObject of(Long guestId, String guestNickname, CarpoolRequestDto carpoolRequestDTO) throws JSONException {
             return new JSONObject()
                     .put("guestId", String.valueOf(guestId))
                     .put("guestNickname", guestNickname)

@@ -1,6 +1,7 @@
 package com.fiveguys.robocar.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fiveguys.robocar.models.CarState;
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,6 +17,7 @@ public class Car {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "garageId")
     private Garage garage;
