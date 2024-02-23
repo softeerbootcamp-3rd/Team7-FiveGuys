@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,13 +31,14 @@ public class FcmController {
             @ApiResponse(responseCode = "200", description = "push 성공"),
             @ApiResponse(responseCode = "400", description = "해당하는 유저가 존재하지 않음")})
     @PostMapping("/push/carpool/request")
-    public ResponseEntity pushRequestMessage(@Auth Long guestId, @RequestBody CarpoolRequestDTO carpoolRequestDTO) throws JSONException {
+    public HttpEntity pushRequestMessage(@Auth Long guestId, @RequestBody CarpoolRequestDTO carpoolRequestDTO) throws JSONException {
+        HttpEntity response = null;
         try {
-            firebaseCloudMessageService.pushCarpoolRequest(guestId, carpoolRequestDTO);
+            response = new HttpEntity<>(firebaseCloudMessageService.pushCarpoolRequest(guestId, carpoolRequestDTO));
         } catch (EntityNotFoundException e) {
-            ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
+            return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
         }
-        return ResponseApi.ok();
+        return ResponseApi.ok(response);
     }
 
     @Operation(summary = "호스트가 동승 수락 시 게스트에게 수락을 알려주기 위한 push api, AOS에서 직접 넣어주는 것이 아닌 '동승 수락 요청 API'의 서비스 로직의 일부로서 동작")
@@ -49,9 +51,13 @@ public class FcmController {
     public ResponseEntity pushAcceptMessage(@Auth Long hostId,
                                             @RequestParam Long guestId,
                                             @RequestParam Long inOperationId) throws JSONException {
-
-        firebaseCloudMessageService.pushCarpoolAccept(guestId, inOperationId);
-        return ResponseApi.ok();
+        HttpEntity response = null;
+        try {
+            response = new HttpEntity<>(firebaseCloudMessageService.pushCarpoolAccept(guestId, inOperationId));
+        } catch (EntityNotFoundException e) {
+            return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
+        }
+        return ResponseApi.ok(response);
     }
 
     @Operation(summary = "호스트가 동승 거절 시 게스트에게 거절을 알려주기 위한 push api")
@@ -61,12 +67,13 @@ public class FcmController {
             @ApiResponse(responseCode = "400", description = "해당하는 유저가 존재하지 않음")})
     @PostMapping("/push/carpool/reject")
     public ResponseEntity pushRejectMessage(@Auth Long hostId, @RequestParam Long guestId) throws JSONException {
+        HttpEntity response = null;
         try {
-            firebaseCloudMessageService.pushCarpoolReject(guestId);
+            response = new HttpEntity<>(firebaseCloudMessageService.pushCarpoolReject(guestId));
         } catch (EntityNotFoundException e) {
-            ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
+            return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
         }
-        return ResponseApi.ok();
+        return ResponseApi.ok(response);
     }
 
 }
