@@ -161,11 +161,11 @@ public class OperationService {
     }
 
     @Transactional
-    public void carpoolRequestCancel(Long id) {
+    public void carpoolRequestCancel(Long id) throws Exception {
 
         CarpoolRequest carpoolRequest= carpoolRequestRepository.findById(String.valueOf(id)).orElseThrow(EntityNotFoundException::new);
         carpoolRequestRepository.deleteById(String.valueOf(id));
-        Car car = carRepository.findById(carpoolRequest.getCarId()).orElseThrow(EntityNotFoundException::new);
+        Car car = carRepository.findById(carpoolRequest.getCarId()).orElseThrow(Exception::new);
         car.editCarState(CarState.READY);
         //TODO
         // 락 해제

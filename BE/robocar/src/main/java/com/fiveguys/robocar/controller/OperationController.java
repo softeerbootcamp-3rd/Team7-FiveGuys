@@ -163,7 +163,10 @@ public class OperationController {
     public ResponseEntity carpoolRequestCancel(@Auth Long id){
         try{
             operationService.carpoolRequestCancel(id);
-        } catch(Exception e){
+        } catch (EntityNotFoundException e){
+            return ResponseApi.of(ResponseStatus.CARPOOL_NOT_FOUND);
+        }
+        catch(Exception e){
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
         return ResponseApi.ok(null);
