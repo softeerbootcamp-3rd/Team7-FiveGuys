@@ -28,6 +28,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.NoSuchElementException;
+
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Operation", description = "Operation 도메인 관련 API")
@@ -44,6 +46,8 @@ public class OperationController {
             fcmMessage = fcmService.pushCarpoolRequest(guestId, carpoolRequestDto);
         } catch (EntityNotFoundException e) {
             return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
+        } catch (NoSuchElementException e) {
+            return ResponseApi.of(ResponseStatus.CLIENT_TOKEN_NOT_EXIST);
         }
         return ResponseApi.ok(fcmMessage);
     }
@@ -60,6 +64,8 @@ public class OperationController {
             response = fcmService.pushCarpoolReject(guestId);
         } catch (EntityNotFoundException e) {
             return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
+        } catch (NoSuchElementException e) {
+            return ResponseApi.of(ResponseStatus.CLIENT_TOKEN_NOT_EXIST);
         }
         return ResponseApi.ok(response);
     }
@@ -124,7 +130,7 @@ public class OperationController {
         try {
             operationService.carpoolRegister(carpoolRegisterReqDto, id);
         } catch (IllegalArgumentException e) {
-            return ResponseApi.of(ResponseStatus.CAR_NOT_FOUND);
+            return ResponseApi.of(ResponseStatus.ADDRESS_INPUT_INVALID);
         } catch (EntityNotFoundException e) {
             return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
         } catch (Exception e) {
@@ -141,11 +147,11 @@ public class OperationController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @DeleteMapping("/operations/carpools")
-    public ResponseEntity carpoolSuccess(CarpoolSuccessReqDto carpoolSuccessReqDto, @Auth Long id){
+    public ResponseEntity carpoolSuccess(CarpoolSuccessReqDto carpoolSuccessReqDto, @Auth Long id) {
         Long inOperationId;
         try {
             inOperationId = operationService.carpoolSuccess(id, carpoolSuccessReqDto);
-        } catch(EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             return ResponseApi.of(ResponseStatus.CARPOOL_NOT_FOUND);
         } catch (Exception e) {
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
@@ -160,13 +166,12 @@ public class OperationController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @DeleteMapping("/operations/carpools/cancel")
-    public ResponseEntity carpoolRequestCancel(@Auth Long id){
-        try{
+    public ResponseEntity carpoolRequestCancel(@Auth Long id) {
+        try {
             operationService.carpoolRequestCancel(id);
         } catch (EntityNotFoundException e){
             return ResponseApi.of(ResponseStatus.CARPOOL_NOT_FOUND);
-        }
-        catch(Exception e){
+        } catch(Exception e){
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
         return ResponseApi.ok(null);

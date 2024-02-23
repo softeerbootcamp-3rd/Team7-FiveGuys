@@ -25,6 +25,7 @@ public enum ResponseStatus {
     USER_CREATE_OK(CREATED,"회원가입성공"),
     USER_WRONG_PASSWORD(BAD_REQUEST,"비밀번호가 틀렸습니다"),
     USER_WRONG_LOGIN_INFO(BAD_REQUEST,"아이디 혹은 비밀번호가 틀렸습니다"),
+    CLIENT_TOKEN_NOT_EXIST(BAD_REQUEST, "타켓 유저의 FCM 토큰이 존재하지 않습니다"),
 
     // 동승 관련
     CARPOOL_NOT_FOUND(BAD_REQUEST,"이미 삭제된 동승 정보입니다"),
