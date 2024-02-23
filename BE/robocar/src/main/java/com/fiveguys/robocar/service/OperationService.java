@@ -53,10 +53,10 @@ public class OperationService {
             if (isFirstDestinationHost) {
                 // 첫 번째 목적지가 호스트의 목적지와 일치
                 routeInfoHost = routeService.getRouteInfo(start.toString(), optimalRoute.getFirstDestination(), null);
-                routeInfoGuest = routeService.getRouteInfo(start.toString(), optimalRoute.getFirstDestination(), optimalRoute.getSecondDestination());
+                routeInfoGuest = routeService.getRouteInfo(start.toString(), optimalRoute.getSecondDestination(), optimalRoute.getFirstDestination());
             } else {
                 // 두 번째 목적지가 호스트의 목적지와 일치
-                routeInfoHost = routeService.getRouteInfo(start.toString(), optimalRoute.getFirstDestination(), optimalRoute.getSecondDestination());
+                routeInfoHost = routeService.getRouteInfo(start.toString(), optimalRoute.getSecondDestination(), optimalRoute.getFirstDestination());
                 routeInfoGuest = routeService.getRouteInfo(start.toString(), optimalRoute.getFirstDestination(), null);
             }
         } else {
