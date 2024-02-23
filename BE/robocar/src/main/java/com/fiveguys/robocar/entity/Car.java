@@ -44,5 +44,6 @@ public class Car {
         this.carImage = carImage;
         this.carNumber = carNumber;
     }
+    public void editCarState(CarState state){this.state = state;}
 
 }
