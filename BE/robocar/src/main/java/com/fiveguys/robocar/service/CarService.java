@@ -32,7 +32,7 @@ public class CarService {
             throw new IllegalArgumentException(ResponseStatus.CAR_ALREADY_EXIST.getMessage());
         }
 
-        // garageId를 사용하여 Garage 엔티티 검색
+// garageId를 사용하여 Garage 엔티티 검색
         Garage garage = garageRepository.findById(carReqDto.getGarageId())
                 .orElseThrow(() -> new IllegalArgumentException("Garage not found with id: " + carReqDto.getGarageId()));
 
@@ -53,10 +53,8 @@ public class CarService {
     }
 
     public Car getCar(Long carId) {
-        Car findCar = carRepository.findById(carId)
-                .orElseThrow(() -> new EntityNotFoundException(ResponseStatus.CAR_NOT_FOUND.getMessage()));
-
-        return findCar;
+        return carRepository.findById(carId)
+                .orElseThrow(() -> new EntityNotFoundException("Car not found with id: " + carId));
     }
 
     public List<Car> getCarAll() {
