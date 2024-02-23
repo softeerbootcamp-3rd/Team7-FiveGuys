@@ -2,36 +2,54 @@ package com.fiveguys.robocar.controller;
 
 import com.fiveguys.robocar.apiPayload.ResponseApi;
 import com.fiveguys.robocar.apiPayload.ResponseStatus;
+import com.fiveguys.robocar.dto.res.RouteResDto;
+import com.fiveguys.robocar.service.OperationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import com.fiveguys.robocar.auth.Auth;
 import com.fiveguys.robocar.dto.req.CarpoolRegisterReqDto;
 import com.fiveguys.robocar.dto.req.CarpoolSuccessReqDto;
 import com.fiveguys.robocar.dto.res.CarpoolListUpResDto;
-import com.fiveguys.robocar.service.OperationService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @Tag(name = "Operation", description = "Operation 도메인 관련 API")
 public class OperationController {
 
-    OperationService operationService;
+    private final OperationService operationService;
 
-    @Autowired
-    OperationController(OperationService operationService){
-        this.operationService = operationService;
+    @Operation(summary = "최적화된 경로 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청")})
+    @GetMapping("/operations/optimized-route")
+    public ResponseEntity<?> getOptimizedRoute(
+            @Parameter(description = "출발지 주소") @RequestParam String departureAddress,
+            @Parameter(description = "호스트 목적지 주소") @RequestParam String hostDestAddress,
+            @Parameter(description = "게스트 목적지 주소 (선택)") @RequestParam(required = false) String guestDestAddress,
+            @Parameter(description = "호스트 ID") @RequestParam Long hostId,
+            @Parameter(description = "게스트 ID (선택)") @RequestParam(required = false) Long guestId) {
+
+        try {
+            RouteResDto response = operationService.getOptimizedRoute(departureAddress, hostDestAddress, guestDestAddress, hostId, guestId);
+            return ResponseApi.ok(response);
+        } catch (Exception e) {
+            return ResponseApi.of(ResponseStatus.OPERATION_NOT_FOUND);
+        }
     }
-
     @Operation(summary = "게스트 위치 기반 리스트 조회")
     @Parameters(value = {
             @Parameter(name = "guestDepartAddress", description = "게스트 출발지"),
@@ -103,6 +121,4 @@ public class OperationController {
         }
         return ResponseApi.ok(null);
     }
-
-
 }
