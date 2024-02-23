@@ -1,5 +1,6 @@
 package org.softeer.robocar.data.repository.CarPool
 
+import org.softeer.robocar.data.dto.carpool.request.RejectCarPoolRequest
 import org.softeer.robocar.data.dto.carpool.request.RequestCarPoolRequest
 import org.softeer.robocar.data.dto.carpool.request.registerCarPoolRequest
 import org.softeer.robocar.data.model.CarPools
@@ -21,4 +22,7 @@ interface CarPoolRemoteDataSource {
         request: registerCarPoolRequest
     ): Result<Unit>
 
+    suspend fun rejectCarPoolRequest(
+        request: RejectCarPoolRequest
+    ): Result<Unit>
 }
