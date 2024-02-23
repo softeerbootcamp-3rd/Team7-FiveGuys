@@ -1,5 +1,6 @@
 package org.softeer.robocar.data.repository.CarPool
 
+import org.softeer.robocar.data.dto.carpool.request.RequestCarPoolRequest
 import org.softeer.robocar.data.mapper.toCarPools
 import org.softeer.robocar.data.model.CarPools
 import org.softeer.robocar.data.service.CarPool.CarPoolService
@@ -17,5 +18,15 @@ class CarPoolRemoteDataSourceImpl @Inject constructor(
             guestStartLocation,
             guestDestinationLocation
         ).toCarPools()
+    }
+
+    override suspend fun requestCarPool(
+        request: RequestCarPoolRequest
+    ): Result<Unit> {
+        return runCatching {
+            carPoolService.requestCarPool(
+                request
+            )
+        }
     }
 }
