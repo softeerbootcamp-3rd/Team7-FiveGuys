@@ -20,7 +20,6 @@ public class UserLoginReqDto {
     String password;
 
     @JsonProperty("FCMToken")
-    @Size(max = 100)
     @NotBlank
     String clientToken;
 }
