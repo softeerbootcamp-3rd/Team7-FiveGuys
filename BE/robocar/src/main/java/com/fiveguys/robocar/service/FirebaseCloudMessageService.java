@@ -42,32 +42,37 @@ public class FirebaseCloudMessageService {
         fcmHeader = setDefaultFCMHeader();
     }
 
-    public void pushCarpoolRequest(Long guestId, CarpoolRequestDTO carpoolRequestDTO) throws JSONException {
-        User findUser = userRepository.findById(carpoolRequestDTO.getHostId())
+    public String pushCarpoolRequest(Long guestId, CarpoolRequestDTO carpoolRequestDTO) throws JSONException {
+        User hostUser = userRepository.findById(carpoolRequestDTO.getHostId())
+                .orElseThrow(() -> new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage()));
+        User guestUser = userRepository.findById(guestId)
                 .orElseThrow(() -> new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage()));
 
-        JSONObject data = Data.of(carpoolRequestDTO.getHostId(), carpoolRequestDTO);
-        JSONObject fcmMessage = createFCMMessage(findUser.getClientToken(), FcmNotificationType.CARPOOL_REQUEST, data);
-
+        JSONObject data = Data.of(carpoolRequestDTO.getHostId(), guestUser.getNickname(), carpoolRequestDTO);
+        JSONObject fcmMessage = createFCMMessage(hostUser.getClientToken(), FcmNotificationType.CARPOOL_REQUEST, data);
         pushFcmMessage(fcmMessage);
+
+        return fcmMessage.toString();
     }
 
-    public void pushCarpoolAccept(Long guestId, Long inOperationId) throws JSONException {
+    public String pushCarpoolAccept(Long guestId, Long inOperationId) throws JSONException {
         User findUser = userRepository.findById(guestId)
                 .orElseThrow(() -> new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage()));
 
         JSONObject fcmMessage = createFCMMessage(findUser.getClientToken(), FcmNotificationType.CARPOOL_ACCEPT, inOperationId);
-
         pushFcmMessage(fcmMessage);
+
+        return fcmMessage.toString();
     }
 
-    public void pushCarpoolReject(Long guestId) throws JSONException {
+    public String pushCarpoolReject(Long guestId) throws JSONException {
         User findUser = userRepository.findById(guestId)
                 .orElseThrow(() -> new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage()));
 
         JSONObject fcmMessage = createFCMMessage(findUser.getClientToken(), FcmNotificationType.CARPOOL_REJECT, null);
-
         pushFcmMessage(fcmMessage);
+
+        return fcmMessage.toString();
     }
 
     private JSONObject createFCMMessage(String targetToken, FcmNotificationType fcmNotificationType, Object requestData) throws JSONException {
@@ -84,14 +89,15 @@ public class FirebaseCloudMessageService {
 
         JSONObject message = Message.of(targetToken, notification, data, android);
         JSONObject fcmMessage = of(message);
+
         return fcmMessage;
     }
 
     private void pushFcmMessage(JSONObject message) {
-        log.info("fcmMessage = {}", message.toString());
+        log.info("FCM - Message = {}", message.toString());
         HttpEntity<String> request = new HttpEntity<>(message.toString(), fcmHeader);
         String response = restTemplate.postForObject(fcmConfig.getMESSAGES_SEND_URL(), request, String.class);
-        log.info("FCM response = {}", response);
+        log.info("push info = {}", response);
     }
 
     private HttpHeaders setDefaultFCMHeader() throws IOException {
