@@ -9,34 +9,48 @@ import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import org.softeer.robocar.BuildConfig
 import org.softeer.robocar.databinding.FragmentPathSettingBinding
+import org.softeer.robocar.ui.adapter.ItemClickListener
+import org.softeer.robocar.ui.adapter.PlaceSearchAdapter
 import org.softeer.robocar.ui.viewmodel.PathSettingViewModel
 
 @AndroidEntryPoint
-class PathSettingFragment : Fragment() {
+class PathSettingFragment : Fragment(), ItemClickListener{
     private var _binding: FragmentPathSettingBinding? = null
     private val binding get() = _binding!!
     private val viewModel:PathSettingViewModel by viewModels()
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: PlaceSearchAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentPathSettingBinding.inflate(inflater, container, false)
+        _binding = FragmentPathSettingBinding.inflate(inflater, container, false).apply {
+            lifecycleOwner = this@PathSettingFragment
+            pathSettingViewModel = viewModel
+        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.pathSettingViewModel = viewModel
-        binding.lifecycleOwner = this@PathSettingFragment
+
+        recyclerView = binding.placeList
+        adapter = PlaceSearchAdapter(this)
+        recyclerView.adapter = adapter
+
         binding.editDestination.setOnEditorActionListener { _, actionId, _ ->
             return@setOnEditorActionListener when (actionId) {
                 EditorInfo.IME_ACTION_SEARCH -> {
                     getSearchResult()
+                    adapter.notifyDataSetChanged()
+                    viewModel.placeList.observe(viewLifecycleOwner){
+                        adapter.submitList(it)
+                    }
                     true
                 }
                 else -> false
@@ -44,9 +58,7 @@ class PathSettingFragment : Fragment() {
         }
 
         binding.editDestMap.setOnClickListener {
-            val action =
-                PathSettingFragmentDirections.actionPathSettingFragmentToSelectDestinationFragment()
-            findNavController().navigate(action)
+            toSelectDestination()
         }
     }
 
@@ -58,6 +70,13 @@ class PathSettingFragment : Fragment() {
     private fun getSearchResult() {
         lifecycleScope.launch {
             viewModel.getSearchResult()
+
         }
+    }
+
+    override fun toSelectDestination(){
+        val action =
+            PathSettingFragmentDirections.actionPathSettingFragmentToSelectDestinationFragment()
+        findNavController().navigate(action)
     }
 }
