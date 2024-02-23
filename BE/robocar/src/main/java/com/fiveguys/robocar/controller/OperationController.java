@@ -124,7 +124,7 @@ public class OperationController {
         try {
             operationService.carpoolRegister(carpoolRegisterReqDto, id);
         } catch (IllegalArgumentException e) {
-            return ResponseApi.of(ResponseStatus.ADDRESS_INPUT_INVALID);
+            return ResponseApi.of(ResponseStatus.CAR_NOT_FOUND);
         } catch (EntityNotFoundException e) {
             return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
         } catch (Exception e) {

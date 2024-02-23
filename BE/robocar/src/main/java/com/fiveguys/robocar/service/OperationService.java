@@ -101,20 +101,25 @@ public class OperationService {
     }
 
     public CarpoolListUpResDto carpoolListUp(String guestDepartAddress, String guestDestAddress, int maleCount, int femaleCount) {
-
         return createCarpoolListUpResDto.create(guestDepartAddress, guestDestAddress, maleCount, femaleCount);
     }
 
     @Transactional
     public void carpoolRegister(CarpoolRegisterReqDto carpoolRegisterReqDto, Long id) {
-
+        Coordinate start = mapService.convertAddressToCoordinates(carpoolRegisterReqDto.getDepartAddress());
         String departAddress = carpoolRegisterReqDto.getDepartAddress();
-        Garage garage = garageService.findNearestGarage(departAddress);
+
+        Garage garage = garageService.findNearestGarage(start.toString());
+        if(garage == null)
+            throw new IllegalArgumentException();
+
         Car car = carService.findAvailableCar(garage.getId());
+        if(car == null)
+            throw new IllegalArgumentException();
+
 
         car.editCarState(CarState.HOLD);
         carRepository.save(car);
-
         CarpoolRequest carpoolRequest = carpoolRegisterParser.dtoToEntity(carpoolRegisterReqDto, id);
         carpoolRequestRepository.save(carpoolRequest);
     }
@@ -149,7 +154,7 @@ public class OperationService {
         Long inOperationId = inOperationRepository.save(inOperation).getId();
 
         firebaseCloudMessageService.pushCarpoolAccept(guestId,inOperationId);
-
+        // 삭제 전, 락 해제해야 할 수도 있음
         carpoolRequestRepository.deleteById(String.valueOf(id));
 
         return inOperationId;
@@ -162,6 +167,7 @@ public class OperationService {
         carpoolRequestRepository.deleteById(String.valueOf(id));
         Car car = carRepository.findById(carpoolRequest.getCarId()).orElseThrow(EntityNotFoundException::new);
         car.editCarState(CarState.READY);
+        //TODO
         // 락 해제
         carRepository.save(car);
     }
