@@ -101,7 +101,6 @@ public class CreateCarpoolListUpResDto {
 
         }
 
-        System.out.println("ok");
         carpoolListUpResDto.doSortByEstimatedTime();
         carpoolListUpResDto.trimByLengthOf(MAX_LIST_LENGTH);
         return carpoolListUpResDto;
