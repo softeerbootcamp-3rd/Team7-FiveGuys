@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "466494168153",
+    "project_id": "robocar-5d6a3",
+    "storage_bucket": "robocar-5d6a3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:466494168153:android:adfa118ca8cfb3df086548",
+        "android_client_info": {
+          "package_name": "org.softeer.robocar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJXbUps0GpaWrkHBRLoXBWX1AIWwDOiPY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
