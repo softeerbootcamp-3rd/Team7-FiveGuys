@@ -7,6 +7,11 @@ import android.graphics.Color
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import androidx.activity.viewModels
+import com.kakao.vectormap.KakaoMap
+import com.kakao.vectormap.KakaoMapReadyCallback
+import com.kakao.vectormap.MapLifeCycleCallback
+import com.kakao.vectormap.MapView
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -20,19 +25,23 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softeer.robocar.R
 import org.softeer.robocar.databinding.ActivityMapBinding
 import org.softeer.robocar.ui.fragment.HeadcountDialogFragment
+import org.softeer.robocar.ui.viewmodel.MapViewModel
 import java.util.*
-
 
 @AndroidEntryPoint
 class MapActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMapBinding
     private lateinit var mapView: MapView
+    private val viewModel: MapViewModel by viewModels()
     private lateinit var locationManager: LocationManager
     private var kakaoMap: KakaoMap? = null // kakaoMap 객체 저장을 위한 변수
-
+  
+    //TODO: home에서 넘어오는 정보 처리
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_map)
+        binding.mapViewModel = viewModel
 
         // 위치 권한 확인
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
