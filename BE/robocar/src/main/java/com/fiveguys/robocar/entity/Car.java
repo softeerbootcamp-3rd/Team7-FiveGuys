@@ -25,6 +25,7 @@ public class Car {
 
     @Enumerated(EnumType.STRING)
     private CarState state;
+    @Enumerated(EnumType.STRING)
     private CarType carType;
     private Integer seatTemperature;
     private Integer ventilationLevel;
