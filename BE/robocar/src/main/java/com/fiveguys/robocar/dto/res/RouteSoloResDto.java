@@ -8,16 +8,12 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RouteResDto {
-    private Long hostId;
-    private Long guestId;
+public class RouteSoloResDto {
     private String carImage;
-    private Long hostEstimatedArrivalTime;
-    private Long guestEstimatedArrivalTime;
+    private Long EstimatedArrivalTime;
     private String carNumber;
     private String carName;
-    private List<Node> hostNodes;
-    private List<Node> guestNodes;
+    private List<Node> nodes;
 
     @Getter
     @AllArgsConstructor

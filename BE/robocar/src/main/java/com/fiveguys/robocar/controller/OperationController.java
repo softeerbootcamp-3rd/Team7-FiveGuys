@@ -5,6 +5,7 @@ import com.fiveguys.robocar.apiPayload.ResponseStatus;
 import com.fiveguys.robocar.dto.req.CarpoolRequestDto;
 import com.fiveguys.robocar.dto.res.InOperationDto;
 import com.fiveguys.robocar.dto.res.RouteResDto;
+import com.fiveguys.robocar.dto.res.RouteSoloResDto;
 import com.fiveguys.robocar.service.FirebaseCloudMessageService;
 import com.fiveguys.robocar.service.OperationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -101,7 +102,7 @@ public class OperationController {
             @Parameter(description = "호스트 목적지 주소") @RequestParam String destAddress) {
 
         try {
-            RouteResDto response = operationService.getOptimizedRouteSolo(departureAddress, destAddress);
+            RouteSoloResDto response = operationService.getOptimizedRouteSolo(departureAddress, destAddress);
             return ResponseApi.ok(response);
         } catch (Exception e) {
             return ResponseApi.of(ResponseStatus.OPERATION_NOT_FOUND);
