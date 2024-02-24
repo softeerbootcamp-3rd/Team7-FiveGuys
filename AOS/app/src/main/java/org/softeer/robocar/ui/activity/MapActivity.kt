@@ -8,11 +8,6 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
-import androidx.activity.viewModels
-import com.kakao.vectormap.KakaoMap
-import com.kakao.vectormap.KakaoMapReadyCallback
-import com.kakao.vectormap.MapLifeCycleCallback
-import com.kakao.vectormap.MapView
 import android.os.Looper
 import android.util.Log
 import androidx.activity.viewModels
@@ -28,7 +23,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softeer.robocar.R
 import org.softeer.robocar.databinding.ActivityMapBinding
 import org.softeer.robocar.ui.fragment.HeadcountDialogFragment
-import org.softeer.robocar.ui.viewmodel.MapViewModel
 import java.util.*
 import com.kakao.vectormap.LatLng;
 import com.kakao.vectormap.label.Label
@@ -37,20 +31,20 @@ import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
 import org.softeer.robocar.ui.viewmodel.RouteViewModel
 
+
 @AndroidEntryPoint
 class MapActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMapBinding
     private lateinit var mapView: MapView
-    private val viewModel: MapViewModel by viewModels()
     private lateinit var locationManager: LocationManager
     private var kakaoMap: KakaoMap? = null
     private var currentLocation: android.location.Location? = null
     private val routeViewModel: RouteViewModel by viewModels()
-    
+    private var currentLocationLabel: Label? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_map)
-        binding.mapViewModel = viewModel
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
@@ -73,7 +67,7 @@ class MapActivity : AppCompatActivity() {
                 observeRouteData() // 경로 데이터 관찰 시작
             }
         })
-        routeViewModel.getOptimizedRoute("서울특별시 강남구 학동로 180", "율전동 280-15", "분당구 정자동 50-3", 1, 2)
+        routeViewModel.getOptimizedRoute("영등포동5가 34-1", "서울특별시 강남구 학동로 180", "분당구 정자동 50-3", 1, 2)
         HeadcountDialogFragment().show(supportFragmentManager, "headCount")
         setupCurrentLocationButton()
     }
@@ -143,10 +137,15 @@ class MapActivity : AppCompatActivity() {
             val labelManager = map.getLabelManager()
             val labelLayer = labelManager?.getLayer()
 
+            // 이전 라벨이 있다면 삭제
+            currentLocationLabel?.let {
+                labelLayer?.remove(it)
+            }
+
             // 스타일 정의
             val labelStyles = LabelStyles.from("myCurrentLocationStyle",
                 LabelStyle.from(R.drawable.icon_car_location)
-                    .setTextStyles(15, Color.BLACK, 1, Color.WHITE) // 텍스트 크기, 색상, 테두리 두께, 테두리 색상 설정
+                    .setTextStyles(30, Color.BLACK, 1, Color.WHITE)
             )
 
             // 스타일 추가
@@ -155,11 +154,11 @@ class MapActivity : AppCompatActivity() {
             // 라벨 옵션 설정
             val options = LabelOptions.from(LatLng.from(lat, lon))
                 .setStyles(styles)
-                .setTexts("현재 위치", "Here") // 표시할 텍스트 설정
+                .setTexts("현재 위치")
 
-            // 라벨 추가
-            val label = labelLayer?.addLabel(options)
-        } ?: Log.d("MapActivity", "kakaoMap is null, cannot add current location label")
+            // 새 라벨 추가 및 참조 저장
+            currentLocationLabel = labelLayer?.addLabel(options)
+        }
     }
 
 

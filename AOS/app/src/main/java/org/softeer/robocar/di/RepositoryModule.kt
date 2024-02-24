@@ -40,7 +40,9 @@ class RepositoryModule {
         placeSearchRemoteDataSource: PlaceSearchRemoteDataSource
     ): PlaceSearchRepository {
         return PlaceSearchRepositoryImpl(placeSearchRemoteDataSource)
-
+    }
+    @Provides
+    @Singleton
     fun provideAuthRepository(
         authRemoteDataSource: AuthRemoteDataSource,
         authLocalDataSource: AuthLocalDataSource,

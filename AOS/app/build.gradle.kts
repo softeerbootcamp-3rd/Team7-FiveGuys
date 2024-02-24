@@ -91,8 +91,9 @@ dependencies {
 
     // Glide 라이브러리
     implementation("com.github.bumptech.glide:glide:4.16.0")
-    // Glide를 사용하기 위한 어노테이션 프로세서
-    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
+    // Glide를 사용하기 위한 어노테이션 프로세서 (Kotlin 프로젝트용으로 변경)
+    kapt("com.github.bumptech.glide:compiler:4.16.0")
+
 }
 
 kapt {
