@@ -55,7 +55,7 @@ class OperationServiceTest {
                 .hostDestAddress("서울 광진구 천호대로 584 능동주유소")
                 .maleCount(1)
                 .femaleCount(0)
-                .carType(CarType.MEIDUM)
+                .carType(CarType.MEDIUM)
                 .carId(2L)
                 .build();
 
