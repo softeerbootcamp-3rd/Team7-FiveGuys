@@ -132,7 +132,7 @@ public class OperationController {
         } catch (IllegalArgumentException e) {
             return ResponseApi.of(ResponseStatus.ADDRESS_INPUT_INVALID);
         } catch (EntityNotFoundException e) {
-            return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
+            return ResponseApi.of(ResponseStatus.CAR_NOT_FOUND);
         } catch (Exception e) {
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
@@ -147,9 +147,11 @@ public class OperationController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @DeleteMapping("/operations/carpools")
-    public ResponseEntity carpoolSuccess(CarpoolSuccessReqDto carpoolSuccessReqDto, @Auth Long id) {
+    public ResponseEntity carpoolSuccess(@RequestParam Long guestId , @RequestParam String guestDestAddress, @Auth Long id) {
         Long inOperationId;
         try {
+            CarpoolSuccessReqDto carpoolSuccessReqDto = new CarpoolSuccessReqDto(guestId,guestDestAddress);
+            System.out.println(carpoolSuccessReqDto.getGuestDestAddress());
             inOperationId = operationService.carpoolSuccess(id, carpoolSuccessReqDto);
         } catch (EntityNotFoundException e) {
             return ResponseApi.of(ResponseStatus.CARPOOL_NOT_FOUND);

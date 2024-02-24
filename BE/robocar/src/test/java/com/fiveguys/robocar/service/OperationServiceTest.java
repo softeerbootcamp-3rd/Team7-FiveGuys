@@ -38,7 +38,7 @@ class OperationServiceTest {
             .maleCount(1)
             .femaleCount(0)
             .carType(CarType.SMALL)
-            .carId(1L)
+            .carId(11L)
             .build();
     @Test
     @DisplayName("redis에 데이터 3개 주입")
