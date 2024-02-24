@@ -64,7 +64,8 @@ class CarPoolListFragment : Fragment(), CarPoolListClickListener {
     }
 
     override fun onClickRequestCarPoolButton(carPool : CarPool) {
-        viewModel.requestCarPool(carPool)
+        // TODO 게스트 도착지 받아서 값 넣기
+        viewModel.requestCarPool(carPool, "서울 강서구 하늘길 111 국내선 주차대기실")
         val action = CarPoolListFragmentDirections.actionCarPoolListToCarPoolRequestDialog()
         navController.navigate(action)
     }
