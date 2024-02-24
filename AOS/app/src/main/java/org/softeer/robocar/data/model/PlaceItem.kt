@@ -5,8 +5,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class PlaceItem (
-    val taxiType: String,
-    val carPoolType: String,
+    val taxiType: TaxiType,
+    val carPoolType: CarPoolType,
     val countMale: String,
     val countFemale: String,
     val departureName: String,

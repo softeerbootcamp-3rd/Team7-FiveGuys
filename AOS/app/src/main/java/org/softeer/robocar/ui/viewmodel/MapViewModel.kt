@@ -9,7 +9,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.softeer.robocar.BuildConfig
 import org.softeer.robocar.data.dto.placesearch.Place
+import org.softeer.robocar.data.model.CarPoolType
 import org.softeer.robocar.data.model.PlaceItem
+import org.softeer.robocar.data.model.TaxiType
 import org.softeer.robocar.domain.usecase.SearchPlaceUseCase
 import javax.inject.Inject
 
@@ -20,15 +22,29 @@ class MapViewModel @Inject constructor(
 
     private var _countMale = MutableLiveData<String>()
     val countMale: LiveData<String> = _countMale
+
     private var _countFemale = MutableLiveData<String>()
     val countFemale: LiveData<String> = _countFemale
+
     var keyWord = MutableLiveData<String>()
+
     private var _placeList = MutableLiveData<List<Place>>()
     val placeList: LiveData<List<Place>> = _placeList
+
     private var _destName = MutableLiveData<String>()
     val destName: LiveData<String> = _destName
+
     private var _destRoadAddress = MutableLiveData<String>()
     val destRoadAddress: LiveData<String> = _destRoadAddress
+
+    private var _startLocation = MutableLiveData<String>()
+    val startLocation: LiveData<String> = _startLocation
+
+    private var _taxiType = MutableLiveData<TaxiType>()
+    val taxiType: LiveData<TaxiType> = _taxiType
+
+    private var _carPoolType = MutableLiveData<CarPoolType>()
+    val carPoolType: LiveData<CarPoolType> = _carPoolType
 
     init {
         _countMale.value = "0"
@@ -37,6 +53,7 @@ class MapViewModel @Inject constructor(
         _placeList.value = listOf()
         _destName.value = ""
         _destRoadAddress.value = ""
+        _startLocation.value = "강남구 학동로 134"
     }
 
     suspend fun getSearchResult() {
@@ -85,14 +102,26 @@ class MapViewModel @Inject constructor(
         return next
     }
 
+    fun setStartLocation(location: String){
+        _startLocation.value = location
+    }
+
+    fun setTaxiType(taxiType: TaxiType){
+        _taxiType.value = taxiType
+    }
+
+    fun setCarPoolType(carPoolType: CarPoolType){
+        _carPoolType.value = carPoolType
+    }
+
     fun emitInfo(): PlaceItem {
         return PlaceItem(
-            "test",
-            "test",
+            taxiType.value!!,
+            carPoolType.value!!,
             countMale.value!!,
             countFemale.value!!,
-            "출발지",
-            "출발지 도로명",
+            startLocation.value!!,
+            startLocation.value!!,
             destName.value!!,
             destRoadAddress.value!!
             )

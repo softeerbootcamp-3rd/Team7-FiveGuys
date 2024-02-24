@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
@@ -15,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.navArgs
 import com.kakao.vectormap.*
 import com.kakao.vectormap.camera.CameraAnimation
 import com.kakao.vectormap.camera.CameraUpdateFactory
@@ -23,12 +23,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softeer.robocar.R
 import org.softeer.robocar.databinding.ActivityMapBinding
 import org.softeer.robocar.ui.fragment.HeadcountDialogFragment
-import java.util.*
 import com.kakao.vectormap.LatLng;
 import com.kakao.vectormap.label.Label
 import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
+import org.softeer.robocar.data.model.CarPoolType
+import org.softeer.robocar.data.model.TaxiType
+import org.softeer.robocar.ui.viewmodel.MapViewModel
 import org.softeer.robocar.ui.viewmodel.RouteViewModel
 
 
@@ -41,11 +43,13 @@ class MapActivity : AppCompatActivity() {
     private var currentLocation: android.location.Location? = null
     private val routeViewModel: RouteViewModel by viewModels()
     private var currentLocationLabel: Label? = null
+    private val mapViewModel: MapViewModel by viewModels()
+    private val args: MapActivityArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_map)
-
+        setCarPoolANDTaxiType()
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
         } else {
@@ -177,5 +181,10 @@ class MapActivity : AppCompatActivity() {
                 kakaoMap?.moveCamera(cameraUpdate, CameraAnimation.from(10, true, true))
             }
         }
+    }
+
+    private fun setCarPoolANDTaxiType(){
+        mapViewModel.setTaxiType(args.taxiType ?: TaxiType.COMPACT_TAXI)
+        mapViewModel.setCarPoolType(args.carPoolType ?: CarPoolType.ALONE)
     }
 }

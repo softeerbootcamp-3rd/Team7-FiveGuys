@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import org.softeer.robocar.databinding.FragmentDialogCarPoolRejectBinding
 
 class CarPoolRejectDialogFragment : DialogFragment() {
@@ -18,6 +19,7 @@ class CarPoolRejectDialogFragment : DialogFragment() {
         get() = _binding!!
 
     private lateinit var navController: NavController
+    private val args: CarPoolRejectDialogFragmentArgs by navArgs()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentDialogCarPoolRejectBinding.inflate(inflater, container, false)
@@ -30,7 +32,7 @@ class CarPoolRejectDialogFragment : DialogFragment() {
         navController = findNavController()
 
         binding.confirmButton.setOnClickListener {
-            val action = CarPoolRejectDialogFragmentDirections.actionCarPoolRejectDialogFragmentToCarPoolList()
+            val action = CarPoolRejectDialogFragmentDirections.actionCarPoolRejectDialogFragmentToCarPoolList(args.destinationLocation)
             navController.navigate(action)
         }
     }

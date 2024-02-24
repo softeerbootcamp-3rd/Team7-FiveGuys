@@ -1,6 +1,7 @@
 package org.softeer.robocar.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import org.softeer.robocar.data.model.CarPool
 import org.softeer.robocar.databinding.FragmentCarPoolListBinding
@@ -24,6 +26,7 @@ class CarPoolListFragment : Fragment(), CarPoolListClickListener {
     private lateinit var adapter: CarPoolAdapter
     private var _binding: FragmentCarPoolListBinding? = null
     private lateinit var navController: NavController
+    private val args: CarPoolListFragmentArgs by navArgs()
     private val binding
         get() = _binding!!
 
@@ -59,14 +62,18 @@ class CarPoolListFragment : Fragment(), CarPoolListClickListener {
     override fun onClickDetailButton(position: Int) {
         val carPool = viewModel.carPoolList.value?.carPoolList?.get(position)!!
         val originalCharge = viewModel.carPoolList.value!!.originalCharge
-        val action = CarPoolListFragmentDirections.actionCarPoolListToCarPoolRequestDetail(carPool, originalCharge)
+        Log.d("Response", "$carPool $originalCharge ${args.destinationLocation}")
+        val action = CarPoolListFragmentDirections.actionCarPoolListToCarPoolRequestDetail(
+            carPool = carPool,
+            originalCharge = originalCharge,
+            destinationLocation = args.destinationLocation
+        )
         navController.navigate(action)
     }
 
     override fun onClickRequestCarPoolButton(carPool : CarPool) {
-        // TODO 게스트 도착지 받아서 값 넣기
-        viewModel.requestCarPool(carPool, "서울 강서구 하늘길 111 국내선 주차대기실")
-        val action = CarPoolListFragmentDirections.actionCarPoolListToCarPoolRequestDialog()
+        viewModel.requestCarPool(carPool, args.destinationLocation)
+        val action = CarPoolListFragmentDirections.actionCarPoolListToCarPoolRequestDialog(args.destinationLocation)
         navController.navigate(action)
     }
 

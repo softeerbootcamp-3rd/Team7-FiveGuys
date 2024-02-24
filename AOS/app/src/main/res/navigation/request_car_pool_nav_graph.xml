@@ -16,6 +16,7 @@
             android:name="carPool" app:argType="org.softeer.robocar.data.model.CarPool"/>
         <argument
             android:name="originalCharge" app:argType="integer"/>
+        <argument android:name="destinationLocation" app:argType="string"/>
     </fragment>
 
     <fragment
@@ -27,6 +28,7 @@
                 app:destination="@id/carPoolRequestDialog"/>
         <action android:id="@+id/action_carPoolList_to_carPoolRequestDetail"
                 app:destination="@id/carPoolRequestDetail"/>
+        <argument android:name="destinationLocation" app:argType="string"/>
     </fragment>
 
     <dialog
@@ -37,6 +39,7 @@
         <action android:id="@+id/action_carPoolRequestDialog_to_carPoolRejectDialogFragment"
                 app:destination="@id/carPoolRejectDialogFragment"/>
         <action android:id="@+id/action_carPoolRequestDialog_to_mapActivity" app:destination="@id/mapActivity"/>
+        <argument android:name="destinationLocation" app:argType="string"/>
     </dialog>
 
     <fragment android:id="@+id/carPoolMatchingFragment"
@@ -45,6 +48,11 @@
               tools:layout="@layout/fragment_car_pool_matching">
         <action android:id="@+id/action_carPoolMatchingFragment_to_receivedCarPoolRequestDialogFragment"
                 app:destination="@id/receivedCarPoolRequestDialogFragment"/>
+        <argument android:name="startLocation" app:argType="string"/>
+        <argument android:name="destinationLocation" app:argType="string"/>
+        <argument android:name="countOfMen" app:argType="integer"/>
+        <argument android:name="countOfWomen" app:argType="integer"/>
+        <argument android:name="taxiType" app:argType="org.softeer.robocar.data.model.TaxiType"/>
     </fragment>
 
     <fragment android:id="@+id/rideTypeSelectionFragment"
@@ -61,7 +69,13 @@
     <fragment android:id="@+id/taxiCallFragment"
               android:name="org.softeer.robocar.ui.fragment.TaxiCallFragment"
               android:label="TaxiCallFragment"
-              tools:layout="@layout/fragment_taxi_call"/>
+              tools:layout="@layout/fragment_taxi_call">
+        <argument android:name="startLocation" app:argType="string"/>
+        <argument android:name="destinationLocation" app:argType="string"/>
+        <argument android:name="countOfMen" app:argType="integer"/>
+        <argument android:name="countOfWomen" app:argType="integer"/>
+        <argument android:name="taxiType" app:argType="org.softeer.robocar.data.model.TaxiType"/>
+    </fragment>
 
     <fragment android:id="@+id/carPoolCallFragment"
               android:name="org.softeer.robocar.ui.fragment.CarPoolCallFragment"
@@ -70,6 +84,11 @@
         <action android:id="@+id/action_carPoolCallFragment_to_noAvailableCarPoolFragment"
                 app:destination="@id/noAvailableCarPoolFragment"/>
         <action android:id="@+id/action_carPoolCallFragment_to_carPoolList" app:destination="@id/carPoolList"/>
+        <argument android:name="startLocation" app:argType="string"/>
+        <argument android:name="destinationLocation" app:argType="string"/>
+        <argument android:name="countOfMen" app:argType="integer"/>
+        <argument android:name="countOfWomen" app:argType="integer"/>
+        <argument android:name="taxiType" app:argType="org.softeer.robocar.data.model.TaxiType"/>
     </fragment>
 
     <fragment android:id="@+id/noAvailableCarPoolFragment"
@@ -95,6 +114,7 @@
             android:label="CarPoolRejectDialogFragment"
             tools:layout="@layout/fragment_dialog_car_pool_reject">
         <action android:id="@+id/action_carPoolRejectDialogFragment_to_carPoolList" app:destination="@id/carPoolList"/>
+        <argument android:name="destinationLocation" app:argType="string"/>
     </dialog>
     <activity
         android:id="@+id/mapActivity"

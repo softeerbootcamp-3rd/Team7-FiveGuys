@@ -79,7 +79,7 @@ class PathSettingFragment : Fragment(), ItemClickListener{
 
     override fun toSelectDestination(name: String, address: String){
         val action =
-            PathSettingFragmentDirections.actionPathSettingFragmentToSelectDestinationFragment(name,address)
+            PathSettingFragmentDirections.actionPathSettingFragmentToSelectDestinationFragment(name,address, viewModel.startLocation.value!!)
        findNavController().navigate(action)
     }
 }

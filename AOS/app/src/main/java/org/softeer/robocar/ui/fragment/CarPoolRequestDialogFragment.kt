@@ -14,6 +14,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import org.softeer.robocar.databinding.FragmentDialogCarPoolRequestBinding
 
 class CarPoolRequestDialogFragment : DialogFragment() {
@@ -23,6 +24,7 @@ class CarPoolRequestDialogFragment : DialogFragment() {
         get() = _binding!!
 
     private lateinit var navController: NavController
+    private val args: CarPoolRequestDialogFragmentArgs by navArgs()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentDialogCarPoolRequestBinding.inflate(inflater, container, false)
@@ -54,7 +56,7 @@ class CarPoolRequestDialogFragment : DialogFragment() {
             val type = intent?.getStringExtra("type") ?: "CAR_POOL_REJECT"
 
             if(type == "CAR_POOL_REJECT"){
-                val action = CarPoolRequestDialogFragmentDirections.actionCarPoolRequestDialogToCarPoolRejectDialogFragment()
+                val action = CarPoolRequestDialogFragmentDirections.actionCarPoolRequestDialogToCarPoolRejectDialogFragment(args.destinationLocation)
                 navController.navigate(action)
             } else {
                 val action = CarPoolRequestDialogFragmentDirections.actionCarPoolRequestDialogToMapActivity()

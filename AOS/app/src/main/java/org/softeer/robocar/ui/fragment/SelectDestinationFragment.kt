@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import org.softeer.robocar.databinding.FragmentSelectDestinationBinding
@@ -21,6 +22,7 @@ class SelectDestinationFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: MapViewModel by activityViewModels()
     private val args: SelectDestinationFragmentArgs by navArgs()
+    private lateinit var navController: NavController
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,16 +38,12 @@ class SelectDestinationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.setDestInfo(args.placeName, args.addressName)
+        navController = findNavController()
 
         binding.finishSelectDest.setOnClickListener {
-            val action =SelectDestinationFragmentDirections.actionSelectDestinationFragmentToRequestCarPoolActivity()
-            findNavController().navigate(action)
-
             val info = viewModel.emitInfo()
-            val intent = Intent(requireActivity(), RequestCarPoolActivity::class.java).apply {
-                this.putExtra("carPoolInfo",info)
-            }
-            startActivity(intent)
+            val action =SelectDestinationFragmentDirections.actionSelectDestinationFragmentToRequestCarPoolActivity(info)
+            navController.navigate(action)
         }
     }
 
