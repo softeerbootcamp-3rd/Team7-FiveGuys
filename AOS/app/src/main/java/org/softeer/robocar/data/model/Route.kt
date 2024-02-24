@@ -1,10 +1,9 @@
 package org.softeer.robocar.data.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import org.softeer.robocar.data.dto.route.response.Coordinate
 
-@Parcelize
+@Serializable
 data class Route(
     val hostId: Long,
     val guestId: Long,
@@ -15,4 +14,4 @@ data class Route(
     val vehicleModel: String,
     val hostNodes: List<Coordinate>,
     val guestNodes: List<Coordinate>
-) : Parcelable
+)

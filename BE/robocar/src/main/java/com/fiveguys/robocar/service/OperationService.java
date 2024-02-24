@@ -2,6 +2,7 @@ package com.fiveguys.robocar.service;
 
 import com.fiveguys.robocar.dto.RouteInfo;
 import com.fiveguys.robocar.dto.res.RouteResDto;
+import com.fiveguys.robocar.dto.res.RouteSoloResDto;
 import com.fiveguys.robocar.entity.Car;
 import com.fiveguys.robocar.entity.Garage;
 import com.fiveguys.robocar.models.CarState;
@@ -88,6 +89,24 @@ public class OperationService {
         );
     }
 
+    public RouteSoloResDto getOptimizedRouteSolo(String startAddress, String destAddress) {
+        Coordinate start = mapService.convertAddressToCoordinates(startAddress);
+        Coordinate dest = mapService.convertAddressToCoordinates(destAddress);
+        Garage nearestGarage = garageService.findNearestGarage(start.toString());
+        Car availableCar = carService.findAvailableCar(nearestGarage.getId());
+
+        RouteInfo routeInfo;
+        routeInfo = routeService.getRouteInfo(start.toString(), dest.toString(), null);
+
+        return new RouteSoloResDto(
+                availableCar.getCarImage(),
+                routeInfo.getDuration(),
+                availableCar.getCarNumber(),
+                availableCar.getCarName(),
+                convertCoordinatesToSoloNodes(routeInfo.getPathCoordinates()) // 수정된 부분
+        );
+    }
+
     private List<RouteResDto.Node> convertCoordinatesToNodes(List<Coordinate> coordinates) {
         List<RouteResDto.Node> nodes = coordinates.stream()
                 .map(coordinate -> new RouteResDto.Node(coordinate.getLatitude(), coordinate.getLongitude()))
@@ -95,6 +114,13 @@ public class OperationService {
         return nodes;
 
     }
+    private List<RouteSoloResDto.Node> convertCoordinatesToSoloNodes(List<Coordinate> coordinates) {
+        List<RouteSoloResDto.Node> nodes = coordinates.stream()
+                .map(coordinate -> new RouteSoloResDto.Node(coordinate.getLatitude(), coordinate.getLongitude()))
+                .collect(Collectors.toList());
+        return nodes;
+    }
+
     public void saveCarpoolRequest(CarpoolRequest a) {
         carpoolRequestRepository.save(a);
     }

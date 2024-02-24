@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,20 +27,19 @@ class SelectDestinationFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSelectDestinationBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this@SelectDestinationFragment
+        binding.mapViewModel = viewModel
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.lifecycleOwner = this@SelectDestinationFragment
-        binding.mapViewModel = viewModel
 
         viewModel.setDestInfo(args.placeName, args.addressName)
 
         binding.finishSelectDest.setOnClickListener {
-//            val action =
-//                SelectDestinationFragmentDirections.actionSelectDestinationFragmentToInternalControlFragment()
-//            findNavController().navigate(action)
+            val action =SelectDestinationFragmentDirections.actionSelectDestinationFragmentToRequestCarPoolActivity()
+            findNavController().navigate(action)
 
             val info = viewModel.emitInfo()
             val intent = Intent(requireActivity(), RequestCarPoolActivity::class.java).apply {

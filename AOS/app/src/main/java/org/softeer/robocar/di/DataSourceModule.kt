@@ -43,7 +43,9 @@ class DataSourceModule {
         placeSearchService: PlaceSearchService
     ): PlaceSearchRemoteDataSource {
         return PlaceSearchRemoteDataSourceImpl(placeSearchService)
-
+    }
+    @Provides
+    @Singleton
     fun provideAuthRemoteDataSource(
         authService: AuthService
     ): AuthRemoteDataSource {

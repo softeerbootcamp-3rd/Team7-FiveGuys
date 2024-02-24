@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-
+        <variable
+            name="dialogViewModel"
+            type="org.softeer.robocar.ui.viewmodel.ReceivedCarPoolRequestDialogViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
@@ -29,7 +31,7 @@
             android:id="@+id/nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="닉네임"
+            android:text="@{dialogViewModel.nickname}"
             android:textSize="@dimen/title_text"
             android:fontFamily="@font/pretendard_semibold"
             android:textColor="@color/black"
@@ -43,25 +45,25 @@
             android:id="@+id/countOfMen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="남성 : 2 명"
             android:textSize="@dimen/title_text"
             android:fontFamily="@font/pretendard_semibold"
             android:textColor="@color/black"
             android:layout_marginTop="24dp"
             app:layout_constraintStart_toStartOf="@id/nickname"
-            app:layout_constraintTop_toBottomOf="@id/nickname"/>
+            app:layout_constraintTop_toBottomOf="@id/nickname"
+            setCountOfRequestCarPoolMale="@{dialogViewModel.maleCount}"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/countOfWomen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="여성 : 1 명"
             android:textSize="@dimen/title_text"
             android:fontFamily="@font/pretendard_semibold"
             android:textColor="@color/black"
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="@id/countOfMen"
-            app:layout_constraintTop_toBottomOf="@id/countOfMen"/>
+            app:layout_constraintTop_toBottomOf="@id/countOfMen"
+            setCountOfRequestCarPoolFemale="@{dialogViewModel.femaleCount}"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/rejectButton"

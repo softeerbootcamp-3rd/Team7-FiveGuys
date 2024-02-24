@@ -29,20 +29,22 @@ class ServiceModule {
         @KakaoRetrofit retrofit: Retrofit
     ): PlaceSearchService = retrofit.create(PlaceSearchService::class.java)
 
+    @Singleton
+    @Provides
     fun provideAuthService(
-        retrofit: Retrofit
+        @BaseRetrofit retrofit: Retrofit
     ): AuthService = retrofit.create(AuthService::class.java)
 
     @Provides
     @Singleton
     fun provideUserService(
-        retrofit: Retrofit
+        @BaseRetrofit retrofit: Retrofit
     ): UserService = retrofit.create(UserService::class.java)
 
     @Provides
     @Singleton
     fun provideRouteService(
-        retrofit: Retrofit
+        @BaseRetrofit retrofit: Retrofit
     ): RouteService = retrofit.create(RouteService::class.java)
     
 }
