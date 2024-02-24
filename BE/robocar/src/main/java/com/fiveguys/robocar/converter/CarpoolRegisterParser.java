@@ -25,7 +25,8 @@ public class CarpoolRegisterParser {
     }
 
     @Transactional(readOnly = true)
-    public CarpoolRequest dtoToEntity(CarpoolRegisterReqDto carpoolRegisterReqDto, Long id){
+    public CarpoolRequest dtoToEntity(CarpoolRegisterReqDto carpoolRegisterReqDto, Long id, Long carId){
+
         JsonParserUtil.Coordinate coordinate;
 
         String hostDepartAddress = carpoolRegisterReqDto.getDepartAddress();
@@ -33,15 +34,12 @@ public class CarpoolRegisterParser {
         Double departLatitude = coordinate.getLatitude();
         Double departLongitude = coordinate.getLongitude();
 
-
         String hostDestAddress = carpoolRegisterReqDto.getDestAddress();
         coordinate = mapService.convertAddressToCoordinates(hostDestAddress);
         Double hostDestLatitude = coordinate.getLatitude();
         Double hostDestLongitude = coordinate.getLongitude();
-
         User user = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         String hostNickname = user.getNickname();
-
         Integer maleCount = carpoolRegisterReqDto.getMaleCount();
         Integer femaleCount = carpoolRegisterReqDto.getFemaleCount();
 
@@ -59,6 +57,7 @@ public class CarpoolRegisterParser {
                 .maleCount(maleCount)
                 .femaleCount(femaleCount)
                 .carType(carType)
+                .carId(carId)
                 .build();
         return carpoolRequest;
     }

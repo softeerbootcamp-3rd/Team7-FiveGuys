@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="mapViewModel"
+            type="org.softeer.robocar.ui.viewmodel.MapViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -61,6 +63,7 @@
             android:background="@drawable/rectangle_gray_200_radius_12"
             android:fontFamily="@font/pretendard_semibold"
             android:hint="@string/default_edit_destination"
+            android:text="@={mapViewModel.keyWord}"
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:paddingStart="40dp"
@@ -98,6 +101,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/editDestination" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/placeList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_place"
+            app:layout_constraintTop_toBottomOf="@id/pathSettingDivider"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

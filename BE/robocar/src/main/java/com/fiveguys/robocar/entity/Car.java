@@ -1,7 +1,9 @@
 package com.fiveguys.robocar.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fiveguys.robocar.models.CarState;
+import com.fiveguys.robocar.models.CarType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,12 +18,15 @@ public class Car {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "garageId")
     private Garage garage;
 
     @Enumerated(EnumType.STRING)
     private CarState state;
+    @Enumerated(EnumType.STRING)
+    private CarType carType;
     private Integer seatTemperature;
     private Integer ventilationLevel;
     private Integer airConditionerTemperature;
@@ -42,5 +47,6 @@ public class Car {
         this.carImage = carImage;
         this.carNumber = carNumber;
     }
+    public void editCarState(CarState state){this.state = state;}
 
 }

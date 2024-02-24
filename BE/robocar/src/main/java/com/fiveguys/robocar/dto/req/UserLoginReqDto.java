@@ -1,5 +1,6 @@
 package com.fiveguys.robocar.dto.req;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -17,4 +18,8 @@ public class UserLoginReqDto {
     @Size(max = 50)
     @NotBlank
     String password;
+
+    @JsonProperty("FCMToken")
+    @NotBlank
+    String clientToken;
 }
