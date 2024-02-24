@@ -3,7 +3,7 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/request_car_pool_nav_graph"
             xmlns:tools="http://schemas.android.com/tools"
-            app:startDestination="@id/carPoolList">
+            app:startDestination="@id/rideTypeSelectionFragment">
 
     <fragment
         android:id="@+id/carPoolRequestDetail"
@@ -33,6 +33,73 @@
         android:id="@+id/carPoolRequestDialog"
         android:name="org.softeer.robocar.ui.fragment.CarPoolRequestDialogFragment"
         android:label="CarPoolRequestDialogFragment"
-        tools:layout="@layout/fragment_dialog_car_pool_request"/>
+        tools:layout="@layout/fragment_dialog_car_pool_request">
+        <action android:id="@+id/action_carPoolRequestDialog_to_carPoolRejectDialogFragment"
+                app:destination="@id/carPoolRejectDialogFragment"/>
+        <action android:id="@+id/action_carPoolRequestDialog_to_mapActivity" app:destination="@id/mapActivity"/>
+    </dialog>
+
+    <fragment android:id="@+id/carPoolMatchingFragment"
+              android:name="org.softeer.robocar.ui.fragment.CarPoolMatchingFragment"
+              android:label="CarPoolMatchingFragment"
+              tools:layout="@layout/fragment_car_pool_matching">
+        <action android:id="@+id/action_carPoolMatchingFragment_to_receivedCarPoolRequestDialogFragment"
+                app:destination="@id/receivedCarPoolRequestDialogFragment"/>
+    </fragment>
+
+    <fragment android:id="@+id/rideTypeSelectionFragment"
+              android:name="org.softeer.robocar.ui.fragment.RideTypeSelectionFragment"
+              android:label="RideTypeSelectionFragment">
+        <action android:id="@+id/action_rideTypeSelectionFragment_to_carPoolMatchingFragment"
+                app:destination="@id/carPoolMatchingFragment"/>
+        <action android:id="@+id/action_rideTypeSelectionFragment_to_taxiCallFragment"
+                app:destination="@id/taxiCallFragment"/>
+        <action android:id="@+id/action_rideTypeSelectionFragment_to_carPoolCallFragment"
+                app:destination="@id/carPoolCallFragment"/>
+    </fragment>
+
+    <fragment android:id="@+id/taxiCallFragment"
+              android:name="org.softeer.robocar.ui.fragment.TaxiCallFragment"
+              android:label="TaxiCallFragment"
+              tools:layout="@layout/fragment_taxi_call"/>
+
+    <fragment android:id="@+id/carPoolCallFragment"
+              android:name="org.softeer.robocar.ui.fragment.CarPoolCallFragment"
+              android:label="CarPoolCallFragment"
+              tools:layout="@layout/fragment_car_pool_call">
+        <action android:id="@+id/action_carPoolCallFragment_to_noAvailableCarPoolFragment"
+                app:destination="@id/noAvailableCarPoolFragment"/>
+        <action android:id="@+id/action_carPoolCallFragment_to_carPoolList" app:destination="@id/carPoolList"/>
+    </fragment>
+
+    <fragment android:id="@+id/noAvailableCarPoolFragment"
+              android:name="org.softeer.robocar.ui.fragment.NoAvailableCarPoolFragment"
+              android:label="NoAvailableCarPoolFragment"
+              tools:layout="@layout/fragment_no_available_car_pool"/>
+
+    <dialog android:id="@+id/receivedCarPoolRequestDialogFragment"
+            android:name="org.softeer.robocar.ui.fragment.ReceivedCarPoolRequestDialogFragment"
+            android:label="ReceivedCarPoolRequestDialogFragment"
+            tools:layout="@layout/fragment_dialog_received_car_pool_request">
+        <argument android:name="guestId" app:argType="long"/>
+        <argument android:name="guestAddress" app:argType="string"/>
+        <argument android:name="maleCount" app:argType="integer"/>
+        <argument android:name="femaleCount" app:argType="integer"/>
+        <argument android:name="nickname" app:argType="string"/>
+        <action android:id="@+id/action_receivedCarPoolRequestDialogFragment_to_mapActivity"
+                app:destination="@id/mapActivity"/>
+    </dialog>
+
+    <dialog android:id="@+id/carPoolRejectDialogFragment"
+            android:name="org.softeer.robocar.ui.fragment.CarPoolRejectDialogFragment"
+            android:label="CarPoolRejectDialogFragment"
+            tools:layout="@layout/fragment_dialog_car_pool_reject">
+        <action android:id="@+id/action_carPoolRejectDialogFragment_to_carPoolList" app:destination="@id/carPoolList"/>
+    </dialog>
+    <activity
+        android:id="@+id/mapActivity"
+        android:name="org.softeer.robocar.ui.activity.MapActivity"
+        android:label="MapActivity"
+        tools:layout="@layout/activity_map"/>
 
 </navigation>

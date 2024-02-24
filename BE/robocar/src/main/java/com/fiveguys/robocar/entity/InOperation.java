@@ -31,12 +31,20 @@ public class InOperation {
 
     private LocalDateTime estimatedGuestArrivalTime;
 
-
     private Long carId;
 
     private Long hostId;
 
     private Long guestId;
 
+    private boolean guestOnBoard;
 
+    private boolean hostOnBoard;
+
+    public void editHostOnBoard(boolean hostOnBoard) {
+        this.hostOnBoard = hostOnBoard;
+    }
+    public void editGustOnBoard(boolean guestOnBoard) {
+        this.guestOnBoard = guestOnBoard;
+    }
 }

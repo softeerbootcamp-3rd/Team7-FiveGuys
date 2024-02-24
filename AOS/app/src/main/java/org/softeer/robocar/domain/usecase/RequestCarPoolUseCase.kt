@@ -8,8 +8,9 @@ class RequestCarPoolUseCase @Inject constructor(
     private val repository: CarPoolRepository
 ) {
     suspend operator fun invoke(
-        carPool: CarPool
+        carPool: CarPool,
+        guestDestination: String
     ): Result<Unit> {
-        return repository.requestCarPool(carPool)
+        return repository.requestCarPool(carPool, guestDestination)
     }
 }

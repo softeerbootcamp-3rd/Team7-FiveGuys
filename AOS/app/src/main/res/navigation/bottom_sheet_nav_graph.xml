@@ -23,6 +23,8 @@
         <action
             android:id="@+id/action_selectDestinationFragment_to_internalControlFragment"
             app:destination="@id/internalControlFragment" />
+        <action android:id="@+id/action_selectDestinationFragment_to_requestCarPoolActivity"
+                app:destination="@id/requestCarPoolActivity"/>
         <argument
             android:name="placeName"
             app:argType="string" />
@@ -36,5 +38,8 @@
         android:name="org.softeer.robocar.ui.fragment.InternalControlFragment"
         android:label="InternalControlFragment"
         tools:layout="@layout/fragment_internal_control"/>
+    <activity android:id="@+id/requestCarPoolActivity"
+              android:name="org.softeer.robocar.ui.activity.RequestCarPoolActivity"
+              android:label="RequestCarPoolActivity"/>
 
 </navigation>

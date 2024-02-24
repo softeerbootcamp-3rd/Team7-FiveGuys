@@ -7,9 +7,10 @@ import kotlinx.serialization.Serializable
 data class RequestCarPoolRequest(
     @SerialName("hostId")
     val carPoolId: Long,
-    val nickname: String,
     @SerialName("maleCount")
     val countOfMale: Int,
     @SerialName("femaleCount")
-    val countOfFemale: Int
+    val countOfFemale: Int,
+    @SerialName("guestDestAddress")
+    val guestDestinationLocation: String,
 )

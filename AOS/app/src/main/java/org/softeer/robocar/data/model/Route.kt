@@ -1,9 +1,7 @@
 package org.softeer.robocar.data.model
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.softeer.robocar.data.dto.route.response.Coordinate
-
 
 @Serializable
 data class Route(

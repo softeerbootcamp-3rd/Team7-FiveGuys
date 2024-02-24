@@ -72,6 +72,8 @@ class OperationServiceTest {
                 .femaleCount(0)
                 .carType(CarType.SMALL)
                 .carId(3L)
+                .isLocked(false)
+                .timeToLive(360000L)
                 .build();
         service.saveCarpoolRequest(carpoolRequest);
         service.saveCarpoolRequest(carpoolRequest2);

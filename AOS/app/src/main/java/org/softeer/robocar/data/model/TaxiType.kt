@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-enum class TaxiType : Parcelable {
-    COMPACT_TAXI,
-    MID_SIZE_TAXI,
+enum class TaxiType(val size: String) : Parcelable {
+    COMPACT_TAXI("SMALL"),
+    MID_SIZE_TAXI("MEDIUM"),
 }
