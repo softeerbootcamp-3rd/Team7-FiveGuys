@@ -35,8 +35,7 @@
     <string name="new_password_warning_message">입력하신 비밀번호와 일치하지 않습니다.</string>
     <string name="nickname_warning_message">이미 존재하는 닉네임입니다.</string>
     <string name="head_check">탑승인원</string>
-    <string name="count_male">0명</string>
-    <string name="count_female">0명</string>
+    <string name="count_passenger">%s 명</string>
     <string name="male">남성</string>
     <string name="female">여성</string>
     <string name="finish_head_count">확인</string>

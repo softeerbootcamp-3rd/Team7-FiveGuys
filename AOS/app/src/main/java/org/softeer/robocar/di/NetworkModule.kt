@@ -13,7 +13,16 @@ import org.softeer.robocar.utils.interceptor.ParseResponseDataInterceptor
 import org.softeer.robocar.utils.interceptor.ResponseLoggingInterceptor
 import org.softeer.robocar.utils.interceptor.TokenAuthenticator
 import retrofit2.Retrofit
+import javax.inject.Qualifier
 import javax.inject.Singleton
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class BaseRetrofit
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class KakaoRetrofit
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -31,6 +40,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
+    @BaseRetrofit
     fun provideRetrofit(
         okHttpClient: OkHttpClient
     ) : Retrofit{
@@ -41,4 +51,13 @@ class NetworkModule {
             .build()
     }
 
+    @Provides
+    @Singleton
+    @KakaoRetrofit
+    fun provideRetrofitKakao(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://dapi.kakao.com/")
+            .addConverterFactory(Json.asConverterFactory(("application/json").toMediaType()))
+            .build()
+    }
 }

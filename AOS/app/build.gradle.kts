@@ -28,13 +28,15 @@ android {
         val properties = Properties().apply {
             load(File(rootDir, "local.properties").inputStream())
         }
-        val kakao_native_app_key = properties["kakao_native_app_key"] as String
 
-        // 읽어온 API 키를 manifest placeholder에 설정
-        manifestPlaceholders["kakao_native_app_key"] = kakao_native_app_key
+        val kakaoNativeAppKey = properties["kakao_native_app_key"] as String
+        manifestPlaceholders["kakao_native_app_key"] = kakaoNativeAppKey
 
         val baseUrl = properties["BASE_URL"] as String
         buildConfigField("String", "BASE_URL", baseUrl)
+
+        val kakaoRestApiKey = properties["kakao_rest_api_key"] as String
+        buildConfigField("String","kakao_rest_api_key",kakaoRestApiKey)
     }
 
     buildTypes {
@@ -69,6 +71,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -89,13 +92,15 @@ dependencies {
 
     // Glide 라이브러리
     implementation("com.github.bumptech.glide:glide:4.16.0")
-    // Glide를 사용하기 위한 어노테이션 프로세서
-    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("com.google.firebase:firebase-inappmessaging-display-ktx")
+
+    // Glide를 사용하기 위한 어노테이션 프로세서 (Kotlin 프로젝트용으로 변경)
+    kapt("com.github.bumptech.glide:compiler:4.16.0")
+    
 }
 
 kapt {

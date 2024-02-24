@@ -14,6 +14,7 @@
             android:id="@+id/action_pathSettingFragment_to_selectDestinationFragment"
             app:destination="@id/selectDestinationFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/selectDestinationFragment"
         android:name="org.softeer.robocar.ui.fragment.SelectDestinationFragment"
@@ -24,7 +25,14 @@
             app:destination="@id/internalControlFragment" />
         <action android:id="@+id/action_selectDestinationFragment_to_requestCarPoolActivity"
                 app:destination="@id/requestCarPoolActivity"/>
+        <argument
+            android:name="placeName"
+            app:argType="string" />
+        <argument
+            android:name="addressName"
+            app:argType="string" />
     </fragment>
+
     <fragment
         android:id="@+id/internalControlFragment"
         android:name="org.softeer.robocar.ui.fragment.InternalControlFragment"

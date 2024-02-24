@@ -25,6 +25,7 @@ public enum ResponseStatus {
     USER_CREATE_OK(CREATED,"회원가입성공"),
     USER_WRONG_PASSWORD(BAD_REQUEST,"비밀번호가 틀렸습니다"),
     USER_WRONG_LOGIN_INFO(BAD_REQUEST,"아이디 혹은 비밀번호가 틀렸습니다"),
+    CLIENT_TOKEN_NOT_EXIST(BAD_REQUEST, "타켓 유저의 FCM 토큰이 존재하지 않습니다"),
 
     // 동승 관련
     CARPOOL_NOT_FOUND(BAD_REQUEST,"이미 삭제된 동승 정보입니다"),
@@ -48,6 +49,12 @@ public enum ResponseStatus {
     // 외부 api호출
     EXTERNAL_SERVICE_ERROR(INTERNAL_SERVER_ERROR, "외부 서비스 호출 중 오류가 발생했습니다."),
     ADDRESS_TO_COORDINATE_CONVERSION_FAILED(BAD_REQUEST, "주소를 좌표로 변환할 수 없습니다."),
+
+    // 운행중 관련
+    OPERATION_NOT_FOUND(BAD_REQUEST, "찾을수 없는 운행정보 입니다."),
+
+    // 경로관련
+    ROUTE_NOT_FOUND(BAD_REQUEST, "찾을수 없는 경로정보 입니다."),
 
     // 테스트용
     TEST_EXCEPTION(BAD_REQUEST, "Error 테스트");

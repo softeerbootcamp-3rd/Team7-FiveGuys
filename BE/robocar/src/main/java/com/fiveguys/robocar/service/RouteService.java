@@ -31,7 +31,7 @@ public class RouteService {
 
             return new RouteInfo(duration, taxiFare, pathCoordinates);
         } else {
-            throw new GeneralException(ResponseStatus._BAD_REQUEST);
+            throw new GeneralException(ResponseStatus.ROUTE_NOT_FOUND);
         }
     }
 }

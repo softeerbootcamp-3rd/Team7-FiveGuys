@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -24,25 +23,20 @@ public class InOperation {
 
     private String departureAddress;
 
-    private String departureCoordinate;
+    private String hostDestAddress;
 
-    private String hostDestCoordinate;
-
-    private String guestDestCoordinate;
+    private String guestDestAddress;
 
     private LocalDateTime estimatedHostArrivalTime;
 
     private LocalDateTime estimatedGuestArrivalTime;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "carId")
-    private Car car;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hostId")
-    private User host;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "guestId")
-    private User guest;
+
+    private Long carId;
+
+    private Long hostId;
+
+    private Long guestId;
 
 
 }

@@ -34,6 +34,15 @@ jobs:
         run: |
           mkdir -p $YML_DIR
           echo "$YML" | base64 --decode > $YML_DIR/$YML_FILE_NAME
+          
+      - name: Create Secret.json in project resource path
+        env:
+          FCM_JSON: ${{ secrets.FCM_JSON }}
+          FCM_JSON_DIR: ./BE/robocar/src/main/resources/firebase
+          FCM_JSON_FILE_NAME: robocar.json
+        run: |
+          mkdir -p $FCM_JSON_DIR
+          echo "$FCM_JSON" | base64 --decode > $FCM_JSON_DIR/$FCM_JSON_FILE_NAME
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./BE/robocar/gradlew

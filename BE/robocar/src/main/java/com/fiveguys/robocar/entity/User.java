@@ -30,4 +30,5 @@ public class User {
     public void editPassword(String password) {
         this.password = password;
     }
+    public void editClientToken(String clientToken){this.clientToken = clientToken; }
 }

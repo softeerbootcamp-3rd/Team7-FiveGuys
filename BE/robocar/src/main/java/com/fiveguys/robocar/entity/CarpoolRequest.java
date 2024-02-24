@@ -28,5 +28,6 @@ public class CarpoolRequest {
     private Integer femaleCount;
 
     private CarType carType;
+    private Long carId;
 
 }
