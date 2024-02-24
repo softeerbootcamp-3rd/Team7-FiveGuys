@@ -4,6 +4,7 @@ import com.fiveguys.robocar.apiPayload.ResponseApi;
 import com.fiveguys.robocar.apiPayload.ResponseStatus;
 import com.fiveguys.robocar.dto.req.CarpoolRequestDto;
 import com.fiveguys.robocar.dto.res.InOperationDto;
+import com.fiveguys.robocar.dto.res.OnBoardDto;
 import com.fiveguys.robocar.dto.res.RouteResDto;
 import com.fiveguys.robocar.service.FirebaseCloudMessageService;
 import com.fiveguys.robocar.service.OperationService;
@@ -187,18 +188,18 @@ public class OperationController {
     })
     @GetMapping("/operations/onboard")
     public ResponseEntity checkOnBoard(@RequestParam Long inOperationId, @Auth Long id) {
-        boolean isOnboard;
+        OnBoardDto onboardDto;
         try {
-            isOnboard = operationService.checkOnBoard(inOperationId, id);
+            onboardDto = new OnBoardDto(operationService.checkOnBoard(inOperationId, id));
         } catch (EntityNotFoundException e){
             return ResponseApi.of(ResponseStatus._BAD_REQUEST);
         } catch(Exception e){
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
-        return ResponseApi.ok(isOnboard);
+        return ResponseApi.ok(onboardDto);
     }
 
-    @Operation(summary = "운행중인지 확인")
+    @Operation(summary = "운행 종료후 운행 상태 변경")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "요청 성공"),
             @ApiResponse(responseCode = "400", description = "없는 유저 혹은 운행정보"),
@@ -206,7 +207,6 @@ public class OperationController {
     })
     @PostMapping("/operations/onboard")
     public ResponseEntity leaveOnBoard(@RequestParam Long inOperationId, @Auth Long id) {
-        String data = null;
         try {
             operationService.leaveOnBoard(inOperationId, id);
         } catch (EntityNotFoundException e){
@@ -214,7 +214,7 @@ public class OperationController {
         } catch(Exception e){
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
-        return ResponseApi.ok(data);
+        return ResponseApi.ok(null);
     }
 
 }
