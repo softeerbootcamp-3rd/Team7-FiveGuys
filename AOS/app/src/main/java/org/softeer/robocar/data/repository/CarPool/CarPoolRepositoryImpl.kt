@@ -1,7 +1,7 @@
 package org.softeer.robocar.data.repository.CarPool
 
-import org.softeer.robocar.data.dto.carpool.request.RejectCarPoolRequest
 import org.softeer.robocar.data.dto.carpool.request.registerCarPoolRequest
+import org.softeer.robocar.data.dto.carpool.response.AcceptCarPoolResponse
 import org.softeer.robocar.data.mapper.toRequestCarPool
 import org.softeer.robocar.data.model.CarPool
 import org.softeer.robocar.data.model.CarPools
@@ -48,6 +48,16 @@ class CarPoolRepositoryImpl @Inject constructor(
     ): Result<Unit> {
         return dataSource.rejectCarPoolRequest(
             guestId
+        )
+    }
+
+    override suspend fun acceptCarPoolRequest(
+        guestId: Long,
+        guestDestination: String
+    ): Result<AcceptCarPoolResponse> {
+        return dataSource.acceptCarPoolRequest(
+            guestId,
+            guestDestination
         )
     }
 

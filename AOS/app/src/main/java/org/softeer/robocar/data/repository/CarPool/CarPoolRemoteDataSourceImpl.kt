@@ -1,8 +1,8 @@
 package org.softeer.robocar.data.repository.CarPool
 
-import org.softeer.robocar.data.dto.carpool.request.RejectCarPoolRequest
 import org.softeer.robocar.data.dto.carpool.request.RequestCarPoolRequest
 import org.softeer.robocar.data.dto.carpool.request.registerCarPoolRequest
+import org.softeer.robocar.data.dto.carpool.response.AcceptCarPoolResponse
 import org.softeer.robocar.data.mapper.toCarPools
 import org.softeer.robocar.data.model.CarPools
 import org.softeer.robocar.data.service.CarPool.CarPoolService
@@ -52,6 +52,18 @@ class CarPoolRemoteDataSourceImpl @Inject constructor(
         return runCatching {
             carPoolService.rejectCarPoolRequest(
                 guestId
+            )
+        }
+    }
+
+    override suspend fun acceptCarPoolRequest(
+        guestId: Long,
+        guestDestination: String
+    ): Result<AcceptCarPoolResponse> {
+        return runCatching {
+            carPoolService.acceptCarPoolRequest(
+                guestId = guestId,
+                guestDestination =  guestDestination
             )
         }
     }
