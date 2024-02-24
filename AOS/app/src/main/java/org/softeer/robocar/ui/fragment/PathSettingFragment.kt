@@ -7,18 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import org.softeer.robocar.data.model.PlaceItem
 import org.softeer.robocar.databinding.FragmentPathSettingBinding
 import org.softeer.robocar.ui.adapter.ItemClickListener
 import org.softeer.robocar.ui.adapter.PlaceSearchAdapter
 import org.softeer.robocar.ui.viewmodel.MapViewModel
-import org.softeer.robocar.ui.viewmodel.PathSettingViewModel
 
 @AndroidEntryPoint
 class PathSettingFragment : Fragment(), ItemClickListener{

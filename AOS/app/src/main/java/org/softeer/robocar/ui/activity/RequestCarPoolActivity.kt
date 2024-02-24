@@ -2,6 +2,7 @@ package org.softeer.robocar.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.databinding.DataBindingUtil
 import dagger.hilt.android.AndroidEntryPoint
 import org.softeer.robocar.R
@@ -16,6 +17,8 @@ class RequestCarPoolActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_request_car_pool)
         setStatusBarTransparent(window)
+
+        println(intent.getParcelableExtra<Parcelable?>("carPoolInfo").toString())
 
         binding.backButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()

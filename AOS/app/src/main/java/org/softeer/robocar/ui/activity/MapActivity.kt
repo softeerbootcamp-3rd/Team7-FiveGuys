@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.navArgs
 import com.kakao.vectormap.*
 import com.kakao.vectormap.camera.CameraAnimation
 import com.kakao.vectormap.camera.CameraUpdateFactory
@@ -23,28 +24,29 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softeer.robocar.R
 import org.softeer.robocar.databinding.ActivityMapBinding
 import org.softeer.robocar.ui.fragment.HeadcountDialogFragment
-import java.util.*
 import com.kakao.vectormap.LatLng;
 import com.kakao.vectormap.label.Label
 import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
-import org.softeer.robocar.ui.viewmodel.RouteViewModel
-
+import org.softeer.robocar.ui.viewmodel.MapViewModel
 
 @AndroidEntryPoint
 class MapActivity : AppCompatActivity() {
+    private val args: MapActivityArgs by navArgs()
     private lateinit var binding: ActivityMapBinding
     private lateinit var mapView: MapView
     private lateinit var locationManager: LocationManager
     private var kakaoMap: KakaoMap? = null
-    private var currentLocation: android.location.Location? = null
-    private val routeViewModel: RouteViewModel by viewModels()
+    private var currentLocation: Location? = null
+    private val mapViewModel: MapViewModel by viewModels()
     private var currentLocationLabel: Label? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_map)
+
+        mapViewModel.setPassengerType(args.taxiType,args.carPoolType)
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
@@ -67,14 +69,14 @@ class MapActivity : AppCompatActivity() {
                 observeRouteData() // 경로 데이터 관찰 시작
             }
         })
-        routeViewModel.getOptimizedRoute("영등포동5가 34-1", "서울특별시 강남구 학동로 180", "분당구 정자동 50-3", 1, 2)
+        mapViewModel.getOptimizedRoute("영등포동5가 34-1", "서울특별시 강남구 학동로 180", "분당구 정자동 50-3", 1, 2)
         HeadcountDialogFragment().show(supportFragmentManager, "headCount")
         setupCurrentLocationButton()
     }
 
     // 경로 데이터 관찰 및 경로 그리기
     private fun observeRouteData() {
-        routeViewModel.route.observe(this) { route ->
+        mapViewModel.route.observe(this) { route ->
             route?.let {
                 drawRoute(kakaoMap!!, it.guestNodes) // API 호출 결과에 따라 hostNodes 또는 guestNodes 사용
             }
