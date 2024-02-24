@@ -3,6 +3,7 @@ package com.fiveguys.robocar.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fiveguys.robocar.models.CarState;
+import com.fiveguys.robocar.models.CarType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,6 +25,7 @@ public class Car {
 
     @Enumerated(EnumType.STRING)
     private CarState state;
+    private CarType carType;
     private Integer seatTemperature;
     private Integer ventilationLevel;
     private Integer airConditionerTemperature;

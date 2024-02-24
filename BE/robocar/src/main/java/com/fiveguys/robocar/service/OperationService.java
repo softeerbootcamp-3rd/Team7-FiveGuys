@@ -112,10 +112,8 @@ public class OperationService {
         Garage garage = garageService.findNearestGarage(start.toString());
         if(garage == null)
             throw new IllegalArgumentException();
-        System.out.println("[[");
-        System.out.println(garage.getId());
+
         Car car = carService.findAvailableCar(garage.getId());
-        System.out.println("]]");
         if(car == null)
             throw new IllegalArgumentException();
 
