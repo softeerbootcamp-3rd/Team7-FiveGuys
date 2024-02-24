@@ -64,7 +64,7 @@ public class OperationController {
     public HttpEntity carpoolReject(@Auth Long hostId, @RequestParam Long guestId) throws JSONException {
         String response = null;
         try {
-            response = fcmService.pushCarpoolReject(guestId);
+            response = fcmService.pushCarpoolReject(guestId, hostId);
         } catch (EntityNotFoundException e) {
             return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
         } catch (NoSuchElementException e) {

@@ -181,11 +181,10 @@ public class OperationService {
 //                .estimatedGuestArrivalTime()
                 .build();
 
-        //리턴값 필요함( 호스트에게 )
         Long inOperationId = inOperationRepository.save(inOperation).getId();
 
         firebaseCloudMessageService.pushCarpoolAccept(guestId,inOperationId);
-        // 삭제 전, 락 해제해야 할 수도 있음
+
         carpoolRequestRepository.deleteById(String.valueOf(id));
 
         return inOperationId;
@@ -198,8 +197,7 @@ public class OperationService {
         carpoolRequestRepository.deleteById(String.valueOf(id));
         Car car = carRepository.findById(carpoolRequest.getCarId()).orElseThrow(Exception::new);
         car.editCarState(CarState.READY);
-        //TODO
-        // 락 해제
+
         carRepository.save(car);
     }
 
