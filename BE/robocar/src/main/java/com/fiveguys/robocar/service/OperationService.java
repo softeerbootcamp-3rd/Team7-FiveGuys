@@ -120,7 +120,7 @@ public class OperationService {
 
         car.editCarState(CarState.HOLD);
         carRepository.save(car);
-        CarpoolRequest carpoolRequest = carpoolRegisterParser.dtoToEntity(carpoolRegisterReqDto, id);
+        CarpoolRequest carpoolRequest = carpoolRegisterParser.dtoToEntity(carpoolRegisterReqDto, id,car.getId());
         carpoolRequestRepository.save(carpoolRequest);
     }
 

@@ -25,7 +25,7 @@ public class CarpoolRegisterParser {
     }
 
     @Transactional(readOnly = true)
-    public CarpoolRequest dtoToEntity(CarpoolRegisterReqDto carpoolRegisterReqDto, Long id){
+    public CarpoolRequest dtoToEntity(CarpoolRegisterReqDto carpoolRegisterReqDto, Long id, Long carId){
 
         JsonParserUtil.Coordinate coordinate;
 
@@ -57,6 +57,7 @@ public class CarpoolRegisterParser {
                 .maleCount(maleCount)
                 .femaleCount(femaleCount)
                 .carType(carType)
+                .carId(carId)
                 .build();
         return carpoolRequest;
     }

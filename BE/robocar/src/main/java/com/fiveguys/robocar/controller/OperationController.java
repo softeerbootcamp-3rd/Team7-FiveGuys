@@ -3,6 +3,7 @@ package com.fiveguys.robocar.controller;
 import com.fiveguys.robocar.apiPayload.ResponseApi;
 import com.fiveguys.robocar.apiPayload.ResponseStatus;
 import com.fiveguys.robocar.dto.req.CarpoolRequestDto;
+import com.fiveguys.robocar.dto.res.InOperationDto;
 import com.fiveguys.robocar.dto.res.RouteResDto;
 import com.fiveguys.robocar.service.FirebaseCloudMessageService;
 import com.fiveguys.robocar.service.OperationService;
@@ -157,7 +158,7 @@ public class OperationController {
         } catch (Exception e) {
             return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
         }
-        return ResponseApi.ok(inOperationId);
+        return ResponseApi.ok(new InOperationDto(inOperationId));
     }
 
     @Operation(summary = "호스트가 매칭을 취소")
