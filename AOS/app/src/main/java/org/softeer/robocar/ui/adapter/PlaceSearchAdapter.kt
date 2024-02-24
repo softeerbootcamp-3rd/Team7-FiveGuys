@@ -47,13 +47,12 @@ class PlaceViewHolder(
         with(binding) {
             itemTitle.text = place.place_name
             placeItem.setOnClickListener {
-                val placeItem = PlaceItem(place.place_name,place.address_name)
-                itemClickListener.toSelectDestination(placeItem)
+                itemClickListener.toSelectDestination(place.place_name,place.address_name)
             }
         }
     }
 }
 
 interface ItemClickListener {
-    fun toSelectDestination(placeItem: PlaceItem)
+    fun toSelectDestination(name: String, address: String)
 }

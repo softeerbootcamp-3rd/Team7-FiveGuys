@@ -20,14 +20,15 @@
         android:name="org.softeer.robocar.ui.fragment.SelectDestinationFragment"
         android:label="SelectDestinationFragment"
         tools:layout="@layout/fragment_select_destination">
-        <argument
-            android:name="placeItem"
-            app:argType="org.softeer.robocar.data.model.PlaceItem"
-            app:nullable="true"
-            android:defaultValue="@null" />
         <action
             android:id="@+id/action_selectDestinationFragment_to_internalControlFragment"
             app:destination="@id/internalControlFragment" />
+        <argument
+            android:name="placeName"
+            app:argType="string" />
+        <argument
+            android:name="addressName"
+            app:argType="string" />
     </fragment>
 
     <fragment

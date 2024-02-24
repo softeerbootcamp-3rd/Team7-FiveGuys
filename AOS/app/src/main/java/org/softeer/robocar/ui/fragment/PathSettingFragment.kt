@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -16,13 +17,14 @@ import org.softeer.robocar.data.model.PlaceItem
 import org.softeer.robocar.databinding.FragmentPathSettingBinding
 import org.softeer.robocar.ui.adapter.ItemClickListener
 import org.softeer.robocar.ui.adapter.PlaceSearchAdapter
+import org.softeer.robocar.ui.viewmodel.MapViewModel
 import org.softeer.robocar.ui.viewmodel.PathSettingViewModel
 
 @AndroidEntryPoint
 class PathSettingFragment : Fragment(), ItemClickListener{
     private var _binding: FragmentPathSettingBinding? = null
     private val binding get() = _binding!!
-    private val viewModel:PathSettingViewModel by viewModels()
+    private val viewModel: MapViewModel by activityViewModels()
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PlaceSearchAdapter
 
@@ -32,7 +34,7 @@ class PathSettingFragment : Fragment(), ItemClickListener{
     ): View {
         _binding = FragmentPathSettingBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = this@PathSettingFragment
-            pathSettingViewModel = viewModel
+            mapViewModel = viewModel
         }
         return binding.root
     }
@@ -75,9 +77,9 @@ class PathSettingFragment : Fragment(), ItemClickListener{
         }
     }
 
-    override fun toSelectDestination(placeItem: PlaceItem){
+    override fun toSelectDestination(name: String, address: String){
         val action =
-            PathSettingFragmentDirections.actionPathSettingFragmentToSelectDestinationFragment(placeItem)
+            PathSettingFragmentDirections.actionPathSettingFragmentToSelectDestinationFragment(name,address)
        findNavController().navigate(action)
     }
 }

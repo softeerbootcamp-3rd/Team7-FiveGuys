@@ -2,18 +2,8 @@ package org.softeer.robocar.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.ViewGroup.MarginLayoutParams
-import android.view.inputmethod.EditorInfo
-import androidx.activity.enableEdgeToEdge
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isVisible
-import androidx.core.view.updateLayoutParams
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.add
-import androidx.fragment.app.commit
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.MapLifeCycleCallback
@@ -22,16 +12,20 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softeer.robocar.R
 import org.softeer.robocar.databinding.ActivityMapBinding
 import org.softeer.robocar.ui.fragment.HeadcountDialogFragment
-import org.softeer.robocar.ui.fragment.PathSettingFragment
+import org.softeer.robocar.ui.viewmodel.MapViewModel
 
 @AndroidEntryPoint
 class MapActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMapBinding
     private lateinit var mapView: MapView
+    private val viewModel: MapViewModel by viewModels()
+
+    //TODO: home에서 넘어오는 정보 처리
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_map)
+        binding.mapViewModel = viewModel
 
         mapView = binding.mapView
         mapView.start(object : MapLifeCycleCallback() {

@@ -5,6 +5,12 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class PlaceItem (
-    val place_name: String,
-    val road_address_name: String, // 전체 도로명 주소
+    val taxiType: String,
+    val carPoolType: String,
+    val countMale: String,
+    val countFemale: String,
+    val departureName: String,
+    val departureRoadAddressName: String,
+    val destName: String,
+    val destRoadAddressName: String,
 ): Parcelable

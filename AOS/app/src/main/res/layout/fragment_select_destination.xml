@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="selectDestinationViewModel"
-            type="org.softeer.robocar.ui.viewmodel.SelectDestinationViewModel" />
+            name="mapViewModel"
+            type="org.softeer.robocar.ui.viewmodel.MapViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:text="@{selectDestinationViewModel.destName}"
+            android:text="@{mapViewModel.destName}"
             android:fontFamily="@font/pretendard_semibold"
             android:textColor="@color/black"
             android:textSize="@dimen/title_text"
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:text="@{selectDestinationViewModel.destRoadAddress}"
+            android:text="@{mapViewModel.destRoadAddress}"
             android:fontFamily="@font/pretendard_semibold"
             android:textColor="@color/gray_700"
             android:textSize="@dimen/content_sub_text"

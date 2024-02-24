@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="mapViewModel"
+            type="org.softeer.robocar.ui.viewmodel.MapViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -72,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="false"
                 android:fontFamily="@font/pretendard_semibold"
-                android:text="@string/count_male"
+                android:text="@{@string/count_passenger(mapViewModel.countMale)}"
                 android:textSize="16sp"
                 android:textColor="@color/black" />
 
@@ -134,7 +136,7 @@
                 android:minWidth="88dp"
                 android:clickable="false"
                 android:fontFamily="@font/pretendard_semibold"
-                android:text="@string/count_female"
+                android:text="@{@string/count_passenger(mapViewModel.countFemale)}"
                 android:textSize="16sp"
                 android:textColor="@color/black" />
 
