@@ -118,3 +118,15 @@ fun setCarPoolTypeRadioButton(button: AppCompatImageButton, carPoolType: CarPool
         }
     }
 }
+
+@BindingAdapter("setCountOfRequestCarPoolMale")
+fun setCountOfRequestCarPoolMale(textView: AppCompatTextView, countOfMale: Int) {
+    val maleText = countOfMale.let { "남성 : $it 명" }
+    textView.text = maleText
+}
+
+@BindingAdapter("setCountOfRequestCarPoolFemale")
+fun setCountOfRequestCarPoolFemale(textView: AppCompatTextView, countOfFemale: Int) {
+    val femaleText = countOfFemale.let { "여성 : $it 명" }
+    textView.text = femaleText
+}

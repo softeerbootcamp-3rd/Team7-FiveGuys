@@ -11,6 +11,7 @@ import okhttp3.OkHttpClient
 import org.softeer.robocar.BuildConfig
 import org.softeer.robocar.utils.interceptor.ParseResponseDataInterceptor
 import org.softeer.robocar.utils.interceptor.ResponseLoggingInterceptor
+import org.softeer.robocar.utils.interceptor.TokenAuthenticator
 import retrofit2.Retrofit
 import javax.inject.Qualifier
 import javax.inject.Singleton
@@ -33,6 +34,7 @@ class NetworkModule {
         return OkHttpClient.Builder()
             .addInterceptor(ParseResponseDataInterceptor())
             .addInterceptor(ResponseLoggingInterceptor())
+            .authenticator(TokenAuthenticator())
             .build()
     }
 
