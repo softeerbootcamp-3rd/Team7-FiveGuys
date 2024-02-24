@@ -151,7 +151,6 @@ public class OperationController {
         Long inOperationId;
         try {
             CarpoolSuccessReqDto carpoolSuccessReqDto = new CarpoolSuccessReqDto(guestId,guestDestAddress);
-            System.out.println(carpoolSuccessReqDto.getGuestDestAddress());
             inOperationId = operationService.carpoolSuccess(id, carpoolSuccessReqDto);
         } catch (EntityNotFoundException e) {
             return ResponseApi.of(ResponseStatus.CARPOOL_NOT_FOUND);
