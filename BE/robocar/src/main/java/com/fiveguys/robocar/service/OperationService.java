@@ -85,6 +85,23 @@ public class OperationService {
         );
     }
 
+    public RouteResDto getOptimizedRouteSolo(String startAddress, String destAddress) {
+        Coordinate start = mapService.convertAddressToCoordinates(startAddress);
+        Coordinate dest = mapService.convertAddressToCoordinates(destAddress);
+        Garage nearestGarage = garageService.findNearestGarage(start.toString());
+        Car availableCar = carService.findAvailableCar(nearestGarage.getId());
+
+        RouteInfo routeInfo;
+        routeInfo = routeService.getRouteInfo(start.toString(), dest.toString(), null);
+
+        return RouteResDto.builder()
+                .carImage(availableCar.getCarImage())
+                .carNumber(availableCar.getCarNumber())
+                .carName(availableCar.getCarName())
+                .hostNodes(convertCoordinatesToNodes(routeInfo.getPathCoordinates()))
+                .build();
+    }
+
     private List<RouteResDto.Node> convertCoordinatesToNodes(List<Coordinate> coordinates) {
         List<RouteResDto.Node> nodes = coordinates.stream()
                 .map(coordinate -> new RouteResDto.Node(coordinate.getLatitude(), coordinate.getLongitude()))

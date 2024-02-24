@@ -71,7 +71,7 @@ public class OperationController {
         return ResponseApi.ok(response);
     }
 
-    @Operation(summary = "최적화된 경로 조회")
+    @Operation(summary = "최적화된 동승 경로 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청")})
@@ -85,6 +85,23 @@ public class OperationController {
 
         try {
             RouteResDto response = operationService.getOptimizedRoute(departureAddress, hostDestAddress, guestDestAddress, hostId, guestId);
+            return ResponseApi.ok(response);
+        } catch (Exception e) {
+            return ResponseApi.of(ResponseStatus.OPERATION_NOT_FOUND);
+        }
+    }
+
+    @Operation(summary = "최적화된 혼자타기 경로 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청")})
+    @GetMapping("/operations/optimized-route/solo")
+    public ResponseEntity<?> getOptimizedRouteSolo(
+            @Parameter(description = "출발지 주소") @RequestParam String departureAddress,
+            @Parameter(description = "호스트 목적지 주소") @RequestParam String destAddress) {
+
+        try {
+            RouteResDto response = operationService.getOptimizedRouteSolo(departureAddress, destAddress);
             return ResponseApi.ok(response);
         } catch (Exception e) {
             return ResponseApi.of(ResponseStatus.OPERATION_NOT_FOUND);
