@@ -178,4 +178,43 @@ public class OperationController {
         }
         return ResponseApi.ok(null);
     }
+
+    @Operation(summary = "운행중인지 확인")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "요청 성공"),
+            @ApiResponse(responseCode = "400", description = "없는 유저 혹은 운행정보"),
+            @ApiResponse(responseCode = "500", description = "서버 에러")
+    })
+    @GetMapping("/operations/onboard")
+    public ResponseEntity checkOnBoard(@RequestParam Long inOperationId, @Auth Long id) {
+        boolean isOnboard;
+        try {
+            isOnboard = operationService.checkOnBoard(inOperationId, id);
+        } catch (EntityNotFoundException e){
+            return ResponseApi.of(ResponseStatus._BAD_REQUEST);
+        } catch(Exception e){
+            return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
+        }
+        return ResponseApi.ok(isOnboard);
+    }
+
+    @Operation(summary = "운행중인지 확인")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "요청 성공"),
+            @ApiResponse(responseCode = "400", description = "없는 유저 혹은 운행정보"),
+            @ApiResponse(responseCode = "500", description = "서버 에러")
+    })
+    @PostMapping("/operations/onboard")
+    public ResponseEntity leaveOnBoard(@RequestParam Long inOperationId, @Auth Long id) {
+        String data = null;
+        try {
+            operationService.leaveOnBoard(inOperationId, id);
+        } catch (EntityNotFoundException e){
+            return ResponseApi.of(ResponseStatus._BAD_REQUEST);
+        } catch(Exception e){
+            return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
+        }
+        return ResponseApi.ok(data);
+    }
+
 }
