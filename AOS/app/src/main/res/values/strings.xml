@@ -76,4 +76,5 @@
     <string name="apply_for_car_pool">동승 신청하기</string>
     <string name="logo">RoboCar</string>
     <string name="go_to_riding_taxi">택시 타기</string>
+    <string name="reject_car_pool">요청이 거절당했어요.</string>
 </resources>
