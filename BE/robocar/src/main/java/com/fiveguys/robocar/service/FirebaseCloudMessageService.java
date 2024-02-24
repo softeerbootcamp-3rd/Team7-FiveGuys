@@ -55,7 +55,7 @@ public class FirebaseCloudMessageService {
             throw new NoSuchElementException(CLIENT_TOKEN_NOT_EXIST.getMessage());
         }
 
-        JSONObject data = Data.of(guestId, guestUser.getNickname(), carpoolRequestDTO);
+        JSONObject data = Data.of(FcmNotificationType.CARPOOL_REQUEST, guestId, guestUser.getNickname(), carpoolRequestDTO);
         JSONObject fcmMessage = createFCMMessage(targetToken, FcmNotificationType.CARPOOL_REQUEST, data);
         pushFcmMessage(fcmMessage);
 
@@ -71,7 +71,8 @@ public class FirebaseCloudMessageService {
             throw new NoSuchElementException(CLIENT_TOKEN_NOT_EXIST.getMessage());
         }
 
-        JSONObject fcmMessage = createFCMMessage(findUser.getClientToken(), FcmNotificationType.CARPOOL_ACCEPT, inOperationId);
+        JSONObject data = Data.of(FcmNotificationType.CARPOOL_ACCEPT, inOperationId);
+        JSONObject fcmMessage = createFCMMessage(findUser.getClientToken(), FcmNotificationType.CARPOOL_ACCEPT, data);
         pushFcmMessage(fcmMessage);
 
         return fcmMessage.toString();
@@ -86,7 +87,8 @@ public class FirebaseCloudMessageService {
             throw new NoSuchElementException(CLIENT_TOKEN_NOT_EXIST.getMessage());
         }
 
-        JSONObject fcmMessage = createFCMMessage(findUser.getClientToken(), FcmNotificationType.CARPOOL_REJECT, null);
+        JSONObject data = Data.of(FcmNotificationType.CARPOOL_REJECT);
+        JSONObject fcmMessage = createFCMMessage(findUser.getClientToken(), FcmNotificationType.CARPOOL_REJECT, data);
         pushFcmMessage(fcmMessage);
 
         return fcmMessage.toString();
@@ -96,7 +98,7 @@ public class FirebaseCloudMessageService {
         JSONObject notification = Notification.of(fcmNotificationType.getTitle(), fcmNotificationType.getBody());
         JSONObject data;
         if (requestData instanceof Long) {
-            data = Data.of((Long) requestData);
+            data = Data.of(fcmNotificationType, (Long) requestData);
         } else if (requestData instanceof JSONObject) {
             data = (JSONObject) requestData;
         } else {

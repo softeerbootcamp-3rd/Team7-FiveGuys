@@ -18,7 +18,7 @@ public class Car {
     private Long id;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "garageId")
     private Garage garage;
 
