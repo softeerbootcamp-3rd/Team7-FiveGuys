@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CreateCarpoolListUpResDto {
+public class CreateCarpoolListUp {
 
     private final int MAX_RANGE_TIME;
     private final int MAX_LIST_LENGTH;
@@ -22,7 +22,7 @@ public class CreateCarpoolListUpResDto {
     private final MapService mapService;
     private final RouteComparisonService routeComparisonService;
     @Autowired
-    public CreateCarpoolListUpResDto(CarpoolRequestRepository carpoolRequestRepository, CarpoolRegisterParser carpoolRegisterParser, MapService mapService, RouteService routeService, RouteComparisonService routeComparisonService){
+    public CreateCarpoolListUp(CarpoolRequestRepository carpoolRequestRepository, CarpoolRegisterParser carpoolRegisterParser, MapService mapService, RouteService routeService, RouteComparisonService routeComparisonService){
         this.carpoolRequestRepository = carpoolRequestRepository;
         this.mapService = mapService;
         this.routeService = routeService;

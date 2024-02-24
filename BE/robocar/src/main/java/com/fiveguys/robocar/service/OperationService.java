@@ -18,7 +18,7 @@ import com.fiveguys.robocar.entity.InOperation;
 import com.fiveguys.robocar.repository.CarpoolRequestRepository;
 import com.fiveguys.robocar.converter.CarpoolRegisterParser;
 import com.fiveguys.robocar.repository.InOperationRepository;
-import com.fiveguys.robocar.util.CreateCarpoolListUpResDto;
+import com.fiveguys.robocar.util.CreateCarpoolListUp;
 import jakarta.persistence.EntityNotFoundException;
 import org.json.JSONException;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +39,7 @@ public class OperationService {
     private final CarService carService;
     private final CarpoolRequestRepository carpoolRequestRepository;
     private final CarpoolRegisterParser carpoolRegisterParser;
-    private final CreateCarpoolListUpResDto createCarpoolListUpResDto;
+    private final CreateCarpoolListUp createCarpoolListUp;
     private final InOperationRepository inOperationRepository;
     private final CarRepository carRepository;
     private final FirebaseCloudMessageService firebaseCloudMessageService;
@@ -92,16 +92,10 @@ public class OperationService {
         return nodes;
 
     }
-    public void saveCarpoolRequest(CarpoolRequest a) {
-        carpoolRequestRepository.save(a);
-    }
 
-    public CarpoolRequest findCarpoolRequestById(Long id) {
-        return carpoolRequestRepository.findById(String.valueOf(id)).orElse(null);
-    }
-
+    @Transactional
     public CarpoolListUpResDto carpoolListUp(String guestDepartAddress, String guestDestAddress, int maleCount, int femaleCount) {
-        return createCarpoolListUpResDto.create(guestDepartAddress, guestDestAddress, maleCount, femaleCount);
+        return createCarpoolListUp.create(guestDepartAddress, guestDestAddress, maleCount, femaleCount);
     }
 
     @Transactional
@@ -116,7 +110,6 @@ public class OperationService {
         Car car = carService.findAvailableCar(garage.getId());
         if(car == null)
             throw new IllegalArgumentException();
-
 
         car.editCarState(CarState.HOLD);
         carRepository.save(car);
