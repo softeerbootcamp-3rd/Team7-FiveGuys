@@ -8,6 +8,11 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import androidx.activity.viewModels
+import com.kakao.vectormap.KakaoMap
+import com.kakao.vectormap.KakaoMapReadyCallback
+import com.kakao.vectormap.MapLifeCycleCallback
+import com.kakao.vectormap.MapView
 import android.os.Looper
 import android.util.Log
 import androidx.activity.viewModels
@@ -23,6 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softeer.robocar.R
 import org.softeer.robocar.databinding.ActivityMapBinding
 import org.softeer.robocar.ui.fragment.HeadcountDialogFragment
+import org.softeer.robocar.ui.viewmodel.MapViewModel
 import java.util.*
 import com.kakao.vectormap.LatLng;
 import com.kakao.vectormap.label.Label
@@ -31,19 +37,20 @@ import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
 import org.softeer.robocar.ui.viewmodel.RouteViewModel
 
-
 @AndroidEntryPoint
 class MapActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMapBinding
     private lateinit var mapView: MapView
+    private val viewModel: MapViewModel by viewModels()
     private lateinit var locationManager: LocationManager
     private var kakaoMap: KakaoMap? = null
     private var currentLocation: android.location.Location? = null
     private val routeViewModel: RouteViewModel by viewModels()
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_map)
+        binding.mapViewModel = viewModel
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)

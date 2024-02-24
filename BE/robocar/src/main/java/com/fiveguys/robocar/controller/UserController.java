@@ -158,8 +158,8 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @DeleteMapping("/users")
-    public ResponseEntity userResign(@Auth Long id){
 
+    public ResponseEntity userResign(@Auth Long id){
         try{
             userService.userResign(id);
         } catch (EntityNotFoundException e){
@@ -179,6 +179,7 @@ public class UserController {
     })
     @PostMapping("/users/login")
     public ResponseEntity userLogin(@RequestBody @Validated UserLoginReqDto userLoginReqDto, Errors errors){
+
         LoginResDto loginResDto = null;
         try{
             loginResDto = userService.userLogin(userLoginReqDto);

@@ -2,7 +2,7 @@ package com.fiveguys.robocar.service;
 
 import com.fiveguys.robocar.apiPayload.ResponseStatus;
 import com.fiveguys.robocar.config.FCMConfig;
-import com.fiveguys.robocar.dto.req.CarpoolRequestDTO;
+import com.fiveguys.robocar.dto.req.CarpoolRequestDto;
 import com.fiveguys.robocar.entity.User;
 import com.fiveguys.robocar.models.FcmNotificationType;
 import com.fiveguys.robocar.repository.UserRepository;
@@ -21,7 +21,9 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 
+import static com.fiveguys.robocar.apiPayload.ResponseStatus.CLIENT_TOKEN_NOT_EXIST;
 import static com.fiveguys.robocar.models.FcmMessage.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
@@ -42,39 +44,61 @@ public class FirebaseCloudMessageService {
         fcmHeader = setDefaultFCMHeader();
     }
 
-    public void pushCarpoolRequest(Long guestId, CarpoolRequestDTO carpoolRequestDTO) throws JSONException {
-        User findUser = userRepository.findById(carpoolRequestDTO.getHostId())
+    public String pushCarpoolRequest(Long guestId, CarpoolRequestDto carpoolRequestDTO) throws JSONException {
+        User hostUser = userRepository.findById(carpoolRequestDTO.getHostId())
+                .orElseThrow(() -> new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage()));
+        User guestUser = userRepository.findById(guestId)
                 .orElseThrow(() -> new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage()));
 
-        JSONObject data = Data.of(carpoolRequestDTO.getHostId(), carpoolRequestDTO);
-        JSONObject fcmMessage = createFCMMessage(findUser.getClientToken(), FcmNotificationType.CARPOOL_REQUEST, data);
+        String targetToken = hostUser.getClientToken();
+        if (targetToken == null) {
+            throw new NoSuchElementException(CLIENT_TOKEN_NOT_EXIST.getMessage());
+        }
 
+        JSONObject data = Data.of(FcmNotificationType.CARPOOL_REQUEST, guestId, guestUser.getNickname(), carpoolRequestDTO);
+        JSONObject fcmMessage = createFCMMessage(targetToken, FcmNotificationType.CARPOOL_REQUEST, data);
         pushFcmMessage(fcmMessage);
+
+        return fcmMessage.toString();
     }
 
-    public void pushCarpoolAccept(Long guestId, Long inOperationId) throws JSONException {
+    public String pushCarpoolAccept(Long guestId, Long inOperationId) throws JSONException {
         User findUser = userRepository.findById(guestId)
                 .orElseThrow(() -> new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage()));
 
-        JSONObject fcmMessage = createFCMMessage(findUser.getClientToken(), FcmNotificationType.CARPOOL_ACCEPT, inOperationId);
+        String targetToken = findUser.getClientToken();
+        if (targetToken == null) {
+            throw new NoSuchElementException(CLIENT_TOKEN_NOT_EXIST.getMessage());
+        }
 
+        JSONObject data = Data.of(FcmNotificationType.CARPOOL_ACCEPT, inOperationId);
+        JSONObject fcmMessage = createFCMMessage(findUser.getClientToken(), FcmNotificationType.CARPOOL_ACCEPT, data);
         pushFcmMessage(fcmMessage);
+
+        return fcmMessage.toString();
     }
 
-    public void pushCarpoolReject(Long guestId) throws JSONException {
+    public String pushCarpoolReject(Long guestId) throws JSONException {
         User findUser = userRepository.findById(guestId)
                 .orElseThrow(() -> new EntityNotFoundException(ResponseStatus.MEMBER_NOT_FOUND.getMessage()));
 
-        JSONObject fcmMessage = createFCMMessage(findUser.getClientToken(), FcmNotificationType.CARPOOL_REJECT, null);
+        String targetToken = findUser.getClientToken();
+        if (targetToken == null) {
+            throw new NoSuchElementException(CLIENT_TOKEN_NOT_EXIST.getMessage());
+        }
 
+        JSONObject data = Data.of(FcmNotificationType.CARPOOL_REJECT);
+        JSONObject fcmMessage = createFCMMessage(findUser.getClientToken(), FcmNotificationType.CARPOOL_REJECT, data);
         pushFcmMessage(fcmMessage);
+
+        return fcmMessage.toString();
     }
 
     private JSONObject createFCMMessage(String targetToken, FcmNotificationType fcmNotificationType, Object requestData) throws JSONException {
         JSONObject notification = Notification.of(fcmNotificationType.getTitle(), fcmNotificationType.getBody());
         JSONObject data;
         if (requestData instanceof Long) {
-            data = Data.of((Long) requestData);
+            data = Data.of(fcmNotificationType, (Long) requestData);
         } else if (requestData instanceof JSONObject) {
             data = (JSONObject) requestData;
         } else {
@@ -84,14 +108,15 @@ public class FirebaseCloudMessageService {
 
         JSONObject message = Message.of(targetToken, notification, data, android);
         JSONObject fcmMessage = of(message);
+
         return fcmMessage;
     }
 
     private void pushFcmMessage(JSONObject message) {
-        log.info("fcmMessage = {}", message.toString());
+        log.info("FCM - Message = {}", message.toString());
         HttpEntity<String> request = new HttpEntity<>(message.toString(), fcmHeader);
         String response = restTemplate.postForObject(fcmConfig.getMESSAGES_SEND_URL(), request, String.class);
-        log.info("FCM response = {}", response);
+        log.info("push info = {}", response);
     }
 
     private HttpHeaders setDefaultFCMHeader() throws IOException {

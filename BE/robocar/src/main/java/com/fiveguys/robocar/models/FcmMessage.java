@@ -1,6 +1,6 @@
 package com.fiveguys.robocar.models;
 
-import com.fiveguys.robocar.dto.req.CarpoolRequestDTO;
+import com.fiveguys.robocar.dto.req.CarpoolRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -58,16 +58,24 @@ public class FcmMessage {
     @AllArgsConstructor
     @Getter
     public static class Data {
-        public static JSONObject of(Long id) throws JSONException {
-            return new JSONObject().put("in_operation_id", String.valueOf(id));
+        public static JSONObject of(FcmNotificationType fcmNotificationType) throws JSONException {
+            return new JSONObject().put("type", fcmNotificationType.getClickAction());
         }
 
-        public static JSONObject of(Long guestId, CarpoolRequestDTO carpoolRequestDTO) throws JSONException {
+        public static JSONObject of(FcmNotificationType fcmNotificationType, Long id) throws JSONException {
             return new JSONObject()
+                    .put("type", fcmNotificationType.getClickAction())
+                    .put("in_operation_id", String.valueOf(id));
+        }
+        public static JSONObject of(FcmNotificationType fcmNotificationType,Long guestId, String guestNickname, CarpoolRequestDto carpoolRequestDTO) throws JSONException {
+            return new JSONObject()
+                    .put("type", fcmNotificationType.getClickAction())
                     .put("guestId", String.valueOf(guestId))
+                    .put("guestNickname", guestNickname)
                     .put("guestDestAddress", carpoolRequestDTO.getGuestDestAddress())
                     .put("maleCount", String.valueOf(carpoolRequestDTO.getMaleCount()))
                     .put("femaleCount", String.valueOf(carpoolRequestDTO.getFemaleCount()));
+
         }
     }
 

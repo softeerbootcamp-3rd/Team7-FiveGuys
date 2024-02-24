@@ -53,13 +53,19 @@ public class CreateCarpoolListUpResDto {
         long taxifare;
         RouteInfo routeInfo;
 
+
         for(CarpoolRequest req : iterableRequests){
+            if(req == null)
+                continue;
 
             hostDepartCoordinate = String.format("%f,%f",req.getDepartLongitude(),req.getDepartLatitude());
 
             //10분 초과 거리는 제외
-            if(!hostDepartCoordinate.equals(guestDepartCoordinate) && routeService.getRouteInfo(hostDepartCoordinate, guestDepartCoordinate,null ).getDuration()/(1000*60) > MAX_RANGE_TIME)
-                continue;
+
+            try {
+                if (!hostDepartCoordinate.equals(guestDepartCoordinate) && routeService.getRouteInfo(hostDepartCoordinate, guestDepartCoordinate, null).getDuration() / (1000 * 60) > MAX_RANGE_TIME)
+                    continue;
+            } catch (Exception e){}
 
             //인원수 초과시 제외
             if(req.getFemaleCount()+req.getMaleCount()+guestMaleCount+guestFemaleCount > req.getCarType().getCapacity())
@@ -74,9 +80,9 @@ public class CreateCarpoolListUpResDto {
 
             optimalRoute = routeComparisonService.determineOptimalRoute(hostDepartCoordinate,hostDestCoordinate,guestDestCoordinate);
             routeInfo = routeService.getRouteInfo(hostDepartCoordinate, optimalRoute.getFirstDestination(), optimalRoute.getSecondDestination());
-            duration = routeInfo.getDuration();
+            duration = routeInfo.getDuration()/60/1000;
 
-            taxifare = routeInfo.getTaxiFare();
+            taxifare = routeInfo.getTaxiFare()/2;
             carpoolItem = CarpoolListUpResDto.CarpoolItem.builder()
                     .hostId(req.getId())
                     .hostNickname(req.getHostNickname())
@@ -92,6 +98,7 @@ public class CreateCarpoolListUpResDto {
                     .estimatedPrice(taxifare)
                     .build();
             carpoolListUpResDto.addCarpoolItem(carpoolItem);
+
         }
 
         carpoolListUpResDto.doSortByEstimatedTime();
