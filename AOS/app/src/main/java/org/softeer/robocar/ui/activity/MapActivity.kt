@@ -46,7 +46,7 @@ class MapActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_map)
 
-        mapViewModel.setPassengerType(args.taxiType,args.carPoolType)
+        mapViewModel.setPassengerType(args.taxiType, args.carPoolType)
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)

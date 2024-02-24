@@ -18,8 +18,6 @@ class RequestCarPoolActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_request_car_pool)
         setStatusBarTransparent(window)
 
-        println(intent.getParcelableExtra<Parcelable?>("carPoolInfo").toString())
-
         binding.backButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }

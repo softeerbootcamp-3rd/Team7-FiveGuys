@@ -33,23 +33,28 @@ class MapViewModel @Inject constructor(
     val taxiType: LiveData<TaxiType> = _taxiType
     private var _carPoolType = MutableLiveData<CarPoolType>()
     val carPoolType: LiveData<CarPoolType> = _carPoolType
-    private var _countMale = MutableLiveData<String>()
-    val countMale: LiveData<String> = _countMale
-    private var _countFemale = MutableLiveData<String>()
-    val countFemale: LiveData<String> = _countFemale
+    private var _countMale = MutableLiveData<Int>()
+    val countMale: LiveData<Int> = _countMale
+    private var _countFemale = MutableLiveData<Int>()
+    val countFemale: LiveData<Int> = _countFemale
     private var _destName = MutableLiveData<String>()
     val destName: LiveData<String> = _destName
     private var _destRoadAddress = MutableLiveData<String>()
     val destRoadAddress: LiveData<String> = _destRoadAddress
 
-    init {
-        _countMale.value = "0"
-        _countFemale.value = "0"
-        keyWord.value = ""
-        _placeList.value = listOf()
-        _destName.value = ""
-        _destRoadAddress.value = ""
-    }
+    var total = if (taxiType.value == TaxiType.COMPACT_TAXI) 4 else 6
+    private var _passenger = MutableLiveData<Int>()
+    val passenger: LiveData<Int> = _passenger
+
+        init {
+            _countMale.value = 0
+            _countFemale.value = 0
+            keyWord.value = ""
+            _placeList.value = listOf()
+            _destName.value = ""
+            _destRoadAddress.value = ""
+            _passenger.value = 0
+        }
 
     fun getOptimizedRoute(
         departureAddress: String,
@@ -77,9 +82,10 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun setPassengerType(taxiType: TaxiType, carPoolType: CarPoolType) {
-        _taxiType.value = taxiType
-        _carPoolType.value = carPoolType
+    fun setPassengerType(taxiT: TaxiType, carPoolT: CarPoolType) {
+        _taxiType.value = taxiT
+        _carPoolType.value = carPoolT
+        total = if (taxiT == TaxiType.COMPACT_TAXI) 4 else 6
     }
 
     fun setDestInfo(destName: String, destRoadAddress: String) {
@@ -87,40 +93,36 @@ class MapViewModel @Inject constructor(
         _destRoadAddress.value = destRoadAddress
     }
 
-    fun addMale(): Int {
-        val next = _countMale.value!!.toInt() + 1
-        _countMale.value = next.toString()
-
-        return next
+    fun addMale() {
+        val next = _countMale.value!! + 1
+        _countMale.value = next
+        _passenger.value = _passenger.value!! + 1
     }
 
-    fun subtractMale(): Int {
+    fun subtractMale() {
         val next = _countMale.value!!.toInt() - 1
-        _countMale.value = next.toString()
-
-        return next
+        _countMale.value = next
+        _passenger.value = _passenger.value!! - 1
     }
 
-    fun addFemale(): Int {
+    fun addFemale() {
         val next = _countFemale.value!!.toInt() + 1
-        _countFemale.value = next.toString()
-
-        return next
+        _countFemale.value = next
+        _passenger.value = _passenger.value!! + 1
     }
 
-    fun subtractFemale(): Int {
+    fun subtractFemale() {
         val next = _countFemale.value!!.toInt() - 1
-        _countFemale.value = next.toString()
-
-        return next
+        _countFemale.value = next
+        _passenger.value = _passenger.value!! - 1
     }
 
     fun emitInfo(): PlaceItem {
         return PlaceItem(
             taxiType.value!!,
             carPoolType.value!!,
-            countMale.value!!,
-            countFemale.value!!,
+            countMale.value!!.toString(),
+            countFemale.value!!.toString(),
             "출발지",
             "출발지 도로명",
             destName.value!!,
