@@ -10,6 +10,7 @@ import com.fiveguys.robocar.repository.CarRepository;
 import com.fiveguys.robocar.service.RouteComparisonService.OptimalRoute;
 import com.fiveguys.robocar.util.JsonParserUtil.Coordinate;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 import com.fiveguys.robocar.dto.req.CarpoolRegisterReqDto;
 import com.fiveguys.robocar.dto.req.CarpoolSuccessReqDto;
@@ -23,8 +24,10 @@ import com.fiveguys.robocar.util.CreateCarpoolListUpResDto;
 import jakarta.persistence.EntityNotFoundException;
 import org.json.JSONException;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import java.time.LocalDateTime;
@@ -170,6 +173,8 @@ public class OperationService {
                 .guestId(guestId)
                 .departureTime(LocalDateTime.now())
                 .carId(carpoolRequest.getCarId())
+                .hostOnBoard(true)
+                .guestOnBoard(true)
                 //TODO
                 // 얼마나 갈리는지 아래부분 추가
 //                .estimatedHostArrivalTime()
@@ -197,4 +202,30 @@ public class OperationService {
         // 락 해제
         carRepository.save(car);
     }
+
+    @Transactional(readOnly = true)
+    public boolean checkOnBoard(Long inOperationId, Long id) {
+        InOperation inOperation = inOperationRepository.findById(inOperationId).orElseThrow(EntityNotFoundException::new);
+
+        if(Objects.equals(id, inOperation.getHostId()))
+            return inOperation.isHostOnBoard();
+        else if(Objects.equals(id, inOperation.getGuestId()))
+            return inOperation.isGuestOnBoard();
+
+        throw new EntityNotFoundException();
+    }
+
+    @Transactional
+    public void leaveOnBoard(Long inOperationId, Long id) {
+        InOperation inOperation = inOperationRepository.findById(inOperationId).orElseThrow(EntityNotFoundException::new);
+
+        if(Objects.equals(id, inOperation.getHostId()))
+            inOperation.editHostOnBoard(false);
+        else if(Objects.equals(id, inOperation.getGuestId()))
+            inOperation.editGustOnBoard(false);
+        else
+            throw new EntityNotFoundException();
+    }
+
+
 }

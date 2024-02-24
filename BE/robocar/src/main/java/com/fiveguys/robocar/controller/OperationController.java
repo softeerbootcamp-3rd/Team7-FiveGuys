@@ -4,6 +4,7 @@ import com.fiveguys.robocar.apiPayload.ResponseApi;
 import com.fiveguys.robocar.apiPayload.ResponseStatus;
 import com.fiveguys.robocar.dto.req.CarpoolRequestDto;
 import com.fiveguys.robocar.dto.res.InOperationDto;
+import com.fiveguys.robocar.dto.res.OnBoardDto;
 import com.fiveguys.robocar.dto.res.RouteResDto;
 import com.fiveguys.robocar.dto.res.RouteSoloResDto;
 import com.fiveguys.robocar.service.FirebaseCloudMessageService;
@@ -196,4 +197,42 @@ public class OperationController {
         }
         return ResponseApi.ok(null);
     }
+
+    @Operation(summary = "운행중인지 확인")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "요청 성공"),
+            @ApiResponse(responseCode = "400", description = "없는 유저 혹은 운행정보"),
+            @ApiResponse(responseCode = "500", description = "서버 에러")
+    })
+    @GetMapping("/operations/onboard")
+    public ResponseEntity checkOnBoard(@RequestParam Long inOperationId, @Auth Long id) {
+        OnBoardDto onboardDto;
+        try {
+            onboardDto = new OnBoardDto(operationService.checkOnBoard(inOperationId, id));
+        } catch (EntityNotFoundException e){
+            return ResponseApi.of(ResponseStatus._BAD_REQUEST);
+        } catch(Exception e){
+            return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
+        }
+        return ResponseApi.ok(onboardDto);
+    }
+
+    @Operation(summary = "운행 종료후 운행 상태 변경")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "요청 성공"),
+            @ApiResponse(responseCode = "400", description = "없는 유저 혹은 운행정보"),
+            @ApiResponse(responseCode = "500", description = "서버 에러")
+    })
+    @PostMapping("/operations/onboard")
+    public ResponseEntity leaveOnBoard(@RequestParam Long inOperationId, @Auth Long id) {
+        try {
+            operationService.leaveOnBoard(inOperationId, id);
+        } catch (EntityNotFoundException e){
+            return ResponseApi.of(ResponseStatus._BAD_REQUEST);
+        } catch(Exception e){
+            return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
+        }
+        return ResponseApi.ok(null);
+    }
+
 }
