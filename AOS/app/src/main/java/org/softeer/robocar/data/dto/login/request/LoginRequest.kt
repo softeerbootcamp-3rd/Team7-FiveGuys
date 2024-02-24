@@ -8,4 +8,5 @@ data class LoginRequest(
     @SerialName("loginId")
     val userId: String,
     val password: String,
+    val FCMToken: String,
 )

@@ -58,6 +58,8 @@ public class CarpoolRegisterParser {
                 .femaleCount(femaleCount)
                 .carType(carType)
                 .carId(carId)
+                .isLocked(false)
+                .timeToLive(3600L)
                 .build();
         return carpoolRequest;
     }

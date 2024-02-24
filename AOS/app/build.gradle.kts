@@ -7,6 +7,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("androidx.navigation.safeargs.kotlin")
     id("kotlin-parcelize")
+    id("com.google.gms.google-services")
     kotlin("kapt")
     kotlin("plugin.serialization") version "1.9.21"
 }
@@ -91,9 +92,15 @@ dependencies {
 
     // Glide 라이브러리
     implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-messaging-ktx")
+    implementation("com.google.firebase:firebase-inappmessaging-display-ktx")
+
     // Glide를 사용하기 위한 어노테이션 프로세서 (Kotlin 프로젝트용으로 변경)
     kapt("com.github.bumptech.glide:compiler:4.16.0")
-
+    
 }
 
 kapt {

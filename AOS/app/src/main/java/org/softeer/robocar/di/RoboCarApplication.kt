@@ -5,4 +5,8 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class RoboCarApplication : Application() {
+    companion object {
+        var token: String? = null
+        var FCMToken: String? = null
+    }
 }
