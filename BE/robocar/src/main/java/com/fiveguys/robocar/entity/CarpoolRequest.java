@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 
 import lombok.*;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.TimeToLive;
 
 @RedisHash("CarpoolRequest")
 @Getter
@@ -27,7 +28,11 @@ public class CarpoolRequest {
     private Integer maleCount;
     private Integer femaleCount;
 
-    private CarType carType;
     private Long carId;
+    private CarType carType;
 
+    boolean isLocked;
+
+    @TimeToLive()
+    private Long timeToLive;
 }
