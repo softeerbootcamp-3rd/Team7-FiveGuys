@@ -55,7 +55,7 @@ public class FirebaseCloudMessageService {
             throw new NoSuchElementException(CLIENT_TOKEN_NOT_EXIST.getMessage());
         }
 
-        JSONObject data = Data.of(carpoolRequestDTO.getHostId(), guestUser.getNickname(), carpoolRequestDTO);
+        JSONObject data = Data.of(guestId, guestUser.getNickname(), carpoolRequestDTO);
         JSONObject fcmMessage = createFCMMessage(targetToken, FcmNotificationType.CARPOOL_REQUEST, data);
         pushFcmMessage(fcmMessage);
 
