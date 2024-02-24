@@ -1,9 +1,8 @@
 package com.fiveguys.robocar.util;
 
+import com.fiveguys.robocar.apiPayload.exception.GeneralException;
 import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
+import com.fiveguys.robocar.apiPayload.ResponseStatus;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +49,20 @@ public class JsonParserUtil {
         return pathCoordinates;
     }
 
+    public static Coordinate extractCoordinatesFromAddressResponse(String jsonResponse) {
+        JsonObject responseObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
+        JsonArray addressesArray = responseObject.getAsJsonArray("addresses");
+
+        if (addressesArray != null && addressesArray.size() > 0) {
+            JsonObject addressObject = addressesArray.get(0).getAsJsonObject();
+            double latitude = addressObject.get("x").getAsDouble();
+            double longtitude = addressObject.get("y").getAsDouble();
+            return new Coordinate(longtitude, latitude);
+        }
+        throw new GeneralException(ResponseStatus.ADDRESS_TO_COORDINATE_CONVERSION_FAILED);
+    }
+
+
     public static class Coordinate {
         private double latitude;
         private double longitude;
@@ -65,6 +78,11 @@ public class JsonParserUtil {
 
         public double getLongitude() {
             return longitude;
+        }
+
+        @Override
+        public String toString() {
+            return longitude + "," + latitude;
         }
     }
 }

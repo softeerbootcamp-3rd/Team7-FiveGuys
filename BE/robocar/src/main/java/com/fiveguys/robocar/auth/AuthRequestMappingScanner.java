@@ -1,8 +1,8 @@
-package com.fiveguys.robocar.controller;
+package com.fiveguys.robocar.auth;
 
-import com.fiveguys.robocar.controller.annotation.Auth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -18,17 +18,24 @@ public class AuthRequestMappingScanner {
     @Autowired
     private RequestMappingHandlerMapping requestMappingHandlerMapping;
 
-    public List<String> getAuthAnnotatedUrls() {
-        List<String> urls = new ArrayList<>();
-        Map<RequestMappingInfo, HandlerMethod> handlerMethods = requestMappingHandlerMapping.getHandlerMethods();
+    public RequestMappings getCustomRequestMappings() {
+        RequestMappings requestMappings = new RequestMappings();
 
+        Map<RequestMappingInfo, HandlerMethod> handlerMethods = requestMappingHandlerMapping.getHandlerMethods();
         for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : handlerMethods.entrySet()) {
             Method method = entry.getValue().getMethod();
             for (Parameter parameter : method.getParameters()) {
                 if (parameter.isAnnotationPresent(Auth.class)) {
-                    Set<PathPattern> patterns = entry.getKey().getPathPatternsCondition().getPatterns();
+                    RequestMappingInfo requestMappingInfo = entry.getKey();
+
+                    Set<PathPattern> patterns = requestMappingInfo.getPathPatternsCondition().getPatterns();
+                    Set<RequestMethod> methods = requestMappingInfo.getMethodsCondition().getMethods();
                     for (PathPattern pattern : patterns) {
-                        urls.add(pattern.getPatternString());
+                        for (RequestMethod requestMethod : methods) {
+                            String url = pattern.getPatternString();
+                            String httpMethod = requestMethod.name();
+                            requestMappings.add(url, httpMethod);
+                        }
                     }
                     break;
                 }
@@ -36,6 +43,6 @@ public class AuthRequestMappingScanner {
 
         }
 
-        return urls;
+        return requestMappings;
     }
 }

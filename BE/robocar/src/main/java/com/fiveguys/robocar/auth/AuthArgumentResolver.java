@@ -1,7 +1,7 @@
-package com.fiveguys.robocar.controller.resolver;
+package com.fiveguys.robocar.auth;
 
 
-import com.fiveguys.robocar.controller.annotation.Auth;
+import com.fiveguys.robocar.auth.Auth;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;

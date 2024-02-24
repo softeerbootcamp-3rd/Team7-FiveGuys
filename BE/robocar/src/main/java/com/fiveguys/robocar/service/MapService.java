@@ -2,6 +2,9 @@ package com.fiveguys.robocar.service;
 
 import com.fiveguys.robocar.apiPayload.ResponseStatus;
 import com.fiveguys.robocar.apiPayload.exception.GeneralException;
+import com.fiveguys.robocar.config.NaverMapConfig;
+import com.fiveguys.robocar.util.JsonParserUtil;
+import com.fiveguys.robocar.util.JsonParserUtil.Coordinate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -23,9 +26,11 @@ public class MapService {
     }
 
     public ResponseEntity<String> getRoute(String start, String goal1, String goal2) {
-        String url = buildUrl(start, goal1, goal2);
-        HttpHeaders headers = createHeaders();
+        String waypointParam = goal2 != null && !goal2.isEmpty() ? "&waypoints=" + goal2 : "";
 
+        String url = String.format("%s?start=%s&goal=%s%s&option=trafast", NaverMapConfig.DIRECTION_API_URL, start, goal1, waypointParam);
+
+        HttpHeaders headers = createHeaders();
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         try {
@@ -35,11 +40,17 @@ public class MapService {
         }
     }
 
-    // URL 생성을 위한 메소드
-    private String buildUrl(String start, String goal1, String goal2) {
-        String waypointParam = goal2 != null && !goal2.isEmpty() ? "&waypoints=" + goal2 : "";
-        return String.format("https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=%s&goal=%s%s&option=trafast",
-                start.replace(" ", ""), goal1.replace(" ", ""), waypointParam.replace(" ", ""));
+    public Coordinate convertAddressToCoordinates(String address) {
+        String url = String.format("%s?query=%s", NaverMapConfig.GEOCODE_API_URL,address);
+        HttpHeaders headers = createHeaders();
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+            return JsonParserUtil.extractCoordinatesFromAddressResponse(response.getBody());
+        } catch (RestClientException e) {
+            throw new GeneralException(ResponseStatus.EXTERNAL_SERVICE_ERROR);
+        }
     }
 
     // 헤더 설정을 위한 메소드

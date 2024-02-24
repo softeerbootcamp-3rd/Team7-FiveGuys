@@ -1,4 +1,4 @@
-package com.fiveguys.robocar.controller.annotation;
+package com.fiveguys.robocar.auth;
 
 import io.swagger.v3.oas.annotations.Parameter;
 

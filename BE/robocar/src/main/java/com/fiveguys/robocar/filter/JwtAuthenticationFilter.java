@@ -1,6 +1,7 @@
 package com.fiveguys.robocar.filter;
 
-import com.fiveguys.robocar.controller.AuthRequestMappingScanner;
+import com.fiveguys.robocar.auth.AuthRequestMappingScanner;
+import com.fiveguys.robocar.auth.RequestMappings;
 import com.fiveguys.robocar.util.JwtUtil;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.List;
 
 import static com.fiveguys.robocar.models.LoginConstant.*;
 import static com.fiveguys.robocar.models.TokenConstant.*;
@@ -20,12 +20,12 @@ import static com.fiveguys.robocar.models.TokenConstant.*;
 @Component
 public class JwtAuthenticationFilter implements Filter {
     private final JwtUtil jwtUtil;
-    private final List<String> unauthenticatedUrls;
+    private final RequestMappings unauthenticatedRequestMappings;
 
     @Autowired
     public JwtAuthenticationFilter(JwtUtil jwtUtil, AuthRequestMappingScanner scanner) {
         this.jwtUtil = jwtUtil;
-        this.unauthenticatedUrls = scanner.getAuthAnnotatedUrls();
+        this.unauthenticatedRequestMappings = scanner.getCustomRequestMappings();
     }
 
     @Override
@@ -33,9 +33,10 @@ public class JwtAuthenticationFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String authorization = jwtUtil.getAuthorization(httpRequest);
         String requestUrl = httpRequest.getRequestURI();
+        String method = httpRequest.getMethod();
 
-        String jwtToken = null;
-        if (unauthenticatedUrls.contains(requestUrl)) {
+        if (unauthenticatedRequestMappings.contains(requestUrl, method)) {
+            String jwtToken = null;
             if (authorization != null && authorization.startsWith(BEARER_TYPE)) {
                 jwtToken = jwtUtil.getBearerToken(authorization);
                 // 유효한 토큰이 있으면 id를 리퀘스트에 추가
@@ -53,6 +54,7 @@ public class JwtAuthenticationFilter implements Filter {
 
         chain.doFilter(request, response);
     }
+
     public void sendUnauthorizedResponse(ServletResponse response) throws IOException {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         httpResponse.setCharacterEncoding("UTF-8"); // 인코딩 설정

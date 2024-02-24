@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import org.softeer.robocar.data.model.CarPool
 import org.softeer.robocar.databinding.FragmentCarPoolListBinding
 import org.softeer.robocar.ui.adapter.CarPoolAdapter
 import org.softeer.robocar.ui.adapter.CarPoolListClickListener
@@ -66,7 +67,8 @@ class CarPoolListFragment : Fragment(), CarPoolListClickListener {
         navController.navigate(action)
     }
 
-    override fun onClickRequestCarPoolButton(carPoolId: Long) {
+    override fun onClickRequestCarPoolButton(carPool : CarPool) {
+        viewModel.requestCarPool(carPool)
         val action = CarPoolListFragmentDirections.actionCarPoolListToCarPoolRequestDialog()
         navController.navigate(action)
     }

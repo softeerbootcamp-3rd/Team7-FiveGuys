@@ -1,5 +1,6 @@
 package com.fiveguys.robocar.service;
 
+import com.fiveguys.robocar.util.JsonParserUtil.Coordinate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,5 +30,17 @@ public class MapServiceTest {
         // 응답 본문을 JSON 문자열로 변환하여 로그 출력
         String jsonResponse = objectMapper.writeValueAsString(responseEntity.getBody());
         logger.info("응답 JSON: {}", jsonResponse);
+    }
+
+    @Test
+    public void testConvertAddressToCoordinates() {
+        // 주소 예시: "분당구 불정로 6"
+        String address = "서울 광진구 천호대로 584 능동주유소";
+        Coordinate coordinate = mapService.convertAddressToCoordinates(address);
+
+        // 좌표 출력
+        logger.info("Converted Coordinates:");
+        logger.info("Latitude: {}", coordinate.getLatitude());
+        logger.info("Longitude: {}", coordinate.getLongitude());
     }
 }

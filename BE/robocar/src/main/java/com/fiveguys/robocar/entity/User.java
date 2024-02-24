@@ -1,12 +1,10 @@
 package com.fiveguys.robocar.entity;
 
-import com.fiveguys.robocar.models.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -15,11 +13,22 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String loginId;
 
-    private String name;
+    @Column(unique = true)
+    private String nickname;
 
     private String password;
 
-    private String clientId;
+    private String clientToken;
+
+    public void editNickname(String nickname){
+        this.nickname = nickname;
+    }
+
+    public void editPassword(String password) {
+        this.password = password;
+    }
+    public void editClientToken(String clientToken){this.clientToken = clientToken; }
 }

@@ -5,7 +5,7 @@
     <string name="taxi_type_title">원하는 차량 타입을 알려주세요!</string>
     <string name="compact_taxi">소형택시</string>
     <string name="midsize_taxi">중형택시</string>
-    <string name="car_pool_title">저렴한 가격으로 이동해보세요.</string>
+    <string name="car_pool_title">탑승 유형을 선택해주세요!</string>
     <string name="recruit_car_pool">동승자 모집</string>
     <string name="participate_car_pool">동승 참여</string>
     <string name="return_taxi">내 택시로 돌아가기</string>
@@ -46,7 +46,7 @@
     <string name="no_available_car_pool">앗, 현재 동승 가능한 차량이 없어요. \n잠시 후에 다시 시도해주세요.</string>
     <string name="retry_search">다시 탐색하기</string>
     <string name="to_home">메인으로</string>
-    <string name="ride_alone">혼자타기</string>
+    <string name="ride_alone">혼자 타기</string>
     <string name="request_car_pool_message">동승 요청 중입니다.\n잠시만 기다려주세요.</string>
     <string name="cancel_car_pool_request">요청취소</string>
     <string name="receive_car_pool_reqeust_message">동승 요청이 들어왔어요!</string>
@@ -73,4 +73,6 @@
     <string name="off_all">전체 끄기</string>
     <string name="air_conditioner">에어컨</string>
     <string name="apply_for_car_pool">동승 신청하기</string>
+    <string name="logo">RoboCar</string>
+    <string name="go_to_riding_taxi">택시 타기</string>
 </resources>
