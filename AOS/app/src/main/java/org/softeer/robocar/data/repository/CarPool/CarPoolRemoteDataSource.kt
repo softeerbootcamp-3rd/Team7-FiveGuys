@@ -23,6 +23,6 @@ interface CarPoolRemoteDataSource {
     ): Result<Unit>
 
     suspend fun rejectCarPoolRequest(
-        request: RejectCarPoolRequest
+        guestId: Long
     ): Result<Unit>
 }

@@ -39,10 +39,20 @@ class CarPoolListViewModel @Inject constructor(
     }
 
     fun requestCarPool(
-        carPool: CarPool
+        carPool: CarPool,
+        destinationLocation: String
     ) {
         viewModelScope.launch {
-            requestCarPoolUseCase(carPool)
+            requestCarPoolUseCase(
+                carPool,
+                destinationLocation
+            )
+                .onSuccess {
+
+                }
+                .onFailure {
+
+                }
         }
     }
 }

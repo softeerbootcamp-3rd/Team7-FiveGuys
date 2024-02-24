@@ -47,11 +47,11 @@ class CarPoolRemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun rejectCarPoolRequest(
-        request: RejectCarPoolRequest
+        guestId: Long
     ): Result<Unit> {
-        return kotlin.runCatching {
+        return runCatching {
             carPoolService.rejectCarPoolRequest(
-                request
+                guestId
             )
         }
     }

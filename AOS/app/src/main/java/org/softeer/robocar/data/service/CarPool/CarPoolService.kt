@@ -19,9 +19,9 @@ interface CarPoolService {
         @Query("femaleCount") countOfFemale: Int,
     ): CarPoolListResponse
 
-    @POST("operations")
+    @POST("operations/carpool/request")
     suspend fun requestCarPool(
-        @Body requestCarPoolRequest: RequestCarPoolRequest
+        @Body request: RequestCarPoolRequest
     )
 
     @POST("operations/carpools")
@@ -29,9 +29,9 @@ interface CarPoolService {
         @Body registerCarPoolRequest: registerCarPoolRequest
     )
 
-    @POST("push/carpool/reject")
+    @POST("operations/carpool/reject")
     suspend fun rejectCarPoolRequest(
-        @Body rejectCarPoolRequest: RejectCarPoolRequest
+        @Query("guestId") guestId: Long
     )
 
 }

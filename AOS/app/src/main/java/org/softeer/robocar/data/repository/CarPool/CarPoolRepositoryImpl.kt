@@ -27,10 +27,11 @@ class CarPoolRepositoryImpl @Inject constructor(
     }
 
     override suspend fun requestCarPool(
-        carPool: CarPool
+        carPool: CarPool,
+        guestDestinationLocation: String
     ): Result<Unit> {
         return dataSource.requestCarPool(
-            carPool.toRequestCarPool()
+            carPool.toRequestCarPool(guestDestinationLocation)
         )
     }
 
@@ -43,10 +44,10 @@ class CarPoolRepositoryImpl @Inject constructor(
     }
 
     override suspend fun rejectCarPoolRequest(
-        request: RejectCarPoolRequest
+        guestId: Long
     ): Result<Unit> {
         return dataSource.rejectCarPoolRequest(
-            request
+            guestId
         )
     }
 
