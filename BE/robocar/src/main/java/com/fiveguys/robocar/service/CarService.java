@@ -103,8 +103,10 @@ public class CarService {
 
     // 가장 가까운 차고에서 사용 가능한 차량을 조회하는 메서드
     public Car findAvailableCar(Long garageId) {
-        // 특정 차고에 위치하며 상태가 READY인 차량을 조회
-        return carRepository.findByGarageIdAndState(garageId, CarState.READY)
+        // 특정 차고에 위치하며 상태가 READY인 차량들 중 첫 번째 차량을 조회
+        List<Car> cars = carRepository.findByGarageIdAndState(garageId, CarState.READY);
+        return cars.stream()
+                .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException(ResponseStatus.CAR_NOT_FOUND.getMessage()));
     }
 }
