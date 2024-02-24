@@ -202,13 +202,13 @@ public class OperationService {
     }
 
     @Transactional(readOnly = true)
-    public boolean checkOnBoard(Long inOperationId, Long id) {
+    public InOperation checkOnBoard(Long inOperationId, Long id) {
         InOperation inOperation = inOperationRepository.findById(inOperationId).orElseThrow(EntityNotFoundException::new);
 
         if(Objects.equals(id, inOperation.getHostId()))
-            return inOperation.isHostOnBoard();
+            return inOperation;
         else if(Objects.equals(id, inOperation.getGuestId()))
-            return inOperation.isGuestOnBoard();
+            return inOperation;
 
         throw new EntityNotFoundException();
     }
