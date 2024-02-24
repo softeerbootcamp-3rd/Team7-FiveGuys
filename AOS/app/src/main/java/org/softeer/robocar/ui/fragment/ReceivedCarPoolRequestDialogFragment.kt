@@ -7,7 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softeer.robocar.databinding.FragmentDialogReceivedCarPoolRequestBinding
 import org.softeer.robocar.ui.viewmodel.ReceivedCarPoolRequestDialogViewModel
@@ -18,7 +19,7 @@ class ReceivedCarPoolRequestDialogFragment : DialogFragment() {
     private var _binding: FragmentDialogReceivedCarPoolRequestBinding? = null
     private val binding
         get() = _binding!!
-    private val viewModel : ReceivedCarPoolRequestDialogViewModel by viewModels()
+    private val viewModel : ReceivedCarPoolRequestDialogViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,12 +53,17 @@ class ReceivedCarPoolRequestDialogFragment : DialogFragment() {
 
         with(binding) {
             rejectButton.setOnClickListener {
-                // TODO API 연결
+                viewModel.rejectCarPoolRequest()
                 dismiss()
             }
             acceptButton.setOnClickListener {
-                // TODO API 연결
-                dismiss()
+                viewModel.acceptCarPoolRequest()
+                if(viewModel.carPoolId.equals(-1)){
+                    // TODO 수락 실패 예외처리
+                } else {
+                    val action =ReceivedCarPoolRequestDialogFragmentDirections.actionReceivedCarPoolRequestDialogFragmentToMapActivity()
+                    findNavController().navigate(action)
+                }
             }
         }
     }
