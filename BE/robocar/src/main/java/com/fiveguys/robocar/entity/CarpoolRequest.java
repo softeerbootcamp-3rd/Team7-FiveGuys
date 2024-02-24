@@ -35,4 +35,7 @@ public class CarpoolRequest {
 
     @TimeToLive()
     private Long timeToLive;
+
+    public void lock(){isLocked=true;}
+    public void unlock(){isLocked=false;}
 }

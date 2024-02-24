@@ -57,6 +57,8 @@ public class CreateCarpoolListUpResDto {
         for(CarpoolRequest req : iterableRequests){
             if(req == null)
                 continue;
+            if(req.isLocked())
+                continue;
 
             hostDepartCoordinate = String.format("%f,%f",req.getDepartLongitude(),req.getDepartLatitude());
 
