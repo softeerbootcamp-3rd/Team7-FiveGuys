@@ -8,8 +8,8 @@ data class RouteResponse(
     @SerialName("hostId") val hostId: Long, // JSON 필드 이름에 맞게 수정
     @SerialName("guestId") val guestId: Long,
     @SerialName("carImage") val carImage: String,
-    @SerialName("hostEstimatedArrivalTime") val hostEstimatedArrivalTime: Long,
-    @SerialName("guestEstimatedArrivalTime") val guestEstimatedArrivalTime: Long,
+    @SerialName("hostEstimatedArrivalTime") val hostEstimatedArrivalTime: Int,
+    @SerialName("guestEstimatedArrivalTime") val guestEstimatedArrivalTime: Int,
     @SerialName("carNumber") val carNumber: String,
     @SerialName("carName") val carName: String,
     @SerialName("hostNodes") val hostNodes: List<Coordinate>,

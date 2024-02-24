@@ -1,16 +1,17 @@
 package org.softeer.robocar.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.softeer.robocar.data.model.Route
 import org.softeer.robocar.data.model.RouteSolo
 import org.softeer.robocar.domain.usecase.GetOptimizedRouteSoloUseCase
-import org.softeer.robocar.domain.usecase.GetOptimizedRouteUseCase
 import javax.inject.Inject
 
+@HiltViewModel
 class RouteSoloViewModel @Inject constructor(
     private val getOptimizedRouteSoloUseCase: GetOptimizedRouteSoloUseCase
 ) : ViewModel() {
@@ -23,8 +24,16 @@ class RouteSoloViewModel @Inject constructor(
         destAddress: String
     ) {
         viewModelScope.launch {
-            val optimizedRouteSolo = getOptimizedRouteSoloUseCase(departureAddress, destAddress)
-            _routeSolo.value = optimizedRouteSolo
+            runCatching {
+                val optimizedRouteSolo = getOptimizedRouteSoloUseCase(departureAddress, destAddress)
+                _routeSolo.value = optimizedRouteSolo
+            }
+                .onSuccess {
+                    Log.d("Response", "테스트! $it")
+                }
+                .onFailure {
+                    Log.d("Response", "테스트! $it")
+                }
         }
     }
 }

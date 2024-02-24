@@ -13,7 +13,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
-            android:visibility="gone"
             tools:context=".ui.fragment.TaxiInformationFragment">
 
         <androidx.appcompat.widget.AppCompatImageButton
@@ -88,10 +87,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:fontFamily="@font/pretendard_semibold"
-                android:text="예상 소요 시간"
+                setRouteFormattedTime="@{viewModel.route.hostEstimatedArrivalTime}"
                 android:textColor="@color/black"
                 android:textSize="@dimen/content_text"
-                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/taxiLicensePlate"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/taxiLicensePlate"

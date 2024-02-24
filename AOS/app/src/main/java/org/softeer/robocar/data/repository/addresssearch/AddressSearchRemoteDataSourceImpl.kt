@@ -10,10 +10,11 @@ class AddressSearchRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getAddressSearchResult(
         key: String,
-        query: String
+        longitude: Double,
+        latitude: Double
     ): Result<AddressSearchResponse> {
         return runCatching {
-            addressSearchService.getAddressSearchResult(key, query)
+            addressSearchService.getAddressSearchResult(key, longitude, latitude)
         }
     }
 }

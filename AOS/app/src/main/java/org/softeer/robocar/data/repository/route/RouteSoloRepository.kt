@@ -5,6 +5,6 @@ import org.softeer.robocar.data.model.RouteSolo
 interface RouteSoloRepository {
     suspend fun getOptimizedRouteSolo(
         startPoint: String,
-        Goal: String,
+        goal: String,
     ): RouteSolo
 }

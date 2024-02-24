@@ -5,6 +5,7 @@ import org.softeer.robocar.data.dto.addresssearch.AddressSearchResponse
 interface AddressSearchRepository {
     suspend fun getAddressSearchResult(
         key: String,
-        query: String
+        longitude: Double,
+        latitude: Double
     ): Result<AddressSearchResponse>
 }
