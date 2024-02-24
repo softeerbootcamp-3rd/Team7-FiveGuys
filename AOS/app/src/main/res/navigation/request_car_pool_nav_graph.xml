@@ -33,7 +33,11 @@
         android:id="@+id/carPoolRequestDialog"
         android:name="org.softeer.robocar.ui.fragment.CarPoolRequestDialogFragment"
         android:label="CarPoolRequestDialogFragment"
-        tools:layout="@layout/fragment_dialog_car_pool_request"/>
+        tools:layout="@layout/fragment_dialog_car_pool_request">
+        <action android:id="@+id/action_carPoolRequestDialog_to_carPoolRejectDialogFragment"
+                app:destination="@id/carPoolRejectDialogFragment"/>
+        <action android:id="@+id/action_carPoolRequestDialog_to_mapActivity" app:destination="@id/mapActivity"/>
+    </dialog>
 
     <fragment android:id="@+id/carPoolMatchingFragment"
               android:name="org.softeer.robocar.ui.fragment.CarPoolMatchingFragment"
@@ -82,6 +86,20 @@
         <argument android:name="maleCount" app:argType="integer"/>
         <argument android:name="femaleCount" app:argType="integer"/>
         <argument android:name="nickname" app:argType="string"/>
+        <action android:id="@+id/action_receivedCarPoolRequestDialogFragment_to_mapActivity"
+                app:destination="@id/mapActivity"/>
     </dialog>
+
+    <dialog android:id="@+id/carPoolRejectDialogFragment"
+            android:name="org.softeer.robocar.ui.fragment.CarPoolRejectDialogFragment"
+            android:label="CarPoolRejectDialogFragment"
+            tools:layout="@layout/fragment_dialog_car_pool_reject">
+        <action android:id="@+id/action_carPoolRejectDialogFragment_to_carPoolList" app:destination="@id/carPoolList"/>
+    </dialog>
+    <activity
+        android:id="@+id/mapActivity"
+        android:name="org.softeer.robocar.ui.activity.MapActivity"
+        android:label="MapActivity"
+        tools:layout="@layout/activity_map"/>
 
 </navigation>
