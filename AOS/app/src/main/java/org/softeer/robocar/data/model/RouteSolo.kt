@@ -5,14 +5,10 @@ import org.softeer.robocar.data.dto.route.response.Coordinate
 
 
 @Serializable
-data class Route(
-    val hostId: Long,
-    val guestId: Long,
+data class RouteSolo(
     val carImageUrl: String,
-    val hostEstimatedArrivalTime: Long,
-    val guestEstimatedArrivalTime: Long,
+    val estimatedArrivalTime: Long,
     val vehicleRegistrationNumber: String,
     val vehicleModel: String,
-    val hostNodes: List<Coordinate>,
-    val guestNodes: List<Coordinate>
+    val nodes: List<Coordinate>
 )

@@ -104,7 +104,6 @@ class MapActivity : AppCompatActivity() {
             Log.d("MapActivity", "Location updated: Lat=${location.latitude}, Lon=${location.longitude}")
             currentLocation = location
             addCurrentLocationLabel(location.latitude, location.longitude)
-            updateCameraToCurrentLocation()
         }
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {

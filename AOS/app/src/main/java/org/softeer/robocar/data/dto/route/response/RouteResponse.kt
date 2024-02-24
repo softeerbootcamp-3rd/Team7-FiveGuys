@@ -2,8 +2,6 @@ package org.softeer.robocar.data.dto.route.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 
 @Serializable
 data class RouteResponse(
