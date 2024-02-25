@@ -12,7 +12,7 @@ import org.softeer.robocar.utils.setStatusBarTransparent
 @AndroidEntryPoint
 class RequestCarPoolActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityRequestCarPoolBinding
+    lateinit var binding: ActivityRequestCarPoolBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_request_car_pool)

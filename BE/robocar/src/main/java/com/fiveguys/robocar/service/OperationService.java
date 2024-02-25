@@ -2,6 +2,7 @@ package com.fiveguys.robocar.service;
 
 import com.fiveguys.robocar.dto.RouteInfo;
 import com.fiveguys.robocar.dto.res.RouteResDto;
+import com.fiveguys.robocar.dto.res.RouteSoloResDto;
 import com.fiveguys.robocar.entity.Car;
 import com.fiveguys.robocar.entity.Garage;
 import com.fiveguys.robocar.models.CarState;
@@ -9,6 +10,7 @@ import com.fiveguys.robocar.repository.CarRepository;
 import com.fiveguys.robocar.service.RouteComparisonService.OptimalRoute;
 import com.fiveguys.robocar.util.JsonParserUtil.Coordinate;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 import com.fiveguys.robocar.dto.req.CarpoolRegisterReqDto;
 import com.fiveguys.robocar.dto.req.CarpoolSuccessReqDto;
@@ -22,8 +24,10 @@ import com.fiveguys.robocar.util.CreateCarpoolListUpResDto;
 import jakarta.persistence.EntityNotFoundException;
 import org.json.JSONException;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import java.time.LocalDateTime;
@@ -85,6 +89,24 @@ public class OperationService {
         );
     }
 
+    public RouteSoloResDto getOptimizedRouteSolo(String startAddress, String destAddress) {
+        Coordinate start = mapService.convertAddressToCoordinates(startAddress);
+        Coordinate dest = mapService.convertAddressToCoordinates(destAddress);
+        Garage nearestGarage = garageService.findNearestGarage(start.toString());
+        Car availableCar = carService.findAvailableCar(nearestGarage.getId());
+
+        RouteInfo routeInfo;
+        routeInfo = routeService.getRouteInfo(start.toString(), dest.toString(), null);
+
+        return new RouteSoloResDto(
+                availableCar.getCarImage(),
+                routeInfo.getDuration(),
+                availableCar.getCarNumber(),
+                availableCar.getCarName(),
+                convertCoordinatesToSoloNodes(routeInfo.getPathCoordinates()) // 수정된 부분
+        );
+    }
+
     private List<RouteResDto.Node> convertCoordinatesToNodes(List<Coordinate> coordinates) {
         List<RouteResDto.Node> nodes = coordinates.stream()
                 .map(coordinate -> new RouteResDto.Node(coordinate.getLatitude(), coordinate.getLongitude()))
@@ -92,6 +114,13 @@ public class OperationService {
         return nodes;
 
     }
+    private List<RouteSoloResDto.Node> convertCoordinatesToSoloNodes(List<Coordinate> coordinates) {
+        List<RouteSoloResDto.Node> nodes = coordinates.stream()
+                .map(coordinate -> new RouteSoloResDto.Node(coordinate.getLatitude(), coordinate.getLongitude()))
+                .collect(Collectors.toList());
+        return nodes;
+    }
+
     public void saveCarpoolRequest(CarpoolRequest a) {
         carpoolRequestRepository.save(a);
     }
@@ -144,17 +173,18 @@ public class OperationService {
                 .guestId(guestId)
                 .departureTime(LocalDateTime.now())
                 .carId(carpoolRequest.getCarId())
+                .hostOnBoard(true)
+                .guestOnBoard(true)
                 //TODO
                 // 얼마나 갈리는지 아래부분 추가
 //                .estimatedHostArrivalTime()
 //                .estimatedGuestArrivalTime()
                 .build();
 
-        //리턴값 필요함( 호스트에게 )
         Long inOperationId = inOperationRepository.save(inOperation).getId();
 
         firebaseCloudMessageService.pushCarpoolAccept(guestId,inOperationId);
-        // 삭제 전, 락 해제해야 할 수도 있음
+
         carpoolRequestRepository.deleteById(String.valueOf(id));
 
         return inOperationId;
@@ -167,8 +197,33 @@ public class OperationService {
         carpoolRequestRepository.deleteById(String.valueOf(id));
         Car car = carRepository.findById(carpoolRequest.getCarId()).orElseThrow(Exception::new);
         car.editCarState(CarState.READY);
-        //TODO
-        // 락 해제
+
         carRepository.save(car);
     }
+
+    @Transactional(readOnly = true)
+    public InOperation checkOnBoard(Long inOperationId, Long id) {
+        InOperation inOperation = inOperationRepository.findById(inOperationId).orElseThrow(EntityNotFoundException::new);
+
+        if(Objects.equals(id, inOperation.getHostId()))
+            return inOperation;
+        else if(Objects.equals(id, inOperation.getGuestId()))
+            return inOperation;
+
+        throw new EntityNotFoundException();
+    }
+
+    @Transactional
+    public void leaveOnBoard(Long inOperationId, Long id) {
+        InOperation inOperation = inOperationRepository.findById(inOperationId).orElseThrow(EntityNotFoundException::new);
+
+        if(Objects.equals(id, inOperation.getHostId()))
+            inOperation.editHostOnBoard(false);
+        else if(Objects.equals(id, inOperation.getGuestId()))
+            inOperation.editGustOnBoard(false);
+        else
+            throw new EntityNotFoundException();
+    }
+
+
 }

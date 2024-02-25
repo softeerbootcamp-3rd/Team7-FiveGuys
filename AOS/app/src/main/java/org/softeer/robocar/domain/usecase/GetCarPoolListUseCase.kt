@@ -9,8 +9,15 @@ class GetCarPoolListUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         startLocation: String,
-        destinationLocation: String
+        destinationLocation: String,
+        countOfMen: Int,
+        countOfFemale: Int,
     ): CarPools {
-        return carPoolRepository.getCarPoolList(startLocation, destinationLocation)
+        return carPoolRepository.getCarPoolList(
+            startLocation,
+            destinationLocation,
+            countOfMen,
+            countOfFemale,
+        )
     }
 }
