@@ -44,12 +44,13 @@ class MapActivity : AppCompatActivity() {
     private lateinit var locationManager: LocationManager
     private var kakaoMap: KakaoMap? = null
     private var currentLocation: Location? = null
-    private val viewModel: MapViewModel by viewModels()
+    private val mapViewModel: MapViewModel by viewModels()
     private var currentLocationLabel: Label? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_map)
+        mapViewModel.setPassengerType(args.taxiType,args.carPoolType)
 
         val bottomSheetBehavior = BottomSheetBehavior.from(binding.destinationLayout)
         viewModel.bottomSheetState.observe(this, Observer {
@@ -83,14 +84,15 @@ class MapActivity : AppCompatActivity() {
                 observeRouteData() // 경로 데이터 관찰 시작
             }
         })
-        viewModel.getOptimizedRoute("영등포동5가 34-1", "서울특별시 강남구 학동로 180", "분당구 정자동 50-3", 1, 2)
+
+        mapViewModel.getOptimizedRoute("영등포동5가 34-1", "서울특별시 강남구 학동로 180", "분당구 정자동 50-3", 1, 2)
         HeadcountDialogFragment().show(supportFragmentManager, "headCount")
         setupCurrentLocationButton()
     }
 
     // 경로 데이터 관찰 및 경로 그리기
     private fun observeRouteData() {
-        viewModel.route.observe(this) { route ->
+        mapViewModel.route.observe(this) { route ->
             route?.let {
                 drawRoute(kakaoMap!!, it.guestNodes) // API 호출 결과에 따라 hostNodes 또는 guestNodes 사용
             }
