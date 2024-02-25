@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.softeer.robocar.BuildConfig
@@ -22,6 +23,8 @@ class MapViewModel @Inject constructor(
     private val searchPlaceUseCase: SearchPlaceUseCase,
     private val getOptimizedRouteUseCase: GetOptimizedRouteUseCase
 ): ViewModel() {
+    val bottomSheetState = MutableLiveData<Int>()
+    val bottomSheetDraggable = MutableLiveData<Boolean>()
 
     var keyWord = MutableLiveData<String>()
     private var _placeList = MutableLiveData<List<Place>>()
@@ -55,19 +58,6 @@ class MapViewModel @Inject constructor(
             _destRoadAddress.value = ""
             _passenger.value = 0
         }
-
-    fun getOptimizedRoute(
-        departureAddress: String,
-        hostDestAddress: String,
-        guestDestAddress: String,
-        hostId: Long,
-        guestId: Long
-    ) {
-        viewModelScope.launch {
-            val optimizedRoute = getOptimizedRouteUseCase(departureAddress, hostDestAddress, guestDestAddress, hostId, guestId)
-            _route.value = optimizedRoute
-        }
-    }
 
     fun getOptimizedRoute(
         departureAddress: String,
@@ -141,5 +131,17 @@ class MapViewModel @Inject constructor(
             destName.value!!,
             destRoadAddress.value!!
             )
+    }
+
+    fun sheetDown() {
+        bottomSheetState.value = BottomSheetBehavior.STATE_COLLAPSED
+    }
+
+    fun sheetUp() {
+        bottomSheetState.value = BottomSheetBehavior.STATE_EXPANDED
+    }
+
+    fun setDraggable(flag: Boolean) {
+        bottomSheetDraggable.value = flag
     }
 }
