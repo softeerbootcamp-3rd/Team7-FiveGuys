@@ -10,12 +10,17 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet.Layout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.navigation.navArgs
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.kakao.vectormap.*
 import com.kakao.vectormap.camera.CameraAnimation
 import com.kakao.vectormap.camera.CameraUpdateFactory
@@ -39,14 +44,23 @@ class MapActivity : AppCompatActivity() {
     private lateinit var locationManager: LocationManager
     private var kakaoMap: KakaoMap? = null
     private var currentLocation: Location? = null
-    private val mapViewModel: MapViewModel by viewModels()
+    private val viewModel: MapViewModel by viewModels()
     private var currentLocationLabel: Label? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_map)
 
-        mapViewModel.setPassengerType(args.taxiType, args.carPoolType)
+        val bottomSheetBehavior = BottomSheetBehavior.from(binding.destinationLayout)
+        viewModel.bottomSheetState.observe(this, Observer {
+            bottomSheetBehavior.state = it
+        })
+        viewModel.bottomSheetDraggable.observe(this, Observer {
+            bottomSheetBehavior.isDraggable = it
+        })
+
+
+        viewModel.setPassengerType(args.taxiType, args.carPoolType)
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
@@ -69,14 +83,14 @@ class MapActivity : AppCompatActivity() {
                 observeRouteData() // 경로 데이터 관찰 시작
             }
         })
-        mapViewModel.getOptimizedRoute("영등포동5가 34-1", "서울특별시 강남구 학동로 180", "분당구 정자동 50-3", 1, 2)
+        viewModel.getOptimizedRoute("영등포동5가 34-1", "서울특별시 강남구 학동로 180", "분당구 정자동 50-3", 1, 2)
         HeadcountDialogFragment().show(supportFragmentManager, "headCount")
         setupCurrentLocationButton()
     }
 
     // 경로 데이터 관찰 및 경로 그리기
     private fun observeRouteData() {
-        mapViewModel.route.observe(this) { route ->
+        viewModel.route.observe(this) { route ->
             route?.let {
                 drawRoute(kakaoMap!!, it.guestNodes) // API 호출 결과에 따라 hostNodes 또는 guestNodes 사용
             }
@@ -160,6 +174,7 @@ class MapActivity : AppCompatActivity() {
 
             // 새 라벨 추가 및 참조 저장
             currentLocationLabel = labelLayer?.addLabel(options)
+            BottomSheetBehavior.from(binding.destinationLayout).isDraggable
         }
     }
 
