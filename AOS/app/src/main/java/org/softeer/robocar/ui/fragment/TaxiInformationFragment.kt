@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.softeer.robocar.databinding.FragmentTaxiInformationBinding
-import org.softeer.robocar.ui.viewmodel.RouteViewModel
+import org.softeer.robocar.ui.viewmodel.MapViewModel
 
 @AndroidEntryPoint
 class TaxiInformationFragment : Fragment() {
@@ -16,7 +16,7 @@ class TaxiInformationFragment : Fragment() {
     private var _binding: FragmentTaxiInformationBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: RouteViewModel by viewModels()
+    private val viewModel: MapViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
