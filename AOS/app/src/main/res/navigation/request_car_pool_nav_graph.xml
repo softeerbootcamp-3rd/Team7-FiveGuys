@@ -94,7 +94,9 @@
     <fragment android:id="@+id/noAvailableCarPoolFragment"
               android:name="org.softeer.robocar.ui.fragment.NoAvailableCarPoolFragment"
               android:label="NoAvailableCarPoolFragment"
-              tools:layout="@layout/fragment_no_available_car_pool"/>
+              tools:layout="@layout/fragment_no_available_car_pool">
+        <action android:id="@+id/action_noAvailableCarPoolFragment_to_homeActivity" app:destination="@id/homeActivity"/>
+    </fragment>
 
     <dialog android:id="@+id/receivedCarPoolRequestDialogFragment"
             android:name="org.softeer.robocar.ui.fragment.ReceivedCarPoolRequestDialogFragment"
@@ -121,5 +123,10 @@
         android:name="org.softeer.robocar.ui.activity.MapActivity"
         android:label="MapActivity"
         tools:layout="@layout/activity_map"/>
+    <activity
+        android:id="@+id/homeActivity"
+        android:name="org.softeer.robocar.ui.activity.HomeActivity"
+        android:label="HomeActivity"
+        tools:layout="@layout/activity_home"/>
 
 </navigation>
