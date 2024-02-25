@@ -23,8 +23,10 @@
         android:name="org.softeer.robocar.ui.activity.MapActivity"
         android:label="MapActivity"
         tools:layout="@layout/activity_map">
-        <argument android:name="carPoolType" app:argType="org.softeer.robocar.data.model.CarPoolType"/>
-        <argument android:name="taxiType" app:argType="org.softeer.robocar.data.model.TaxiType"/>
+        <argument android:name="carPoolType" app:argType="org.softeer.robocar.data.model.CarPoolType"
+        />
+        <argument android:name="taxiType" app:argType="org.softeer.robocar.data.model.TaxiType"
+        />
     </activity>
 
 </navigation>

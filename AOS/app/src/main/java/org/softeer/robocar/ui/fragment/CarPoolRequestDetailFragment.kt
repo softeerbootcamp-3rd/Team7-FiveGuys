@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.MapLifeCycleCallback
@@ -25,6 +26,7 @@ class CarPoolRequestDetailFragment : Fragment() {
     private lateinit var navController: NavController
     private val binding
         get() = _binding!!
+    private val args: CarPoolRequestDetailFragmentArgs by navArgs()
     private lateinit var mapView: MapView
     private var kakaoMap: KakaoMap? = null
 
@@ -38,17 +40,16 @@ class CarPoolRequestDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val carPool = arguments?.getParcelable<CarPool>("carPool")!!
-        val originalCharge = arguments?.getInt("originalCharge")!!
+        val carPool = args.carPool
+        val originalCharge = args.originalCharge
         viewModel.setCarPoolDetail(carPool, originalCharge)
         navController = findNavController()
         mapView = binding.mapView
         drawMap()
 
-        binding.requestCarPoolButton.setOnClickListener {
-            // TODO 게스트 도착지 받아서 값 넣기
-            viewModel.requestCarPool(carPool, "서울 강서구 하늘길 111 국내선 주차대기실")
-            val action = CarPoolRequestDetailFragmentDirections.actionCarPoolRequestDetailToCarPoolRequestDialog()
+        binding.requestCarPoolButton.setOnClickListener{
+            viewModel.requestCarPool(carPool, args.destinationLocation)
+            val action = CarPoolRequestDetailFragmentDirections.actionCarPoolRequestDetailToCarPoolRequestDialog(args.destinationLocation)
             navController.navigate(action)
         }
     }

@@ -8,6 +8,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import org.softeer.robocar.R
 import org.softeer.robocar.ui.viewmodel.CarPoolListViewModel
@@ -18,10 +19,17 @@ class CarPoolCallFragment : Fragment(R.layout.fragment_car_pool_call) {
     private val viewModel: CarPoolListViewModel by activityViewModels()
     private lateinit var navController : NavController
     private lateinit var action : NavDirections
+    private val args: CarPoolCallFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.getCarPoolList("서울 강남구 학동로 180","서울 강남구 학동로 119",2,2)
+
+        viewModel.getCarPoolList(
+            startLocation = args.startLocation,
+            destinationLocation = args.destinationLocation,
+            countOfMen = args.countOfMen,
+            countOfFemale = args.countOfWomen
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -32,7 +40,7 @@ class CarPoolCallFragment : Fragment(R.layout.fragment_car_pool_call) {
             if(res.carPoolList.isEmpty()){
                 action = CarPoolCallFragmentDirections.actionCarPoolCallFragmentToNoAvailableCarPoolFragment()
             } else {
-                action = CarPoolCallFragmentDirections.actionCarPoolCallFragmentToCarPoolList()
+                action = CarPoolCallFragmentDirections.actionCarPoolCallFragmentToCarPoolList(args.destinationLocation)
             }
 
             navController.navigate(action, NavOptions.Builder()
