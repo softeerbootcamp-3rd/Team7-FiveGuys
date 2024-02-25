@@ -6,7 +6,7 @@
     <data>
         <variable
                 name="viewModel"
-                type="org.softeer.robocar.ui.viewmodel.RouteViewModel" />
+                type="org.softeer.robocar.ui.viewmodel.RouteSoloViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -47,7 +47,7 @@
                 android:adjustViewBounds="true"
                 app:layout_constraintWidth_percent="1"
                 app:layout_constraintHeight_percent="0.3"
-                app:imageUrl="@{viewModel.route.carImageUrl}"
+                app:imageUrl="@{viewModel.routeSolo.carImageUrl}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/pretendard_semibold"
-                android:text="@{viewModel.route.vehicleModel}"
+                android:text="@{viewModel.routeSolo.vehicleModel}"
                 android:textColor="@color/black"
                 android:textSize="@dimen/content_text"
                 app:layout_constraintEnd_toEndOf="@id/taxiImage"
@@ -73,7 +73,7 @@
                 android:layout_marginBottom="8dp"
                 android:background="@color/hyundai_blue"
                 android:fontFamily="@font/pretendard_semibold"
-                android:text="@{viewModel.route.vehicleRegistrationNumber}"
+                android:text="@{viewModel.routeSolo.vehicleRegistrationNumber}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/content_text"
                 app:layout_constraintEnd_toStartOf="@id/taxiEstimatedTime"
@@ -87,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:fontFamily="@font/pretendard_semibold"
-                setRouteFormattedTime="@{viewModel.route.hostEstimatedArrivalTime}"
+                setRouteFormattedTime="@{viewModel.routeSolo.estimatedArrivalTime}"
                 android:textColor="@color/black"
                 android:textSize="@dimen/content_text"
                 app:layout_constraintBottom_toBottomOf="@id/taxiLicensePlate"

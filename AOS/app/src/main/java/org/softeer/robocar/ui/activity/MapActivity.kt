@@ -14,7 +14,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.lifecycleScope
 import com.kakao.vectormap.*
 import com.kakao.vectormap.camera.CameraAnimation
 import com.kakao.vectormap.camera.CameraUpdateFactory
@@ -29,7 +31,13 @@ import com.kakao.vectormap.label.Label
 import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
+import kotlinx.coroutines.launch
+import org.softeer.robocar.BuildConfig.kakao_rest_api_key
+import org.softeer.robocar.data.repository.addresssearch.AddressSearchRepository
+import org.softeer.robocar.ui.viewmodel.MapViewModel
 import org.softeer.robocar.ui.viewmodel.RouteViewModel
+import org.softeer.robocar.ui.viewmodel.RouteSoloViewModel
+import org.softeer.robocar.ui.viewmodel.OnboardViewModel
 
 
 @AndroidEntryPoint
@@ -40,7 +48,11 @@ class MapActivity : AppCompatActivity() {
     private var kakaoMap: KakaoMap? = null
     private var currentLocation: android.location.Location? = null
     private val routeViewModel: RouteViewModel by viewModels()
+    private val routeSoloViewModel: RouteSoloViewModel by viewModels()
+    private val onboardViewModel: OnboardViewModel by viewModels()
     private var currentLocationLabel: Label? = null
+    private val mapViewModel: MapViewModel by viewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,9 +76,26 @@ class MapActivity : AppCompatActivity() {
         }, object : KakaoMapReadyCallback() {
             override fun onMapReady(kakaoMap: KakaoMap) {
                 this@MapActivity.kakaoMap = kakaoMap // kakaoMap 객체 저장
+                observeRouteSoloData() // 혼자 타는 경로 데이터 관찰 시작
                 observeRouteData() // 경로 데이터 관찰 시작
+                updateCameraToCurrentLocation()
+
             }
         })
+        mapViewModel.addressResult.observe(this) { address ->
+            Log.d("주소 변환 결과", address)
+            // 주소 변환 결과를 사용하여 경로 최적화 요청
+            onboardViewModel.onboardDetails.value?.let { onboard ->
+                requestOptimizedRoute(address, onboard.hostDestAddress, onboard.guestDestAddress, onboard.hostId, onboard.guestId)
+            }
+        }
+
+//        val inOperationId = intent.getIntExtra("inOperationId", 0)
+//        val inOperationId = 1
+//        if (inOperationId != 0) {
+//            fetchAndDisplayRoute(inOperationId)
+//        }
+        routeSoloViewModel.getOptimizedRouteSolo("서울특별시 서대문구 남가좌동 122-1", "영등포동5가 34-1")
         routeViewModel.getOptimizedRoute("영등포동5가 34-1", "서울특별시 강남구 학동로 180", "분당구 정자동 50-3", 1, 2)
         HeadcountDialogFragment().show(supportFragmentManager, "headCount")
         setupCurrentLocationButton()
@@ -77,6 +106,13 @@ class MapActivity : AppCompatActivity() {
         routeViewModel.route.observe(this) { route ->
             route?.let {
                 drawRoute(kakaoMap!!, it.guestNodes) // API 호출 결과에 따라 hostNodes 또는 guestNodes 사용
+            }
+        }
+    }
+    private fun observeRouteSoloData() {
+        routeSoloViewModel.routeSolo.observe(this) { routeSolo ->
+            routeSolo?.let {
+                drawRoute(kakaoMap!!, it.nodes)
             }
         }
     }
@@ -98,35 +134,61 @@ class MapActivity : AppCompatActivity() {
         routeLineManager.layer.addRouteLine(options)
     }
     private fun setupLocationUpdates() {
-        Log.d("MapActivity", "setupLocationUpdates called")
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val locationListener = LocationListener { location ->
-            Log.d("MapActivity", "Location updated: Lat=${location.latitude}, Lon=${location.longitude}")
             currentLocation = location
             addCurrentLocationLabel(location.latitude, location.longitude)
+            // inOperationId 값을 Intent에서 가져오거나 다른 방식으로 결정
+//            val inOperationId = intent.getIntExtra("inOperationId", 0)
+            val inOperationId = 1
+            if (inOperationId != 0) {
+                fetchAndDisplayRoute(inOperationId)
+            }
         }
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10, 10f, locationListener, Looper.getMainLooper())
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10f, locationListener, Looper.getMainLooper())
             val lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-            if (lastKnownLocation != null) {
-                Log.d("MapActivity", "Last known location: Lat=${lastKnownLocation.latitude}, Lon=${lastKnownLocation.longitude}")
-                currentLocation = lastKnownLocation
-                addCurrentLocationLabel(lastKnownLocation.latitude, lastKnownLocation.longitude)
+            lastKnownLocation?.let {
+                currentLocation = it
+                addCurrentLocationLabel(it.latitude, it.longitude)
                 updateCameraToCurrentLocation()
-            } else {
-                Log.d("MapActivity", "Last known location is null")
             }
-        } else {
-            Log.d("MapActivity", "Location permission not granted")
         }
+    }
+
+
+    private fun fetchAndDisplayRoute(inOperationId: Int) {
+        onboardViewModel.fetchOnboardDetails(inOperationId)
+        observeOnboardDetails()
+    }
+
+    private fun observeOnboardDetails() {
+        onboardViewModel.onboardDetails.observe(this) { onboard ->
+            currentLocation?.let {
+                // 주소 변환 요청만 하고, 결과는 LiveData를 통해 받음
+                requestAddressConversion(it)
+            }
+        }
+    }
+
+    private fun requestAddressConversion(location: Location) {
+        lifecycleScope.launch {
+            mapViewModel.convertLocationToAddress(location)
+        }
+    }
+
+    // 최적화된 경로 요청
+    private fun requestOptimizedRoute(currentAddress: String, hostDestAddress: String, guestDestAddress: String, hostId: Int, guestId: Int) {
+        // 주소 변환 결과를 사용하여 경로 최적화 요청
+        routeViewModel.getOptimizedRoute(currentAddress, hostDestAddress, guestDestAddress, hostId.toLong(), guestId.toLong())
     }
 
     private fun updateCameraToCurrentLocation() {
         currentLocation?.let { location ->
             kakaoMap?.let { map ->
                 val cameraUpdate = CameraUpdateFactory.newCenterPosition(LatLng.from(location.latitude, location.longitude))
-                map.moveCamera(cameraUpdate, CameraAnimation.from(10, true, true))
+                map.moveCamera(cameraUpdate)
             } ?: Log.d("MapActivity", "kakaoMap is null, cannot update camera to current location")
         }
     }
@@ -173,7 +235,7 @@ class MapActivity : AppCompatActivity() {
             currentLocation?.let { location ->
                 val cameraUpdate = CameraUpdateFactory.newCenterPosition(LatLng.from(location.latitude, location.longitude))
                 // 카메라를 새 위치로 이동시키며 애니메이션 효과 적용
-                kakaoMap?.moveCamera(cameraUpdate, CameraAnimation.from(10, true, true))
+                kakaoMap?.moveCamera(cameraUpdate, CameraAnimation.from(500, true, true))
             }
         }
     }

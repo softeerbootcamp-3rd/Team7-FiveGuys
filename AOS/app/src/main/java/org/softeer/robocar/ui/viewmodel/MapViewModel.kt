@@ -1,5 +1,6 @@
 package org.softeer.robocar.ui.viewmodel
 
+import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,11 +11,13 @@ import kotlinx.coroutines.launch
 import org.softeer.robocar.BuildConfig
 import org.softeer.robocar.data.dto.placesearch.Place
 import org.softeer.robocar.data.model.PlaceItem
+import org.softeer.robocar.domain.usecase.AddressSearchUseCase
 import org.softeer.robocar.domain.usecase.SearchPlaceUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class MapViewModel @Inject constructor(
+    private val addressSearchUseCase: AddressSearchUseCase,
     private val searchPlaceUseCase: SearchPlaceUseCase
 ): ViewModel() {
 
@@ -29,6 +32,10 @@ class MapViewModel @Inject constructor(
     val destName: LiveData<String> = _destName
     private var _destRoadAddress = MutableLiveData<String>()
     val destRoadAddress: LiveData<String> = _destRoadAddress
+    // 주소 검색 결과를 저장할 LiveData
+    private val _addressResult = MutableLiveData<String>()
+    val addressResult: LiveData<String> = _addressResult
+
 
     init {
         _countMale.value = "0"
@@ -96,5 +103,20 @@ class MapViewModel @Inject constructor(
             destName.value!!,
             destRoadAddress.value!!
             )
+    }
+    // 주소 검색을 수행하는 함수
+    // 주소 변환 로직을 suspend 함수로 구현
+    suspend fun convertLocationToAddress(location: Location): String {
+        return try {
+            val apiKey = BuildConfig.kakao_rest_api_key // API 키 설정
+            val latitude = location.latitude
+            val longitude = location.longitude
+
+            // 주소 검색 수행하고 결과 반환
+            val result = addressSearchUseCase(apiKey, latitude, longitude).getOrThrow()
+            result
+        } catch (e: Exception) {
+            "주소를 찾을 수 없습니다." // 예외 발생 시 기본 문자열 반환
+        }
     }
 }

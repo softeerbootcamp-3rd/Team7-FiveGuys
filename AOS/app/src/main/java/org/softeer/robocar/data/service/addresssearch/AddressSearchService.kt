@@ -1,5 +1,6 @@
 package org.softeer.robocar.data.service.addresssearch
 
+import org.softeer.robocar.data.dto.addresssearch.AddressInfo
 import org.softeer.robocar.data.dto.addresssearch.AddressSearchResponse
 import retrofit2.http.GET
 import retrofit2.http.Header

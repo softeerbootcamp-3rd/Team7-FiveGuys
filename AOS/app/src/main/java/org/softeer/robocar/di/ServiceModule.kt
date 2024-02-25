@@ -9,6 +9,7 @@ import org.softeer.robocar.data.service.PlaceSearch.PlaceSearchService
 import org.softeer.robocar.data.service.addresssearch.AddressSearchService
 import org.softeer.robocar.data.service.route.RouteService
 import org.softeer.robocar.data.service.auth.AuthService
+import org.softeer.robocar.data.service.operation.OnboardService
 import org.softeer.robocar.data.service.route.RouteSoloService
 import org.softeer.robocar.data.service.user.UserService
 import retrofit2.Retrofit
@@ -47,6 +48,12 @@ class ServiceModule {
     fun provideUserService(
         @BaseRetrofit retrofit: Retrofit
     ): UserService = retrofit.create(UserService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideOnboardService(
+        @BaseRetrofit retrofit: Retrofit
+    ): OnboardService = retrofit.create(OnboardService::class.java)
 
     @Provides
     @Singleton
