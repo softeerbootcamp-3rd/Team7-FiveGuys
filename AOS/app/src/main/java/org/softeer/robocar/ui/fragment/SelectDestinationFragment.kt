@@ -38,9 +38,6 @@ class SelectDestinationFragment : Fragment() {
         viewModel.setDestInfo(args.placeName, args.addressName)
 
         binding.finishSelectDest.setOnClickListener {
-            val action =SelectDestinationFragmentDirections.actionSelectDestinationFragmentToRequestCarPoolActivity()
-            findNavController().navigate(action)
-
             val info = viewModel.emitInfo()
             val intent = Intent(requireActivity(), RequestCarPoolActivity::class.java).apply {
                 this.putExtra("carPoolInfo",info)
