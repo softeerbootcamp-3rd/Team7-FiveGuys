@@ -69,6 +69,19 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    fun getOptimizedRoute(
+        departureAddress: String,
+        hostDestAddress: String,
+        guestDestAddress: String,
+        hostId: Long,
+        guestId: Long
+    ) {
+        viewModelScope.launch {
+            val optimizedRoute = getOptimizedRouteUseCase(departureAddress, hostDestAddress, guestDestAddress, hostId, guestId)
+            _route.value = optimizedRoute
+        }
+    }
+
     suspend fun getSearchResult() {
         val key = BuildConfig.kakao_rest_api_key
         viewModelScope.launch {
