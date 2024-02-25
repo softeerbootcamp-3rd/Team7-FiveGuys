@@ -5,32 +5,43 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.softeer.robocar.BuildConfig
 import org.softeer.robocar.data.dto.placesearch.Place
 import org.softeer.robocar.data.model.CarPoolType
 import org.softeer.robocar.data.model.PlaceItem
+import org.softeer.robocar.data.model.Route
 import org.softeer.robocar.data.model.TaxiType
+import org.softeer.robocar.domain.usecase.GetOptimizedRouteUseCase
 import org.softeer.robocar.domain.usecase.SearchPlaceUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class MapViewModel @Inject constructor(
-    private val searchPlaceUseCase: SearchPlaceUseCase
+    private val searchPlaceUseCase: SearchPlaceUseCase,
+    private val getOptimizedRouteUseCase: GetOptimizedRouteUseCase
 ): ViewModel() {
-
-    private var _countMale = MutableLiveData<String>()
-    val countMale: LiveData<String> = _countMale
-
-    private var _countFemale = MutableLiveData<String>()
-    val countFemale: LiveData<String> = _countFemale
-
+    val bottomSheetState = MutableLiveData<Int>()
+    val bottomSheetDraggable = MutableLiveData<Boolean>()
+    
     var keyWord = MutableLiveData<String>()
 
     private var _placeList = MutableLiveData<List<Place>>()
     val placeList: LiveData<List<Place>> = _placeList
+    private var _route = MutableLiveData<Route>()
+    val route: LiveData<Route> = _route
 
+    private var _taxiType = MutableLiveData<TaxiType>()
+    val taxiType: LiveData<TaxiType> = _taxiType
+    private var _carPoolType = MutableLiveData<CarPoolType>()
+    val carPoolType: LiveData<CarPoolType> = _carPoolType
+    private var _countMale = MutableLiveData<Int>()
+    val countMale: LiveData<Int> = _countMale
+    private var _countFemale = MutableLiveData<Int>()
+    val countFemale: LiveData<Int> = _countFemale
+  
     private var _destName = MutableLiveData<String>()
     val destName: LiveData<String> = _destName
 
@@ -40,12 +51,6 @@ class MapViewModel @Inject constructor(
     private var _startLocation = MutableLiveData<String>()
     val startLocation: LiveData<String> = _startLocation
 
-    private var _taxiType = MutableLiveData<TaxiType>()
-    val taxiType: LiveData<TaxiType> = _taxiType
-
-    private var _carPoolType = MutableLiveData<CarPoolType>()
-    val carPoolType: LiveData<CarPoolType> = _carPoolType
-
     init {
         _countMale.value = "0"
         _countFemale.value = "0"
@@ -54,6 +59,23 @@ class MapViewModel @Inject constructor(
         _destName.value = ""
         _destRoadAddress.value = ""
         _startLocation.value = "강남구 학동로 134"
+      
+    var total = if (taxiType.value == TaxiType.COMPACT_TAXI) 4 else 6
+    private var _passenger = MutableLiveData<Int>()
+    val passenger: LiveData<Int> = _passenger
+
+    fun getOptimizedRoute(
+        departureAddress: String,
+        hostDestAddress: String,
+        guestDestAddress: String,
+        hostId: Long,
+        guestId: Long
+    ) {
+        viewModelScope.launch {
+            val optimizedRoute = getOptimizedRouteUseCase(departureAddress, hostDestAddress, guestDestAddress, hostId, guestId)
+            _route.value = optimizedRoute
+        }
+
     }
 
     suspend fun getSearchResult() {
@@ -69,37 +91,39 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    fun setPassengerType(taxiT: TaxiType, carPoolT: CarPoolType) {
+        _taxiType.value = taxiT
+        _carPoolType.value = carPoolT
+        total = if (taxiT == TaxiType.COMPACT_TAXI) 4 else 6
+    }
+
     fun setDestInfo(destName: String, destRoadAddress: String) {
         _destName.value = destName
         _destRoadAddress.value = destRoadAddress
     }
 
-    fun addMale(): Int {
-        val next = _countMale.value!!.toInt() + 1
-        _countMale.value = next.toString()
-
-        return next
+    fun addMale() {
+        val next = _countMale.value!! + 1
+        _countMale.value = next
+        _passenger.value = _passenger.value!! + 1
     }
 
-    fun subtractMale(): Int {
+    fun subtractMale() {
         val next = _countMale.value!!.toInt() - 1
-        _countMale.value = next.toString()
-
-        return next
+        _countMale.value = next
+        _passenger.value = _passenger.value!! - 1
     }
 
-    fun addFemale(): Int {
+    fun addFemale() {
         val next = _countFemale.value!!.toInt() + 1
-        _countFemale.value = next.toString()
-
-        return next
+        _countFemale.value = next
+        _passenger.value = _passenger.value!! + 1
     }
 
-    fun subtractFemale(): Int {
+    fun subtractFemale() {
         val next = _countFemale.value!!.toInt() - 1
-        _countFemale.value = next.toString()
-
-        return next
+        _countFemale.value = next
+        _passenger.value = _passenger.value!! - 1
     }
 
     fun setStartLocation(location: String){
@@ -118,12 +142,24 @@ class MapViewModel @Inject constructor(
         return PlaceItem(
             taxiType.value!!,
             carPoolType.value!!,
-            countMale.value!!,
-            countFemale.value!!,
+            countMale.value!!.toString(),
+            countFemale.value!!.toString(),
             startLocation.value!!,
             startLocation.value!!,
             destName.value!!,
             destRoadAddress.value!!
             )
+    }
+
+    fun sheetDown() {
+        bottomSheetState.value = BottomSheetBehavior.STATE_COLLAPSED
+    }
+
+    fun sheetUp() {
+        bottomSheetState.value = BottomSheetBehavior.STATE_EXPANDED
+    }
+
+    fun setDraggable(flag: Boolean) {
+        bottomSheetDraggable.value = flag
     }
 }

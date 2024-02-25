@@ -9,11 +9,14 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.kakao.vectormap.KakaoMap
+import com.kakao.vectormap.KakaoMapReadyCallback
+import com.kakao.vectormap.MapLifeCycleCallback
+import com.kakao.vectormap.MapView
 import dagger.hilt.android.AndroidEntryPoint
 import org.softeer.robocar.data.model.CarPool
 import org.softeer.robocar.databinding.FragmentCarPoolDetailBinding
 import org.softeer.robocar.ui.viewmodel.CarPoolDetailViewModel
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class CarPoolRequestDetailFragment : Fragment() {
@@ -24,6 +27,8 @@ class CarPoolRequestDetailFragment : Fragment() {
     private val binding
         get() = _binding!!
     private val args: CarPoolRequestDetailFragmentArgs by navArgs()
+    private lateinit var mapView: MapView
+    private var kakaoMap: KakaoMap? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCarPoolDetailBinding.inflate(inflater, container, false).apply {
@@ -39,6 +44,8 @@ class CarPoolRequestDetailFragment : Fragment() {
         val originalCharge = args.originalCharge
         viewModel.setCarPoolDetail(carPool, originalCharge)
         navController = findNavController()
+        mapView = binding.mapView
+        drawMap()
 
         binding.requestCarPoolButton.setOnClickListener{
             viewModel.requestCarPool(carPool, args.destinationLocation)
@@ -51,4 +58,18 @@ class CarPoolRequestDetailFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    private fun drawMap() = mapView.start(object : MapLifeCycleCallback() {
+        override fun onMapDestroy() {
+            // 지도 API가 정상적으로 종료될 때 호출됨
+        }
+
+        override fun onMapError(error: Exception) {
+            // 인증 실패 및 지도 사용 중 에러가 발생할 때 호출됨
+        }
+    }, object : KakaoMapReadyCallback() {
+        override fun onMapReady(kakaoMap: KakaoMap) {
+            this@CarPoolRequestDetailFragment.kakaoMap = kakaoMap // kakaoMap 객체 저장
+        }
+    })
 }

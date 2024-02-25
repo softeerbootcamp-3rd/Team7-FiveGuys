@@ -5,6 +5,8 @@ import com.fiveguys.robocar.apiPayload.ResponseStatus;
 import com.fiveguys.robocar.dto.req.CarpoolRequestDto;
 import com.fiveguys.robocar.dto.res.InOperationDto;
 import com.fiveguys.robocar.dto.res.RouteResDto;
+import com.fiveguys.robocar.dto.res.RouteSoloResDto;
+import com.fiveguys.robocar.entity.InOperation;
 import com.fiveguys.robocar.service.FirebaseCloudMessageService;
 import com.fiveguys.robocar.service.OperationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -62,7 +64,7 @@ public class OperationController {
     public HttpEntity carpoolReject(@Auth Long hostId, @RequestParam Long guestId) throws JSONException {
         String response = null;
         try {
-            response = fcmService.pushCarpoolReject(guestId);
+            response = fcmService.pushCarpoolReject(guestId, hostId);
         } catch (EntityNotFoundException e) {
             return ResponseApi.of(ResponseStatus.MEMBER_NOT_FOUND);
         } catch (NoSuchElementException e) {
@@ -71,7 +73,7 @@ public class OperationController {
         return ResponseApi.ok(response);
     }
 
-    @Operation(summary = "최적화된 경로 조회")
+    @Operation(summary = "최적화된 동승 경로 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청")})
@@ -85,6 +87,23 @@ public class OperationController {
 
         try {
             RouteResDto response = operationService.getOptimizedRoute(departureAddress, hostDestAddress, guestDestAddress, hostId, guestId);
+            return ResponseApi.ok(response);
+        } catch (Exception e) {
+            return ResponseApi.of(ResponseStatus.OPERATION_NOT_FOUND);
+        }
+    }
+
+    @Operation(summary = "최적화된 혼자타기 경로 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청")})
+    @GetMapping("/operations/optimized-route/solo")
+    public ResponseEntity<?> getOptimizedRouteSolo(
+            @Parameter(description = "출발지 주소") @RequestParam String departureAddress,
+            @Parameter(description = "호스트 목적지 주소") @RequestParam String destAddress) {
+
+        try {
+            RouteSoloResDto response = operationService.getOptimizedRouteSolo(departureAddress, destAddress);
             return ResponseApi.ok(response);
         } catch (Exception e) {
             return ResponseApi.of(ResponseStatus.OPERATION_NOT_FOUND);
@@ -178,4 +197,42 @@ public class OperationController {
         }
         return ResponseApi.ok(null);
     }
+
+    @Operation(summary = "유저가 운행중이면 정보를 불러옴")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "요청 성공"),
+            @ApiResponse(responseCode = "400", description = "없는 유저 혹은 운행정보"),
+            @ApiResponse(responseCode = "500", description = "서버 에러")
+    })
+    @GetMapping("/operations/onboard")
+    public ResponseEntity checkOnBoard(@RequestParam Long inOperationId, @Auth Long id) {
+        InOperation inOperation;
+        try {
+            inOperation = operationService.checkOnBoard(inOperationId, id);
+        } catch (EntityNotFoundException e){
+            return ResponseApi.of(ResponseStatus._BAD_REQUEST);
+        } catch(Exception e){
+            return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
+        }
+        return ResponseApi.ok(inOperation);
+    }
+
+    @Operation(summary = "운행 종료후 운행 상태 변경")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "요청 성공"),
+            @ApiResponse(responseCode = "400", description = "없는 유저 혹은 운행정보"),
+            @ApiResponse(responseCode = "500", description = "서버 에러")
+    })
+    @PostMapping("/operations/onboard")
+    public ResponseEntity leaveOnBoard(@RequestParam Long inOperationId, @Auth Long id) {
+        try {
+            operationService.leaveOnBoard(inOperationId, id);
+        } catch (EntityNotFoundException e){
+            return ResponseApi.of(ResponseStatus._BAD_REQUEST);
+        } catch(Exception e){
+            return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
+        }
+        return ResponseApi.ok(null);
+    }
+
 }

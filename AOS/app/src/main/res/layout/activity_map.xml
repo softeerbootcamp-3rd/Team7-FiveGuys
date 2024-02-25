@@ -50,7 +50,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/destinationLayout"
                 android:layout_width="match_parent"
-                android:layout_height="760dp"
+                android:layout_height="match_parent"
                 android:background="@drawable/rectangle_white_top_radius_20"
                 app:behavior_peekHeight="187dp"
                 app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">

@@ -40,10 +40,8 @@ class HeadcountDialogFragment : DialogFragment(R.layout.fragment_headcount_dialo
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         isCancelable = false
 
-        //TODO: TaxiType에 따라 +/- 활성/비활성화
         binding.btnMinusMale.setOnClickListener {
-            val act = viewModel.subtractMale()
-            if(act==0) it.isClickable = false
+            viewModel.subtractMale()
         }
 
         binding.btnPlusMale.setOnClickListener {
@@ -51,8 +49,7 @@ class HeadcountDialogFragment : DialogFragment(R.layout.fragment_headcount_dialo
         }
 
         binding.btnMinusFemale.setOnClickListener {
-            val act = viewModel.subtractFemale()
-            if(act==0) it.isClickable = false
+            viewModel.subtractFemale()
         }
 
         binding.btnPlusFemale.setOnClickListener {

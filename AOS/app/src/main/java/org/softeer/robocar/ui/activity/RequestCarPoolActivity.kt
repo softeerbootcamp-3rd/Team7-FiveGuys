@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
+import android.os.Parcelable
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.navArgs
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,6 +26,8 @@ class RequestCarPoolActivity : AppCompatActivity(), DataPassListener {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_request_car_pool)
         setStatusBarTransparent(window)
         viewModel.setCarPoolInfo(args.CarPoolInformation)
+
+        println(intent.getParcelableExtra<Parcelable?>("carPoolInfo").toString())
 
         binding.backButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()

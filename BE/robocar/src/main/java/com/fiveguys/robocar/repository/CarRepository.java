@@ -9,5 +9,6 @@ import java.util.Optional;
 
 public interface CarRepository extends JpaRepository<Car, Long> {
     Optional<Car> findByCarNumber(String carNumber);
-    List<Car> findByGarageIdAndState(Long garageId, CarState state); // 여러 대의 차량을 찾기 위해 수정
+    List<Car> findByGarageIdAndState(Long garageId, CarState state);
 }
+
