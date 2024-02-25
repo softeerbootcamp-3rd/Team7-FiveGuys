@@ -47,6 +47,7 @@ class ReceivedCarPoolRequestDialogViewModel @Inject constructor(
         _femaleCount.value = femaleCount
         _nickname.value = nickname
         _guestAddress.value = guestAddress
+        _carPoolId.value = -1
     }
 
     fun rejectCarPoolRequest(
@@ -64,7 +65,6 @@ class ReceivedCarPoolRequestDialogViewModel @Inject constructor(
     }
 
     fun acceptCarPoolRequest(){
-
         viewModelScope.launch {
             acceptCarPoolRequestUseCase(
                 guestId.value!!,

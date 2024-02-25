@@ -1,5 +1,6 @@
 package org.softeer.robocar.ui.fragment
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -8,9 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softeer.robocar.databinding.FragmentDialogReceivedCarPoolRequestBinding
+import org.softeer.robocar.ui.adapter.DataPassListener
 import org.softeer.robocar.ui.viewmodel.ReceivedCarPoolRequestDialogViewModel
 
 @AndroidEntryPoint
@@ -20,6 +21,7 @@ class ReceivedCarPoolRequestDialogFragment : DialogFragment() {
     private val binding
         get() = _binding!!
     private val viewModel : ReceivedCarPoolRequestDialogViewModel by activityViewModels()
+    private var dataPassListener: DataPassListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,6 +38,7 @@ class ReceivedCarPoolRequestDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        isCancelable = false
 
         val guestId = arguments?.getLong("guestId") ?: 0
         val maleCount = arguments?.getInt("maleCount")?: 0
@@ -61,8 +64,7 @@ class ReceivedCarPoolRequestDialogFragment : DialogFragment() {
                 if(viewModel.carPoolId.equals(-1)){
                     // TODO 수락 실패 예외처리
                 } else {
-                    val action =ReceivedCarPoolRequestDialogFragmentDirections.actionReceivedCarPoolRequestDialogFragmentToMapActivity()
-                    findNavController().navigate(action)
+                    goToMap(viewModel.carPoolId.value!!)
                 }
             }
         }
@@ -71,5 +73,18 @@ class ReceivedCarPoolRequestDialogFragment : DialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if(context is DataPassListener){
+            dataPassListener = context
+        } else{
+            // 에러처리..
+        }
+    }
+
+    private fun goToMap(carPoolId: Long){
+        dataPassListener?.onDataPassed(carPoolId)
     }
 }

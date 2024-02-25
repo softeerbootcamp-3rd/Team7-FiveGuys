@@ -184,7 +184,10 @@ class MapActivity : AppCompatActivity() {
     }
 
     private fun setCarPoolANDTaxiType(){
-        mapViewModel.setTaxiType(args.taxiType ?: TaxiType.COMPACT_TAXI)
-        mapViewModel.setCarPoolType(args.carPoolType ?: CarPoolType.ALONE)
+
+        val taxiType = TaxiType.getSize(intent.getStringExtra("taxiType") ?: "SMALL")
+        val carPoolType = CarPoolType.getType(intent.getStringExtra("carPoolType") ?: "ALONE")
+        mapViewModel.setTaxiType(taxiType)
+        mapViewModel.setCarPoolType(carPoolType)
     }
 }

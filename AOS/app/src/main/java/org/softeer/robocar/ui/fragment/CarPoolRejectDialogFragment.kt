@@ -29,6 +29,7 @@ class CarPoolRejectDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        isCancelable = false
         navController = findNavController()
 
         binding.confirmButton.setOnClickListener {
