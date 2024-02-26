@@ -18,4 +18,7 @@ interface AuthRepository {
         user: User
     )
 
+    suspend fun getUserInfo(
+    ): User
+
 }

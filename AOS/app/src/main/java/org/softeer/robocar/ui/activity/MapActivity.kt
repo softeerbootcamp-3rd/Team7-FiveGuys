@@ -11,12 +11,17 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet.Layout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.navArgs
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.kakao.vectormap.*
 import com.kakao.vectormap.camera.CameraAnimation
 import com.kakao.vectormap.camera.CameraUpdateFactory
@@ -25,7 +30,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.softeer.robocar.R
 import org.softeer.robocar.databinding.ActivityMapBinding
 import org.softeer.robocar.ui.fragment.HeadcountDialogFragment
-import java.util.*
 import com.kakao.vectormap.LatLng;
 import com.kakao.vectormap.label.Label
 import com.kakao.vectormap.label.LabelOptions
@@ -33,11 +37,10 @@ import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
 import kotlinx.coroutines.launch
 import org.softeer.robocar.ui.viewmodel.MapViewModel
-import org.softeer.robocar.ui.viewmodel.RouteViewModel
-import org.softeer.robocar.ui.viewmodel.RouteSoloViewModel
 import org.softeer.robocar.ui.viewmodel.OnboardViewModel
 import androidx.lifecycle.Observer
-
+import org.softeer.robocar.data.model.CarPoolType
+import org.softeer.robocar.data.model.TaxiType
 
 
 @AndroidEntryPoint
@@ -47,18 +50,29 @@ class MapActivity : AppCompatActivity() {
     private lateinit var locationManager: LocationManager
     private var kakaoMap: KakaoMap? = null
     private var currentLocation: Location? = null
-    private val routeViewModel: RouteViewModel by viewModels()
-    private val routeSoloViewModel: RouteSoloViewModel by viewModels()
     private val onboardViewModel: OnboardViewModel by viewModels()
-    private var currentLocationLabel: Label? = null
     private val mapViewModel: MapViewModel by viewModels()
+    private var currentLocationLabel: Label? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_map)
+        setCarPoolANDTaxiType()
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        val bottomSheetBehavior = BottomSheetBehavior.from(binding.destinationLayout)
+        mapViewModel.bottomSheetState.observe(this, Observer {
+            bottomSheetBehavior.state = it
+        })
+        mapViewModel.bottomSheetDraggable.observe(this, Observer {
+            bottomSheetBehavior.isDraggable = it
+        })
+
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
         } else {
             setupLocationUpdates()
@@ -86,7 +100,7 @@ class MapActivity : AppCompatActivity() {
             Log.d("MapActivity", "관찰된 주소 변환 결과: $address")
             // 주소 변환 결과를 사용하여 경로 최적화 요청
 //            onboardViewModel.onboardDetails.value?.let { onboard ->
-                requestOptimizedRoute(address, "서울 강남구 논현동", "서울 강남구 논현동 279-67", 1, 2)
+            requestOptimizedRoute(address, "서울 강남구 논현동", "서울 강남구 논현동 279-67", 1, 2)
             Log.d("주소", address)
 //            }
 
@@ -99,15 +113,18 @@ class MapActivity : AppCompatActivity() {
 //        if (inOperationId != 0) {
 //            fetchAndDisplayRoute(inOperationId)
 //        }
-        routeSoloViewModel.getOptimizedRouteSolo("논현동 40", "서울특별시 강남구 학동로 171")
-//        routeViewModel.getOptimizedRoute("영등포동5가 34-1", "서울특별시 강남구 학동로 180", "분당구 정자동 50-3", 1, 2)
+//        mapViewModel.getOptimizedRouteSolo("논현동 40", "서울특별시 강남구 학동로 171")
+//        mapViewModel.getOptimizedRoute("영등포동5가 34-1", "서울특별시 강남구 학동로 180", "분당구 정자동 50-3", 1, 2)
+
+
+        mapViewModel.getOptimizedRoute("영등포동5가 34-1", "서울특별시 강남구 학동로 180", "분당구 정자동 50-3", 1, 2)
         HeadcountDialogFragment().show(supportFragmentManager, "headCount")
         setupCurrentLocationButton()
     }
 
     // 경로 데이터 관찰 및 경로 그리기
     private fun observeRouteData() {
-        routeViewModel.route.observe(this) { route ->
+        mapViewModel.route.observe(this) { route ->
             route?.let {
                 drawRoute(kakaoMap!!, it.hostNodes) // API 호출 결과에 따라 hostNodes 또는 guestNodes 사용
             }
@@ -115,14 +132,17 @@ class MapActivity : AppCompatActivity() {
     }
 
     private fun observeRouteSoloData() {
-        routeSoloViewModel.routeSolo.observe(this) { routeSolo ->
+        mapViewModel.routeSolo.observe(this) { routeSolo ->
             routeSolo?.let {
                 drawRoute(kakaoMap!!, it.nodes)
             }
         }
     }
 
-    private fun drawRoute(kakaoMap: KakaoMap, routeNodes: List<org.softeer.robocar.data.dto.route.response.Coordinate>) {
+    private fun drawRoute(
+        kakaoMap: KakaoMap,
+        routeNodes: List<org.softeer.robocar.data.dto.route.response.Coordinate>
+    ) {
         val routeLineManager = kakaoMap.routeLineManager ?: return
 
         routeLineManager.layer.removeAll()
@@ -158,8 +178,18 @@ class MapActivity : AppCompatActivity() {
             requestAddressConversion(location)
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10f, locationListener, Looper.getMainLooper())
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                10000,
+                10f,
+                locationListener,
+                Looper.getMainLooper()
+            )
             val lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
             lastKnownLocation?.let {
                 currentLocation = it
@@ -191,16 +221,29 @@ class MapActivity : AppCompatActivity() {
     }
 
     // 최적화된 경로 요청
-    private fun requestOptimizedRoute(currentAddress: String, hostDestAddress: String, guestDestAddress: String, hostId: Int, guestId: Int) {
+    private fun requestOptimizedRoute(
+        currentAddress: String,
+        hostDestAddress: String,
+        guestDestAddress: String,
+        hostId: Int,
+        guestId: Int
+    ) {
         Log.d("MapActivity", "requestOptimizedRoute 호출됨: $currentAddress")
         // 주소 변환 결과를 사용하여 경로 최적화 요청
-        routeViewModel.getOptimizedRoute(currentAddress, hostDestAddress, guestDestAddress, hostId.toLong(), guestId.toLong())
+        mapViewModel.getOptimizedRoute(
+            currentAddress,
+            hostDestAddress,
+            guestDestAddress,
+            hostId.toLong(),
+            guestId.toLong()
+        )
     }
 
     private fun updateCameraToCurrentLocation() {
         currentLocation?.let { location ->
             kakaoMap?.let { map ->
-                val cameraUpdate = CameraUpdateFactory.newCenterPosition(LatLng.from(location.latitude, location.longitude))
+                val cameraUpdate =
+                    CameraUpdateFactory.newCenterPosition(LatLng.from(location.latitude, location.longitude))
                 map.moveCamera(cameraUpdate)
             } ?: Log.d("MapActivity", "kakaoMap is null, cannot update camera to current location")
         }
@@ -217,10 +260,14 @@ class MapActivity : AppCompatActivity() {
             }
 
             // 스타일 정의
-            val labelStyles = LabelStyles.from("myCurrentLocationStyle",
-                LabelStyle.from(R.drawable.icon_car_location).setTextStyles(70, Color.BLACK, 1, Color.WHITE).setZoomLevel(8),
-                LabelStyle.from(R.drawable.icon_car_location).setTextStyles(70, Color.BLACK, 1, Color.WHITE).setZoomLevel(11),
-                LabelStyle.from(R.drawable.icon_car_location).setTextStyles(70, Color.BLACK, 1, Color.WHITE).setZoomLevel(15)
+            val labelStyles = LabelStyles.from(
+                "myCurrentLocationStyle",
+                LabelStyle.from(R.drawable.icon_car_location).setTextStyles(70, Color.BLACK, 1, Color.WHITE)
+                    .setZoomLevel(8),
+                LabelStyle.from(R.drawable.icon_car_location).setTextStyles(70, Color.BLACK, 1, Color.WHITE)
+                    .setZoomLevel(11),
+                LabelStyle.from(R.drawable.icon_car_location).setTextStyles(70, Color.BLACK, 1, Color.WHITE)
+                    .setZoomLevel(15)
             )
 
             // 스타일 추가
@@ -233,6 +280,7 @@ class MapActivity : AppCompatActivity() {
 
             // 새 라벨 추가 및 참조 저장
             currentLocationLabel = labelLayer?.addLabel(options)
+            BottomSheetBehavior.from(binding.destinationLayout).isDraggable
         }
     }
 
@@ -247,12 +295,14 @@ class MapActivity : AppCompatActivity() {
     private fun setupCurrentLocationButton() {
         binding.btnCurrentLocation.setOnClickListener {
             currentLocation?.let { location ->
-                val cameraUpdate = CameraUpdateFactory.newCenterPosition(LatLng.from(location.latitude, location.longitude))
+                val cameraUpdate =
+                    CameraUpdateFactory.newCenterPosition(LatLng.from(location.latitude, location.longitude))
                 // 카메라를 새 위치로 이동시키며 애니메이션 효과 적용
                 kakaoMap?.moveCamera(cameraUpdate, CameraAnimation.from(500, true, true))
             }
         }
     }
+
     private lateinit var movingLabel: Label
     private val handler = Handler(Looper.getMainLooper())
 
@@ -264,14 +314,14 @@ class MapActivity : AppCompatActivity() {
 
     // 경로 데이터를 받아와서 라벨 이동 시작하는 함수
     private fun fetchAndStartMovingLabel() {
-        routeSoloViewModel.routeSolo.observe(this, Observer { routeSolo ->
+        mapViewModel.routeSolo.observe(this, Observer { routeSolo ->
             routeSolo?.let {
                 val latLngList = convertCoordinatesToLatLng(it.nodes) // Coordinate -> LatLng 변환
                 startMovingLabel(latLngList) // 변환된 리스트를 사용하여 라벨 이동 시작
             }
         })
 
-        routeSoloViewModel.getOptimizedRouteSolo("논현동 40", "서울특별시 강남구 학동로 171")
+        mapViewModel.getOptimizedRouteSolo("논현동 40", "서울특별시 강남구 학동로 171")
     }
 
     private var routeIndex = 0 // 클래스의 멤버 변수로 선언
@@ -285,10 +335,14 @@ class MapActivity : AppCompatActivity() {
                 labelLayer?.remove(movingLabel)
             }
 
-            val labelStyles = LabelStyles.from("myMovingLabelStyle",
-                LabelStyle.from(R.drawable.icon_car_location).setTextStyles(70, Color.BLACK, 1, Color.WHITE).setZoomLevel(8),
-                LabelStyle.from(R.drawable.icon_car_location).setTextStyles(70, Color.BLACK, 1, Color.WHITE).setZoomLevel(11),
-                LabelStyle.from(R.drawable.icon_car_location).setTextStyles(70, Color.BLACK, 1, Color.WHITE).setZoomLevel(15)
+            val labelStyles = LabelStyles.from(
+                "myMovingLabelStyle",
+                LabelStyle.from(R.drawable.icon_car_location).setTextStyles(70, Color.BLACK, 1, Color.WHITE)
+                    .setZoomLevel(8),
+                LabelStyle.from(R.drawable.icon_car_location).setTextStyles(70, Color.BLACK, 1, Color.WHITE)
+                    .setZoomLevel(11),
+                LabelStyle.from(R.drawable.icon_car_location).setTextStyles(70, Color.BLACK, 1, Color.WHITE)
+                    .setZoomLevel(15)
             )
 
             val styles = labelManager?.addLabelStyles(labelStyles)
@@ -321,4 +375,13 @@ class MapActivity : AppCompatActivity() {
             }
         }, 300) // 0.3초마다 위치 업데이트
     }
-}
+    private fun setCarPoolANDTaxiType() {
+        println("테스트! ${intent.getStringExtra("taxiType")}")
+        val taxiType = TaxiType.getSize(intent.getStringExtra("taxiType") ?: "SMALL")
+        val carPoolType = CarPoolType.getType(intent.getStringExtra("carPoolType") ?: "ALONE")
+        mapViewModel.setTaxiType(taxiType)
+        mapViewModel.setCarPoolType(carPoolType)
+        mapViewModel.setPassengerType(taxiT = taxiType, carPoolT = carPoolType)
+
+        }
+    }

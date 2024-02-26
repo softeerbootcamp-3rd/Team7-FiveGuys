@@ -1,5 +1,6 @@
 package org.softeer.robocar.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.softeer.robocar.databinding.FragmentHomeBinding
+import org.softeer.robocar.ui.activity.MapActivity
 import org.softeer.robocar.ui.viewmodel.HomeViewModel
 import javax.inject.Inject
 
@@ -38,7 +40,9 @@ class HomeFragment : Fragment() {
     private fun goToMap(){
         val taxiType = viewModel.taxiType.value!!
         val carPoolType =viewModel.carPoolType.value!!
-        val action = HomeFragmentDirections.actionHomeToMapActivity(carPoolType, taxiType)
-        findNavController().navigate(action)
+        val intent = Intent(requireContext(), MapActivity::class.java)
+        intent.putExtra("carPoolType", carPoolType.type)
+        intent.putExtra("taxiType", taxiType.size)
+        startActivity(intent)
     }
 }

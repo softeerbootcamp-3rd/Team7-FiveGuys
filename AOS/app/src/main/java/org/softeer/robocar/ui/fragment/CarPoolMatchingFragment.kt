@@ -10,9 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import org.softeer.robocar.R
 import org.softeer.robocar.databinding.FragmentCarPoolMatchingBinding
@@ -26,6 +26,7 @@ class CarPoolMatchingFragment : Fragment() {
         get() = _binding!!
 
     private val viewModel: CarPoolMatchingViewModel by viewModels()
+    private val args: CarPoolMatchingFragmentArgs by navArgs()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCarPoolMatchingBinding.inflate(inflater, container, false)
@@ -34,6 +35,13 @@ class CarPoolMatchingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.setCarPoolInfo(
+            startLocation = args.startLocation,
+            destinationLocation = args.destinationLocation,
+            countOfMen = args.countOfMen,
+            countOfWomen = args.countOfWomen,
+            carType = args.taxiType
+        )
         viewModel.registerCarPool()
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
             messageReceiver, IntentFilter("org.softeer.robocar.NEW_MESSAGE")

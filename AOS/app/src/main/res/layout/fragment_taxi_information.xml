@@ -6,7 +6,7 @@
     <data>
         <variable
                 name="viewModel"
-                type="org.softeer.robocar.ui.viewmodel.RouteSoloViewModel" />
+                type="org.softeer.robocar.ui.viewmodel.MapViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

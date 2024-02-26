@@ -31,6 +31,7 @@
         <argument
             android:name="addressName"
             app:argType="string" />
+        <argument android:name="startLocation" app:argType="string"/>
     </fragment>
 
     <fragment
@@ -38,8 +39,13 @@
         android:name="org.softeer.robocar.ui.fragment.InternalControlFragment"
         android:label="InternalControlFragment"
         tools:layout="@layout/fragment_internal_control"/>
-    <activity android:id="@+id/requestCarPoolActivity"
-              android:name="org.softeer.robocar.ui.activity.RequestCarPoolActivity"
-              android:label="RequestCarPoolActivity"/>
+
+    <activity
+        android:id="@+id/requestCarPoolActivity"
+        android:name="org.softeer.robocar.ui.activity.RequestCarPoolActivity"
+        android:label="RequestCarPoolActivity"
+        tools:layout="@layout/activity_request_car_pool">
+        <argument android:name="CarPoolInformation" app:argType="org.softeer.robocar.data.model.PlaceItem"/>
+    </activity>
 
 </navigation>

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.softeer.robocar.data.dto.carpool.request.registerCarPoolRequest
+import org.softeer.robocar.data.model.PlaceItem
 import org.softeer.robocar.data.model.TaxiType
 import org.softeer.robocar.domain.usecase.RegisterCarPoolUseCase
 import javax.inject.Inject
@@ -31,15 +32,6 @@ class CarPoolMatchingViewModel @Inject constructor(
     private var _carType = MutableLiveData<TaxiType>()
     val carType: LiveData<TaxiType> = _carType
 
-    // TODO 값 받아오게 되면 init 없애기
-    init {
-        _startLocation.value = "서울 강남구 학동로 180"
-        _destinationLocation.value = "서울 강서구 하늘길 111 국내선 주차대기실"
-        _countOfMen.value = 1
-        _countOfWomen.value = 0
-        _carType.value = TaxiType.COMPACT_TAXI
-    }
-
     fun registerCarPool() {
         viewModelScope.launch {
             registerCarPoolUseCase(
@@ -53,4 +45,19 @@ class CarPoolMatchingViewModel @Inject constructor(
             )
         }
     }
+
+    fun setCarPoolInfo(
+        startLocation: String,
+        destinationLocation: String,
+        countOfMen: Int,
+        countOfWomen: Int,
+        carType: TaxiType
+    ) {
+        _startLocation.value = startLocation
+        _destinationLocation.value = destinationLocation
+        _countOfMen.value = countOfMen
+        _countOfWomen.value = countOfWomen
+        _carType.value = carType
+    }
+
 }

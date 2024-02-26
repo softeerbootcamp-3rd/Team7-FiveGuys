@@ -63,6 +63,7 @@
                 android:minWidth="64dp"
                 android:layout_gravity="center"
                 android:backgroundTint="@android:color/transparent"
+                android:clickable="@{mapViewModel.countMale==0 ? false : true}"
                 app:icon="@drawable/img_minus"
                 app:iconGravity="textStart"
                 app:iconTint="@color/black" />
@@ -86,6 +87,7 @@
                 android:minWidth="64dp"
                 android:layout_gravity="center"
                 android:backgroundTint="@android:color/transparent"
+                android:clickable="@{mapViewModel.passenger==mapViewModel.total ? false : true}"
                 app:icon="@drawable/img_plus"
                 app:iconGravity="textStart"
                 app:iconTint="@color/black" />
@@ -125,6 +127,7 @@
                 android:minWidth="64dp"
                 android:layout_gravity="center"
                 android:backgroundTint="@android:color/transparent"
+                android:clickable="@{mapViewModel.countFemale==0 ? false : true}"
                 app:icon="@drawable/img_minus"
                 app:iconGravity="textStart"
                 app:iconTint="@color/black" />
@@ -148,6 +151,7 @@
                 android:minWidth="64dp"
                 android:layout_gravity="center"
                 android:backgroundTint="@android:color/transparent"
+                android:clickable="@{mapViewModel.passenger==mapViewModel.total ? false : true}"
                 app:icon="@drawable/img_plus"
                 app:iconGravity="textStart"
                 app:iconTint="@color/black" />
@@ -162,11 +166,12 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="24dp"
-            android:background="@drawable/rectangle_hyundai_blue_radius_12"
+            android:background="@{mapViewModel.passenger==0 ? @drawable/rectangle_gray_600_radius_12 : @drawable/rectangle_hyundai_blue_radius_12}"
             android:fontFamily="@font/pretendard_semibold"
             android:text="@string/finish_head_count"
             android:textColor="@color/white"
             android:textSize="@dimen/content_text"
+            android:clickable="@{mapViewModel.passenger == 0 ? false : true}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

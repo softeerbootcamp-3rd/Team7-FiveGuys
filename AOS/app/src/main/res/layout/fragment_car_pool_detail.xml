@@ -37,16 +37,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@id/mapTopGuideLine"/>
 
-        <View
+        <com.kakao.vectormap.MapView
+            android:id="@+id/mapView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/hyundai_blue"
             android:layout_marginStart="@dimen/default_left_margin"
             android:layout_marginEnd="@dimen/default_right_margin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/mapTopGuideLine"
-            app:layout_constraintBottom_toBottomOf="@id/mapBottomGuideLine"/>
+            app:layout_constraintBottom_toBottomOf="@id/mapBottomGuideLine" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/startLocationIcon"
