@@ -84,7 +84,7 @@ dependencies {
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.airbnb.android:lottie:3.7.0")
+    implementation("com.airbnb.android:lottie:6.3.0")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     implementation("com.google.dagger:hilt-android:2.48")
@@ -98,9 +98,6 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("com.google.firebase:firebase-inappmessaging-display-ktx")
 
-    // Glide를 사용하기 위한 어노테이션 프로세서 (Kotlin 프로젝트용으로 변경)
-    kapt("com.github.bumptech.glide:compiler:4.16.0")
-    
 }
 
 kapt {

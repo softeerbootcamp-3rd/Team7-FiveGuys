@@ -6,7 +6,7 @@ import org.softeer.robocar.data.model.User
 interface AuthLocalDataSource {
 
     suspend fun saveToken(token: String)
-    suspend fun getToken(): Flow<String>
+    suspend fun getToken(): String
     suspend fun saveUserInfo(user: User)
     suspend fun getUserInfo(): Flow<User>
 

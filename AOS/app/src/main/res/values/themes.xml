@@ -6,6 +6,7 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowBackground">@color/white</item>
         <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <style name="Theme.RoboCar" parent="Base.Theme.RoboCar"/>

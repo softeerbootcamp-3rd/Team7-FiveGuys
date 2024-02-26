@@ -9,5 +9,6 @@ interface RouteRemoteDataSource {
         guestDestAddress: String,
         hostId: Long,
         guestId: Long,
+        token: String,
     ): Route
 }

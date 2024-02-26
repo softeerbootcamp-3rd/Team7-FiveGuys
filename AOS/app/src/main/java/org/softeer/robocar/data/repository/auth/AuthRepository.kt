@@ -21,4 +21,7 @@ interface AuthRepository {
     suspend fun getUserInfo(
     ): User
 
+    suspend fun verifyUserToken(
+    ): Result<Unit>
+
 }

@@ -1,10 +1,12 @@
 package org.softeer.robocar.data.repository.route
 
 import org.softeer.robocar.data.model.Route
+import org.softeer.robocar.data.repository.auth.AuthLocalDataSource
 import javax.inject.Inject
 
 class RouteRepositoryImpl @Inject constructor(
     private val dataSource: RouteRemoteDataSource,
+    private val authLocalDataSource: AuthLocalDataSource
 ) : RouteRepository {
 
     override suspend fun getOptimizedRoute(
@@ -20,7 +22,8 @@ class RouteRepositoryImpl @Inject constructor(
             hostDestAddress = hostGoal,
             guestDestAddress = guestGoal,
             hostId = hostId,
-            guestId =guestId
+            guestId =guestId,
+            authLocalDataSource.getToken()
         )
     }
 }

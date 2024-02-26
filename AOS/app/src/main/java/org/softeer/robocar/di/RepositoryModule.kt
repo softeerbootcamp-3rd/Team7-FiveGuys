@@ -29,9 +29,13 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun provideCarPoolRepository(
-        carPoolRemoteDataSource: CarPoolRemoteDataSource
+        carPoolRemoteDataSource: CarPoolRemoteDataSource,
+        authLocalDataSource: AuthLocalDataSource
     ): CarPoolRepository {
-        return CarPoolRepositoryImpl(carPoolRemoteDataSource)
+        return CarPoolRepositoryImpl(
+            carPoolRemoteDataSource,
+            authLocalDataSource
+            )
     }
 
     @Provides
@@ -66,8 +70,12 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun provideRouteRepository(
-        routeRemoteDataSource: RouteRemoteDataSource
+        routeRemoteDataSource: RouteRemoteDataSource,
+        authLocalDataSource: AuthLocalDataSource
     ): RouteRepository {
-        return RouteRepositoryImpl(routeRemoteDataSource)
+        return RouteRepositoryImpl(
+            routeRemoteDataSource,
+            authLocalDataSource
+        )
     }
 }

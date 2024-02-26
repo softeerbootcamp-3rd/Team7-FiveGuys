@@ -6,6 +6,7 @@ import org.softeer.robocar.data.dto.carpool.response.AcceptCarPoolResponse
 import org.softeer.robocar.data.mapper.toCarPools
 import org.softeer.robocar.data.model.CarPools
 import org.softeer.robocar.data.service.CarPool.CarPoolService
+import retrofit2.http.Header
 import javax.inject.Inject
 
 class CarPoolRemoteDataSourceImpl @Inject constructor(
@@ -17,53 +18,63 @@ class CarPoolRemoteDataSourceImpl @Inject constructor(
         guestDestinationLocation: String,
         countOfMen: Int,
         countOfFemale: Int,
+        token: String,
     ): CarPools {
         return carPoolService.getCarPoolList(
             guestStartLocation,
             guestDestinationLocation,
             countOfMen,
             countOfFemale,
+            token,
         ).toCarPools()
     }
 
     override suspend fun requestCarPool(
-        request: RequestCarPoolRequest
+        request: RequestCarPoolRequest,
+        token: String,
     ): Result<Unit> {
         return runCatching {
             carPoolService.requestCarPool(
-                request
+                request,
+                token,
             )
         }
     }
 
     override suspend fun registerCarPool(
-        request: registerCarPoolRequest
+        request: registerCarPoolRequest,
+        token: String,
     ): Result<Unit> {
         return runCatching {
             carPoolService.registerCarPool(
-                request
+                request,
+                token,
             )
         }
     }
 
     override suspend fun rejectCarPoolRequest(
-        guestId: Long
+        guestId: Long,
+        token: String,
     ): Result<Unit> {
         return runCatching {
             carPoolService.rejectCarPoolRequest(
-                guestId
+                guestId,
+                token,
             )
         }
     }
 
     override suspend fun acceptCarPoolRequest(
         guestId: Long,
-        guestDestination: String
+        guestDestination: String,
+        token: String,
     ): Result<AcceptCarPoolResponse> {
         return runCatching {
             carPoolService.acceptCarPoolRequest(
                 guestId = guestId,
-                guestDestination =  guestDestination
+                guestDestination =  guestDestination,
+                token= token,
             )
         }
     }

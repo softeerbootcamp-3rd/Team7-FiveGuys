@@ -33,4 +33,11 @@ class AuthRepositoryImpl @Inject constructor(
         return authLocalDataSource.getUserInfo().first()
     }
 
+    override suspend fun verifyUserToken(
+    ): Result<Unit> {
+        return authRemoteDataSource.verifyUserToken(
+            authLocalDataSource.getToken()
+        )
+    }
+
 }

@@ -16,20 +16,20 @@ interface CarPoolRepository {
 
     suspend fun requestCarPool(
         carPool: CarPool,
-        guestDestinationLocation: String
+        guestDestinationLocation: String,
     ): Result<Unit>
 
     suspend fun registerCarPool(
-        request: registerCarPoolRequest
+        request: registerCarPoolRequest,
     ): Result<Unit>
 
     suspend fun rejectCarPoolRequest(
-        guestId: Long
+        guestId: Long,
     ): Result<Unit>
 
     suspend fun acceptCarPoolRequest(
         guestId: Long,
-        guestDestination: String
+        guestDestination: String,
     ): Result<AcceptCarPoolResponse>
 
 }

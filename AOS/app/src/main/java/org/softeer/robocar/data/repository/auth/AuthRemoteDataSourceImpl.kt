@@ -17,4 +17,12 @@ class AuthRemoteDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun verifyUserToken(
+        token: String
+    ): Result<Unit> {
+        return runCatching {
+            authService.verifyUserToken(token)
+        }
+    }
+
 }

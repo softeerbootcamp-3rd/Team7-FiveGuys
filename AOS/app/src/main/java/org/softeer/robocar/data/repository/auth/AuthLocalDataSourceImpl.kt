@@ -9,9 +9,9 @@ import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import org.softeer.robocar.data.model.User
-import org.softeer.robocar.di.RoboCarApplication
 import javax.inject.Inject
 
 class AuthLocalDataSourceImpl @Inject constructor(
@@ -21,21 +21,20 @@ class AuthLocalDataSourceImpl @Inject constructor(
     override suspend fun saveToken(token: String) {
         if (token.isNotEmpty()) {
             context.tokenDataSource.edit { prefs ->
-                prefs[ACCESS_TOKEN] = token
-                RoboCarApplication.token = token
+                prefs[ACCESS_TOKEN] = "Bearer $token"
             }
         }
     }
-
-    override suspend fun getToken(): Flow<String> {
+    override suspend fun getToken(): String {
         return context.tokenDataSource.data
             .catch { error ->
                 emit(emptyPreferences())
             }
             .map { prefs ->
-                prefs.asMap().values.toString()
-            }
+                prefs[ACCESS_TOKEN] ?: ""
+            }.first()
     }
+
 
     override suspend fun saveUserInfo(user: User) {
         context.userDataSource.edit { prefs ->

@@ -13,22 +13,27 @@ interface CarPoolRemoteDataSource {
         guestDestinationLocation: String,
         countOfMen: Int,
         countOfFemale: Int,
+        token: String,
     ): CarPools
 
     suspend fun requestCarPool(
-        request: RequestCarPoolRequest
+        request: RequestCarPoolRequest,
+        token: String,
     ): Result<Unit>
 
     suspend fun registerCarPool(
-        request: registerCarPoolRequest
+        request: registerCarPoolRequest,
+        token: String,
     ): Result<Unit>
 
     suspend fun rejectCarPoolRequest(
-        guestId: Long
+        guestId: Long,
+        token: String,
     ): Result<Unit>
 
     suspend fun acceptCarPoolRequest(
         guestId: Long,
-        guestDestination: String
+        guestDestination: String,
+        token: String,
     ): Result<AcceptCarPoolResponse>
 }
