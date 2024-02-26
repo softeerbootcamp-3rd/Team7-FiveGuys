@@ -8,13 +8,13 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.kakao.vectormap.*
@@ -32,12 +32,12 @@ import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
 import kotlinx.coroutines.launch
-import org.softeer.robocar.BuildConfig.kakao_rest_api_key
-import org.softeer.robocar.data.repository.addresssearch.AddressSearchRepository
 import org.softeer.robocar.ui.viewmodel.MapViewModel
 import org.softeer.robocar.ui.viewmodel.RouteViewModel
 import org.softeer.robocar.ui.viewmodel.RouteSoloViewModel
 import org.softeer.robocar.ui.viewmodel.OnboardViewModel
+import androidx.lifecycle.Observer
+
 
 
 @AndroidEntryPoint
@@ -79,14 +79,14 @@ class MapActivity : AppCompatActivity() {
                 observeRouteSoloData() // 혼자 타는 경로 데이터 관찰 시작
                 observeRouteData() // 경로 데이터 관찰 시작
                 updateCameraToCurrentLocation()
-
+                fetchAndStartMovingLabel()
             }
         })
         mapViewModel.addressResult.observe(this) { address ->
             Log.d("MapActivity", "관찰된 주소 변환 결과: $address")
             // 주소 변환 결과를 사용하여 경로 최적화 요청
 //            onboardViewModel.onboardDetails.value?.let { onboard ->
-                requestOptimizedRoute(address, "분당구 정자동 50-3", "율전동 280-15", 1, 2)
+                requestOptimizedRoute(address, "서울 강남구 논현동", "서울 강남구 논현동 279-67", 1, 2)
             Log.d("주소", address)
 //            }
 
@@ -99,7 +99,7 @@ class MapActivity : AppCompatActivity() {
 //        if (inOperationId != 0) {
 //            fetchAndDisplayRoute(inOperationId)
 //        }
-//        routeSoloViewModel.getOptimizedRouteSolo("서울특별시 서대문구 남가좌동 122-1", "영등포동5가 34-1")
+        routeSoloViewModel.getOptimizedRouteSolo("논현동 40", "서울특별시 강남구 학동로 171")
 //        routeViewModel.getOptimizedRoute("영등포동5가 34-1", "서울특별시 강남구 학동로 180", "분당구 정자동 50-3", 1, 2)
         HeadcountDialogFragment().show(supportFragmentManager, "headCount")
         setupCurrentLocationButton()
@@ -113,6 +113,7 @@ class MapActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun observeRouteSoloData() {
         routeSoloViewModel.routeSolo.observe(this) { routeSolo ->
             routeSolo?.let {
@@ -120,6 +121,7 @@ class MapActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun drawRoute(kakaoMap: KakaoMap, routeNodes: List<org.softeer.robocar.data.dto.route.response.Coordinate>) {
         val routeLineManager = kakaoMap.routeLineManager ?: return
 
@@ -250,5 +252,73 @@ class MapActivity : AppCompatActivity() {
                 kakaoMap?.moveCamera(cameraUpdate, CameraAnimation.from(500, true, true))
             }
         }
+    }
+    private lateinit var movingLabel: Label
+    private val handler = Handler(Looper.getMainLooper())
+
+    // 경로 데이터를 동적으로 받아오기 위해 route 변수 선언을 제거합니다.
+// 이 예제는 Coordinate 클래스가 latitude와 longitude 속성을 가지고 있다고 가정합니다.
+    private fun convertCoordinatesToLatLng(coordinates: List<org.softeer.robocar.data.dto.route.response.Coordinate>): List<LatLng> {
+        return coordinates.map { LatLng.from(it.latitude, it.longitude) } // Coordinate의 y를 latitude로, x를 longitude로 사용
+    }
+
+    // 경로 데이터를 받아와서 라벨 이동 시작하는 함수
+    private fun fetchAndStartMovingLabel() {
+        routeSoloViewModel.routeSolo.observe(this, Observer { routeSolo ->
+            routeSolo?.let {
+                val latLngList = convertCoordinatesToLatLng(it.nodes) // Coordinate -> LatLng 변환
+                startMovingLabel(latLngList) // 변환된 리스트를 사용하여 라벨 이동 시작
+            }
+        })
+
+        routeSoloViewModel.getOptimizedRouteSolo("논현동 40", "서울특별시 강남구 학동로 171")
+    }
+
+    private var routeIndex = 0 // 클래스의 멤버 변수로 선언
+    private fun startMovingLabel(route: List<LatLng>) {
+        kakaoMap?.let { map ->
+            val labelManager = map.getLabelManager()
+            val labelLayer = labelManager?.getLayer()
+
+            // 기존에 움직이는 라벨이 있으면 제거
+            if (routeIndex == 0 && ::movingLabel.isInitialized) {
+                labelLayer?.remove(movingLabel)
+            }
+
+            val labelStyles = LabelStyles.from("myMovingLabelStyle",
+                LabelStyle.from(R.drawable.icon_car_location).setTextStyles(70, Color.BLACK, 1, Color.WHITE).setZoomLevel(8),
+                LabelStyle.from(R.drawable.icon_car_location).setTextStyles(70, Color.BLACK, 1, Color.WHITE).setZoomLevel(11),
+                LabelStyle.from(R.drawable.icon_car_location).setTextStyles(70, Color.BLACK, 1, Color.WHITE).setZoomLevel(15)
+            )
+
+            val styles = labelManager?.addLabelStyles(labelStyles)
+
+            // 라벨 옵션 설정
+            val options = LabelOptions.from(LatLng.from(route[0]))
+                .setStyles(styles)
+                .setTexts("❤\uFE0F")
+
+            // 움직이는 라벨 생성
+            movingLabel = labelLayer?.addLabel(options)!!
+            // 위치 업데이트 함수를 호출하여 경로에 따라 라벨 이동
+            var routeIndex = 0 // 경로 인덱스 초기화
+            updateLabelPosition(route, routeIndex)
+        }
+    }
+
+    private fun updateLabelPosition(route: List<LatLng>, index: Int) {
+        handler.postDelayed({
+            if (index < route.size) {
+                // 라벨 위치 업데이트
+                movingLabel?.moveTo(route[index])
+
+                // 다음 위치로 업데이트
+                updateLabelPosition(route, index + 1)
+            } else {
+                // 최종 목적지에 도착했을 때 라벨 제거
+                kakaoMap?.getLabelManager()?.getLayer()?.remove(movingLabel)
+                routeIndex = 0 // routeIndex를 다시 초기화
+            }
+        }, 300) // 0.3초마다 위치 업데이트
     }
 }
