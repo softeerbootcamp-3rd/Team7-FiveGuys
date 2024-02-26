@@ -15,13 +15,15 @@ class RouteRemoteDataSourceImpl @Inject constructor(
         guestDestAddress: String,
         hostId: Long,
         guestId: Long,
+        token: String
     ): Route {
         return routeService.getRoute(
             departureAddress,
             hostDestAddress,
             guestDestAddress,
             hostId,
-            guestId
+            guestId,
+            token
         ).toRoute()
     }
 }
