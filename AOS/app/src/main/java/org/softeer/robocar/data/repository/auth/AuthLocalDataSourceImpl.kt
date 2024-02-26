@@ -9,6 +9,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import org.softeer.robocar.data.model.User
 import javax.inject.Inject
@@ -24,16 +25,16 @@ class AuthLocalDataSourceImpl @Inject constructor(
             }
         }
     }
-
-    override suspend fun getToken(): Flow<String> {
+    override suspend fun getToken(): String {
         return context.tokenDataSource.data
             .catch { error ->
                 emit(emptyPreferences())
             }
             .map { prefs ->
-                prefs.asMap().values.toString()
-            }
+                prefs[ACCESS_TOKEN] ?: ""
+            }.first()
     }
+
 
     override suspend fun saveUserInfo(user: User) {
         context.userDataSource.edit { prefs ->

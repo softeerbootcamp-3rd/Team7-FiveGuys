@@ -1,6 +1,5 @@
 package org.softeer.robocar.data.repository.route
 
-import kotlinx.coroutines.flow.first
 import org.softeer.robocar.data.model.Route
 import org.softeer.robocar.data.repository.auth.AuthLocalDataSource
 import javax.inject.Inject
@@ -24,7 +23,7 @@ class RouteRepositoryImpl @Inject constructor(
             guestDestAddress = guestGoal,
             hostId = hostId,
             guestId =guestId,
-            authLocalDataSource.getToken().first()
+            authLocalDataSource.getToken()
         )
     }
 }

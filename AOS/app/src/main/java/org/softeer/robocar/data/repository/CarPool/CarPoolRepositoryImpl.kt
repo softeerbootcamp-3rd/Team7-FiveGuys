@@ -1,6 +1,5 @@
 package org.softeer.robocar.data.repository.CarPool
 
-import kotlinx.coroutines.flow.first
 import org.softeer.robocar.data.dto.carpool.request.registerCarPoolRequest
 import org.softeer.robocar.data.dto.carpool.response.AcceptCarPoolResponse
 import org.softeer.robocar.data.mapper.toRequestCarPool
@@ -26,7 +25,7 @@ class CarPoolRepositoryImpl @Inject constructor(
             guestDestinationLocation = destinationLocation,
             countOfMen,
             countOfFemale,
-            localAuthDataSource.getToken().first()
+            localAuthDataSource.getToken()
         )
     }
 
@@ -36,7 +35,7 @@ class CarPoolRepositoryImpl @Inject constructor(
     ): Result<Unit> {
         return dataSource.requestCarPool(
             carPool.toRequestCarPool(guestDestinationLocation),
-            localAuthDataSource.getToken().first()
+            localAuthDataSource.getToken()
         )
     }
 
@@ -45,7 +44,7 @@ class CarPoolRepositoryImpl @Inject constructor(
     ): Result<Unit> {
         return dataSource.registerCarPool(
             request,
-            localAuthDataSource.getToken().first()
+            localAuthDataSource.getToken()
         )
     }
 
@@ -54,7 +53,7 @@ class CarPoolRepositoryImpl @Inject constructor(
     ): Result<Unit> {
         return dataSource.rejectCarPoolRequest(
             guestId,
-            localAuthDataSource.getToken().first()
+            localAuthDataSource.getToken()
         )
     }
 
@@ -65,7 +64,7 @@ class CarPoolRepositoryImpl @Inject constructor(
         return dataSource.acceptCarPoolRequest(
             guestId,
             guestDestination,
-            localAuthDataSource.getToken().first()
+            localAuthDataSource.getToken()
         )
     }
 

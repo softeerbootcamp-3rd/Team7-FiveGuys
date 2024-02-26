@@ -9,4 +9,8 @@ interface AuthRemoteDataSource {
         loginRequest: LoginRequest
     ): Result<LoginResponse>
 
+    suspend fun verifyUserToken(
+        token: String
+    ): Result<Unit>
+
 }
