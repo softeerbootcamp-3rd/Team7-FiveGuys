@@ -1,5 +1,6 @@
 package org.softeer.robocar.ui.viewmodel
 
+import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,28 +11,31 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.softeer.robocar.BuildConfig
 import org.softeer.robocar.data.dto.placesearch.Place
-import org.softeer.robocar.data.model.CarPoolType
-import org.softeer.robocar.data.model.PlaceItem
-import org.softeer.robocar.data.model.Route
-import org.softeer.robocar.data.model.TaxiType
+import org.softeer.robocar.data.model.*
+import org.softeer.robocar.domain.usecase.AddressSearchUseCase
+import org.softeer.robocar.domain.usecase.GetOptimizedRouteSoloUseCase
 import org.softeer.robocar.domain.usecase.GetOptimizedRouteUseCase
 import org.softeer.robocar.domain.usecase.SearchPlaceUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class MapViewModel @Inject constructor(
+    private val addressSearchUseCase: AddressSearchUseCase,
     private val searchPlaceUseCase: SearchPlaceUseCase,
-    private val getOptimizedRouteUseCase: GetOptimizedRouteUseCase
+    private val getOptimizedRouteUseCase: GetOptimizedRouteUseCase,
+    private val getOptimizedRouteSoloUseCase: GetOptimizedRouteSoloUseCase
 ): ViewModel() {
     val bottomSheetState = MutableLiveData<Int>()
     val bottomSheetDraggable = MutableLiveData<Boolean>()
-    
+
     var keyWord = MutableLiveData<String>()
 
     private var _placeList = MutableLiveData<List<Place>>()
     val placeList: LiveData<List<Place>> = _placeList
     private var _route = MutableLiveData<Route>()
     val route: LiveData<Route> = _route
+    private var _routeSolo = MutableLiveData<RouteSolo>()
+    val routeSolo: LiveData<RouteSolo> = _routeSolo
 
     private var _taxiType = MutableLiveData<TaxiType>()
     val taxiType: LiveData<TaxiType> = _taxiType
@@ -41,12 +45,17 @@ class MapViewModel @Inject constructor(
     val countMale: LiveData<Int> = _countMale
     private var _countFemale = MutableLiveData<Int>()
     val countFemale: LiveData<Int> = _countFemale
-  
+
     private var _destName = MutableLiveData<String>()
     val destName: LiveData<String> = _destName
 
     private var _destRoadAddress = MutableLiveData<String>()
     val destRoadAddress: LiveData<String> = _destRoadAddress
+
+    // 주소 검색 결과를 저장할 LiveData
+    private val _addressResult = MutableLiveData<String>()
+    val addressResult: LiveData<String> = _addressResult
+
 
     private var _startLocation = MutableLiveData<String>()
     val startLocation: LiveData<String> = _startLocation
@@ -74,10 +83,21 @@ class MapViewModel @Inject constructor(
         guestId: Long
     ) {
         viewModelScope.launch {
-            val optimizedRoute = getOptimizedRouteUseCase(departureAddress, hostDestAddress, guestDestAddress, hostId, guestId)
+            val optimizedRoute =
+                getOptimizedRouteUseCase(departureAddress, hostDestAddress, guestDestAddress, hostId, guestId)
             _route.value = optimizedRoute
         }
 
+    }
+
+    fun getOptimizedRouteSolo(
+        departureAddress: String,
+        destAddress: String
+    ) {
+        viewModelScope.launch {
+            val optimizedRouteSolo = getOptimizedRouteSoloUseCase(departureAddress, destAddress)
+            _routeSolo.value = optimizedRouteSolo
+        }
     }
 
     suspend fun getSearchResult() {
@@ -128,15 +148,15 @@ class MapViewModel @Inject constructor(
         _passenger.value = _passenger.value!! - 1
     }
 
-    fun setStartLocation(location: String){
+    fun setStartLocation(location: String) {
         _startLocation.value = location
     }
 
-    fun setTaxiType(taxiType: TaxiType){
+    fun setTaxiType(taxiType: TaxiType) {
         _taxiType.value = taxiType
     }
 
-    fun setCarPoolType(carPoolType: CarPoolType){
+    fun setCarPoolType(carPoolType: CarPoolType) {
         _carPoolType.value = carPoolType
     }
 
@@ -150,7 +170,29 @@ class MapViewModel @Inject constructor(
             startLocation.value!!,
             destName.value!!,
             destRoadAddress.value!!
-            )
+        )
+    }
+
+    // 주소 검색을 수행하는 함수
+    // 주소 변환 로직을 suspend 함수로 구현
+    suspend fun convertLocationToAddress(location: Location) {
+        viewModelScope.launch {
+            try {
+                val apiKey = BuildConfig.kakao_rest_api_key // API 키 설정
+                val longitude = location.longitude
+                val latitude = location.latitude
+
+                // 주소 검색 수행하고 결과 반환
+                val result = addressSearchUseCase(apiKey, longitude, latitude).getOrThrow()
+
+                // 로그로 변환된 주소 출력 및 LiveData에 세팅
+                Log.d("MapViewModel", "주소 변환 결과: $result")
+                _addressResult.postValue(result)
+            } catch (e: Exception) {
+                Log.e("MapViewModel", "주소 변환 실패", e)
+                _addressResult.postValue("주소를 찾을 수 없습니다.")
+            }
+        }
     }
 
     fun sheetDown() {
