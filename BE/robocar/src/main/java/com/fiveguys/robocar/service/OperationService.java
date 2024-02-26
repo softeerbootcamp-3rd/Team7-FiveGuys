@@ -205,9 +205,9 @@ public class OperationService {
     public InOperation checkOnBoard(Long inOperationId, Long id) {
         InOperation inOperation = inOperationRepository.findById(inOperationId).orElseThrow(EntityNotFoundException::new);
 
-        if(Objects.equals(id, inOperation.getHostId()))
+        if(Objects.equals(id, inOperation.getHostId()) && inOperation.isHostOnBoard())
             return inOperation;
-        else if(Objects.equals(id, inOperation.getGuestId()))
+        else if(Objects.equals(id, inOperation.getGuestId()) && inOperation.isGuestOnBoard())
             return inOperation;
 
         throw new EntityNotFoundException();
