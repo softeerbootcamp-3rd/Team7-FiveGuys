@@ -1,14 +1,17 @@
 package org.softeer.robocar.data.repository.CarPool
 
+import kotlinx.coroutines.flow.first
 import org.softeer.robocar.data.dto.carpool.request.registerCarPoolRequest
 import org.softeer.robocar.data.dto.carpool.response.AcceptCarPoolResponse
 import org.softeer.robocar.data.mapper.toRequestCarPool
 import org.softeer.robocar.data.model.CarPool
 import org.softeer.robocar.data.model.CarPools
+import org.softeer.robocar.data.repository.auth.AuthLocalDataSource
 import javax.inject.Inject
 
 class CarPoolRepositoryImpl @Inject constructor(
     private val dataSource: CarPoolRemoteDataSource,
+    private val localAuthDataSource: AuthLocalDataSource,
 ) : CarPoolRepository {
 
     override suspend fun getCarPoolList(
@@ -23,41 +26,46 @@ class CarPoolRepositoryImpl @Inject constructor(
             guestDestinationLocation = destinationLocation,
             countOfMen,
             countOfFemale,
+            localAuthDataSource.getToken().first()
         )
     }
 
     override suspend fun requestCarPool(
         carPool: CarPool,
-        guestDestinationLocation: String
+        guestDestinationLocation: String,
     ): Result<Unit> {
         return dataSource.requestCarPool(
-            carPool.toRequestCarPool(guestDestinationLocation)
+            carPool.toRequestCarPool(guestDestinationLocation),
+            localAuthDataSource.getToken().first()
         )
     }
 
     override suspend fun registerCarPool(
-        request: registerCarPoolRequest
+        request: registerCarPoolRequest,
     ): Result<Unit> {
         return dataSource.registerCarPool(
-            request
+            request,
+            localAuthDataSource.getToken().first()
         )
     }
 
     override suspend fun rejectCarPoolRequest(
-        guestId: Long
+        guestId: Long,
     ): Result<Unit> {
         return dataSource.rejectCarPoolRequest(
-            guestId
+            guestId,
+            localAuthDataSource.getToken().first()
         )
     }
 
     override suspend fun acceptCarPoolRequest(
         guestId: Long,
-        guestDestination: String
+        guestDestination: String,
     ): Result<AcceptCarPoolResponse> {
         return dataSource.acceptCarPoolRequest(
             guestId,
-            guestDestination
+            guestDestination,
+            localAuthDataSource.getToken().first()
         )
     }
 

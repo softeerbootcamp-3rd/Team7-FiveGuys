@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import org.softeer.robocar.data.model.User
-import org.softeer.robocar.di.RoboCarApplication
 import javax.inject.Inject
 
 class AuthLocalDataSourceImpl @Inject constructor(
@@ -21,8 +20,7 @@ class AuthLocalDataSourceImpl @Inject constructor(
     override suspend fun saveToken(token: String) {
         if (token.isNotEmpty()) {
             context.tokenDataSource.edit { prefs ->
-                prefs[ACCESS_TOKEN] = token
-                RoboCarApplication.token = token
+                prefs[ACCESS_TOKEN] = "Bearer $token"
             }
         }
     }
