@@ -27,7 +27,8 @@ data class AddressInfo(
     val region_3depth_name: String,
     val mountain_yn: String,
     val main_address_no: String,
-    val sub_address_no: String
+    val sub_address_no: String,
+    val zip_code: String? // zip_code 필드 추가
 )
 
 @Serializable

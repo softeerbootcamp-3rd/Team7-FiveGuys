@@ -46,7 +46,7 @@ class MapActivity : AppCompatActivity() {
     private lateinit var mapView: MapView
     private lateinit var locationManager: LocationManager
     private var kakaoMap: KakaoMap? = null
-    private var currentLocation: android.location.Location? = null
+    private var currentLocation: Location? = null
     private val routeViewModel: RouteViewModel by viewModels()
     private val routeSoloViewModel: RouteSoloViewModel by viewModels()
     private val onboardViewModel: OnboardViewModel by viewModels()
@@ -83,20 +83,24 @@ class MapActivity : AppCompatActivity() {
             }
         })
         mapViewModel.addressResult.observe(this) { address ->
-            Log.d("주소 변환 결과", address)
+            Log.d("MapActivity", "관찰된 주소 변환 결과: $address")
             // 주소 변환 결과를 사용하여 경로 최적화 요청
-            onboardViewModel.onboardDetails.value?.let { onboard ->
-                requestOptimizedRoute(address, onboard.hostDestAddress, onboard.guestDestAddress, onboard.hostId, onboard.guestId)
-            }
+//            onboardViewModel.onboardDetails.value?.let { onboard ->
+                requestOptimizedRoute(address, "분당구 정자동 50-3", "율전동 280-15", 1, 2)
+            Log.d("주소", address)
+//            }
+
         }
+
+        setupLocationUpdates()
 
 //        val inOperationId = intent.getIntExtra("inOperationId", 0)
 //        val inOperationId = 1
 //        if (inOperationId != 0) {
 //            fetchAndDisplayRoute(inOperationId)
 //        }
-        routeSoloViewModel.getOptimizedRouteSolo("서울특별시 서대문구 남가좌동 122-1", "영등포동5가 34-1")
-        routeViewModel.getOptimizedRoute("영등포동5가 34-1", "서울특별시 강남구 학동로 180", "분당구 정자동 50-3", 1, 2)
+//        routeSoloViewModel.getOptimizedRouteSolo("서울특별시 서대문구 남가좌동 122-1", "영등포동5가 34-1")
+//        routeViewModel.getOptimizedRoute("영등포동5가 34-1", "서울특별시 강남구 학동로 180", "분당구 정자동 50-3", 1, 2)
         HeadcountDialogFragment().show(supportFragmentManager, "headCount")
         setupCurrentLocationButton()
     }
@@ -105,7 +109,7 @@ class MapActivity : AppCompatActivity() {
     private fun observeRouteData() {
         routeViewModel.route.observe(this) { route ->
             route?.let {
-                drawRoute(kakaoMap!!, it.guestNodes) // API 호출 결과에 따라 hostNodes 또는 guestNodes 사용
+                drawRoute(kakaoMap!!, it.hostNodes) // API 호출 결과에 따라 hostNodes 또는 guestNodes 사용
             }
         }
     }
@@ -118,6 +122,8 @@ class MapActivity : AppCompatActivity() {
     }
     private fun drawRoute(kakaoMap: KakaoMap, routeNodes: List<org.softeer.robocar.data.dto.route.response.Coordinate>) {
         val routeLineManager = kakaoMap.routeLineManager ?: return
+
+        routeLineManager.layer.removeAll()
 
         val stylesSet = RouteLineStylesSet.from(
             "routeStyles",
@@ -133,6 +139,7 @@ class MapActivity : AppCompatActivity() {
         val options = RouteLineOptions.from(segment).setStylesSet(stylesSet)
         routeLineManager.layer.addRouteLine(options)
     }
+
     private fun setupLocationUpdates() {
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val locationListener = LocationListener { location ->
@@ -140,10 +147,13 @@ class MapActivity : AppCompatActivity() {
             addCurrentLocationLabel(location.latitude, location.longitude)
             // inOperationId 값을 Intent에서 가져오거나 다른 방식으로 결정
 //            val inOperationId = intent.getIntExtra("inOperationId", 0)
-            val inOperationId = 1
-            if (inOperationId != 0) {
-                fetchAndDisplayRoute(inOperationId)
-            }
+//            val inOperationId = 1
+//            if (inOperationId != 0) {
+//                fetchAndDisplayRoute(inOperationId)
+//            }
+
+            // 현재 위치로 주소 변환 요청
+            requestAddressConversion(location)
         }
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -180,6 +190,7 @@ class MapActivity : AppCompatActivity() {
 
     // 최적화된 경로 요청
     private fun requestOptimizedRoute(currentAddress: String, hostDestAddress: String, guestDestAddress: String, hostId: Int, guestId: Int) {
+        Log.d("MapActivity", "requestOptimizedRoute 호출됨: $currentAddress")
         // 주소 변환 결과를 사용하여 경로 최적화 요청
         routeViewModel.getOptimizedRoute(currentAddress, hostDestAddress, guestDestAddress, hostId.toLong(), guestId.toLong())
     }
@@ -205,8 +216,9 @@ class MapActivity : AppCompatActivity() {
 
             // 스타일 정의
             val labelStyles = LabelStyles.from("myCurrentLocationStyle",
-                LabelStyle.from(R.drawable.icon_car_location)
-                    .setTextStyles(30, Color.BLACK, 1, Color.WHITE)
+                LabelStyle.from(R.drawable.icon_car_location).setTextStyles(70, Color.BLACK, 1, Color.WHITE).setZoomLevel(8),
+                LabelStyle.from(R.drawable.icon_car_location).setTextStyles(70, Color.BLACK, 1, Color.WHITE).setZoomLevel(11),
+                LabelStyle.from(R.drawable.icon_car_location).setTextStyles(70, Color.BLACK, 1, Color.WHITE).setZoomLevel(15)
             )
 
             // 스타일 추가
@@ -215,7 +227,7 @@ class MapActivity : AppCompatActivity() {
             // 라벨 옵션 설정
             val options = LabelOptions.from(LatLng.from(lat, lon))
                 .setStyles(styles)
-                .setTexts("현재 위치")
+                .setTexts("\uD83D\uDE04")
 
             // 새 라벨 추가 및 참조 저장
             currentLocationLabel = labelLayer?.addLabel(options)

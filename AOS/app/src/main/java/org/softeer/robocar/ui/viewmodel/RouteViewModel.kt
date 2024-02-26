@@ -1,5 +1,6 @@
 package org.softeer.robocar.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,8 +26,10 @@ class RouteViewModel @Inject constructor(
         hostId: Long,
         guestId: Long
     ) {
+        Log.d("RouteViewModel", "getOptimizedRoute 호출됨: $departureAddress")
         viewModelScope.launch {
             val optimizedRoute = getOptimizedRouteUseCase(departureAddress, hostDestAddress, guestDestAddress, hostId, guestId)
+            Log.d("RouteViewModel", "경로 최적화 결과: $optimizedRoute")
             _route.value = optimizedRoute
         }
     }

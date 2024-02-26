@@ -6,7 +6,7 @@ import javax.inject.Inject
 class AddressSearchUseCase @Inject constructor(
     private val addressSearchRepository: AddressSearchRepository
 ) {
-    suspend operator fun invoke(apiKey: String, latitude: Double, longitude: Double): Result<String> {
-        return addressSearchRepository.getAddressSearchResult(apiKey, latitude, longitude)
+    suspend operator fun invoke(apiKey: String, longitude: Double, latitude: Double): Result<String> {
+        return addressSearchRepository.getAddressSearchResult(apiKey, longitude, latitude)
     }
 }

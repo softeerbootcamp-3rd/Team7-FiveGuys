@@ -106,17 +106,23 @@ class MapViewModel @Inject constructor(
     }
     // 주소 검색을 수행하는 함수
     // 주소 변환 로직을 suspend 함수로 구현
-    suspend fun convertLocationToAddress(location: Location): String {
-        return try {
-            val apiKey = BuildConfig.kakao_rest_api_key // API 키 설정
-            val latitude = location.latitude
-            val longitude = location.longitude
+    suspend fun convertLocationToAddress(location: Location) {
+        viewModelScope.launch {
+            try {
+                val apiKey = BuildConfig.kakao_rest_api_key // API 키 설정
+                val longitude = location.longitude
+                val latitude = location.latitude
 
-            // 주소 검색 수행하고 결과 반환
-            val result = addressSearchUseCase(apiKey, latitude, longitude).getOrThrow()
-            result
-        } catch (e: Exception) {
-            "주소를 찾을 수 없습니다." // 예외 발생 시 기본 문자열 반환
+                // 주소 검색 수행하고 결과 반환
+                val result = addressSearchUseCase(apiKey, longitude, latitude).getOrThrow()
+
+                // 로그로 변환된 주소 출력 및 LiveData에 세팅
+                Log.d("MapViewModel", "주소 변환 결과: $result")
+                _addressResult.postValue(result)
+            } catch (e: Exception) {
+                Log.e("MapViewModel", "주소 변환 실패", e)
+                _addressResult.postValue("주소를 찾을 수 없습니다.")
+            }
         }
     }
 }
