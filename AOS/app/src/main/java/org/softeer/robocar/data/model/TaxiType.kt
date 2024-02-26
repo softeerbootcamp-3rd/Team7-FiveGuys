@@ -11,7 +11,7 @@ enum class TaxiType(val size: String) : Parcelable {
     companion object {
         fun getSize(_type: String): TaxiType{
             TaxiType.entries.map {
-                if(_type.equals(it))
+                if(_type.equals(it.size))
                     return it
             }
             return TaxiType.COMPACT_TAXI

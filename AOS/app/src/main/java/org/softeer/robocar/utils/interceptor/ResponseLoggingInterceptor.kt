@@ -20,6 +20,17 @@ class ResponseLoggingInterceptor : Interceptor {
         }
         var responseBody : BaseResponse<JsonElement>? = null
         val rawResponseBody = response.body?.string()
+
+        try{
+            val rawRequestBody = response.request.toString()
+            Log.d(TAG, "------------------------------------------")
+            Log.d(TAG, rawRequestBody)
+            Log.d(TAG, "------------------------------------------")
+        }
+        catch (e : Exception){
+            Log.d(TAG, e.message.toString())
+            Log.d(TAG, "------------------------------------------")
+        }
         runCatching {
             responseBody = json.decodeFromString<BaseResponse<JsonElement>>(rawResponseBody!!)
         }.onSuccess {

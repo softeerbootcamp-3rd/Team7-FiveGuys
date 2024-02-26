@@ -51,18 +51,20 @@ class MapViewModel @Inject constructor(
     private var _startLocation = MutableLiveData<String>()
     val startLocation: LiveData<String> = _startLocation
 
+    var total = if (taxiType.value == TaxiType.COMPACT_TAXI) 4 else 6
+    private var _passenger = MutableLiveData<Int>()
+    val passenger: LiveData<Int> = _passenger
+
     init {
-        _countMale.value = "0"
-        _countFemale.value = "0"
+        _countMale.value = 0
+        _countFemale.value = 0
+        _passenger.value = 0
         keyWord.value = ""
         _placeList.value = listOf()
         _destName.value = ""
         _destRoadAddress.value = ""
         _startLocation.value = "강남구 학동로 134"
-      
-    var total = if (taxiType.value == TaxiType.COMPACT_TAXI) 4 else 6
-    private var _passenger = MutableLiveData<Int>()
-    val passenger: LiveData<Int> = _passenger
+    }
 
     fun getOptimizedRoute(
         departureAddress: String,
@@ -109,19 +111,19 @@ class MapViewModel @Inject constructor(
     }
 
     fun subtractMale() {
-        val next = _countMale.value!!.toInt() - 1
+        val next = _countMale.value!! - 1
         _countMale.value = next
         _passenger.value = _passenger.value!! - 1
     }
 
     fun addFemale() {
-        val next = _countFemale.value!!.toInt() + 1
+        val next = _countFemale.value!! + 1
         _countFemale.value = next
         _passenger.value = _passenger.value!! + 1
     }
 
     fun subtractFemale() {
-        val next = _countFemale.value!!.toInt() - 1
+        val next = _countFemale.value!! - 1
         _countFemale.value = next
         _passenger.value = _passenger.value!! - 1
     }

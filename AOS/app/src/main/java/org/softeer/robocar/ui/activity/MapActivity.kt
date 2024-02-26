@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
@@ -36,11 +37,9 @@ import com.kakao.vectormap.label.LabelStyles
 import org.softeer.robocar.data.model.CarPoolType
 import org.softeer.robocar.data.model.TaxiType
 import org.softeer.robocar.ui.viewmodel.MapViewModel
-import org.softeer.robocar.ui.viewmodel.RouteViewModel
 
 @AndroidEntryPoint
 class MapActivity : AppCompatActivity() {
-    private val args: MapActivityArgs by navArgs()
     private lateinit var binding: ActivityMapBinding
     private lateinit var mapView: MapView
     private lateinit var locationManager: LocationManager
@@ -48,7 +47,6 @@ class MapActivity : AppCompatActivity() {
     private var currentLocation: Location? = null
     private val mapViewModel: MapViewModel by viewModels()
     private var currentLocationLabel: Label? = null
-    private val args: MapActivityArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,10 +54,10 @@ class MapActivity : AppCompatActivity() {
         setCarPoolANDTaxiType()
 
         val bottomSheetBehavior = BottomSheetBehavior.from(binding.destinationLayout)
-        viewModel.bottomSheetState.observe(this, Observer {
+        mapViewModel.bottomSheetState.observe(this, Observer {
             bottomSheetBehavior.state = it
         })
-        viewModel.bottomSheetDraggable.observe(this, Observer {
+        mapViewModel.bottomSheetDraggable.observe(this, Observer {
             bottomSheetBehavior.isDraggable = it
         })
 
@@ -199,10 +197,11 @@ class MapActivity : AppCompatActivity() {
     }
 
     private fun setCarPoolANDTaxiType(){
-
+        println("테스트! ${intent.getStringExtra("taxiType")}")
         val taxiType = TaxiType.getSize(intent.getStringExtra("taxiType") ?: "SMALL")
         val carPoolType = CarPoolType.getType(intent.getStringExtra("carPoolType") ?: "ALONE")
         mapViewModel.setTaxiType(taxiType)
         mapViewModel.setCarPoolType(carPoolType)
+        mapViewModel.setPassengerType(taxiT = taxiType, carPoolT = carPoolType)
     }
 }

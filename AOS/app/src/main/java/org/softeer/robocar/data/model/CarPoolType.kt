@@ -10,11 +10,10 @@ enum class CarPoolType(val type: String) : Parcelable {
     JOIN("JOIN");
 
     companion object {
-        fun getType(_type: String): CarPoolType {
-            for (enum in values()) {
-                if (enum.type.equals(_type, ignoreCase = true)) {
-                    return enum
-                }
+        fun getType(_type: String): CarPoolType{
+            CarPoolType.entries.map {
+                if(_type.equals(it.type))
+                    return it
             }
             return ALONE
         }
