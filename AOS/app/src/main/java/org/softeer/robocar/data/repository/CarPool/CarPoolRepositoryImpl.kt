@@ -11,6 +11,7 @@ import javax.inject.Inject
 class CarPoolRepositoryImpl @Inject constructor(
     private val dataSource: CarPoolRemoteDataSource,
     private val localAuthDataSource: AuthLocalDataSource,
+    private val localDataSource: CarPoolLocalDataSource
 ) : CarPoolRepository {
 
     override suspend fun getCarPoolList(
@@ -66,6 +67,24 @@ class CarPoolRepositoryImpl @Inject constructor(
             guestDestination,
             localAuthDataSource.getToken()
         )
+    }
+
+    override suspend fun checkOperationStatus(
+    ): Result<Unit> {
+        return dataSource.checkOperationStatus(
+            localDataSource.getCarPoolId(),
+            localAuthDataSource.getToken()
+        )
+    }
+
+    override suspend fun saveCarPoolId(
+        carPoolId: Long
+    ) {
+        localDataSource.saveCarPoolId(carPoolId)
+    }
+
+    override suspend fun getCarPoolId(): Long {
+        return localDataSource.getCarPoolId()
     }
 
 }

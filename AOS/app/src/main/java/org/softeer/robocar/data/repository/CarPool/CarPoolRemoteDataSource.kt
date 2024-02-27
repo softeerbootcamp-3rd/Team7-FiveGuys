@@ -36,4 +36,9 @@ interface CarPoolRemoteDataSource {
         guestDestination: String,
         token: String,
     ): Result<AcceptCarPoolResponse>
+
+    suspend fun checkOperationStatus(
+        carPoolId: Long,
+        token: String,
+    ): Result<Unit>
 }

@@ -64,6 +64,7 @@ class ReceivedCarPoolRequestDialogFragment : DialogFragment() {
                 if(viewModel.carPoolId.equals(-1)){
                     // TODO 수락 실패 예외처리
                 } else {
+                    viewModel.saveCarPoolId()
                     goToMap(viewModel.carPoolId.value!!)
                 }
             }

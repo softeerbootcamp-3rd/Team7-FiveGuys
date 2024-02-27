@@ -78,4 +78,13 @@ class CarPoolRemoteDataSourceImpl @Inject constructor(
             )
         }
     }
+
+    override suspend fun checkOperationStatus(
+        carPoolId: Long,
+        token: String
+    ): Result<Unit>{
+        return runCatching {
+            carPoolService.checkOperationStatus(carPoolId, token)
+        }
+    }
 }

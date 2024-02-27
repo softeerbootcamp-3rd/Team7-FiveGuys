@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import org.softeer.robocar.data.repository.CarPool.CarPoolLocalDataSource
 import org.softeer.robocar.data.repository.CarPool.CarPoolRemoteDataSource
 import org.softeer.robocar.data.repository.CarPool.CarPoolRepository
 import org.softeer.robocar.data.repository.CarPool.CarPoolRepositoryImpl
@@ -30,11 +31,13 @@ class RepositoryModule {
     @Singleton
     fun provideCarPoolRepository(
         carPoolRemoteDataSource: CarPoolRemoteDataSource,
-        authLocalDataSource: AuthLocalDataSource
+        authLocalDataSource: AuthLocalDataSource,
+        carPoolLocalDataSource: CarPoolLocalDataSource
     ): CarPoolRepository {
         return CarPoolRepositoryImpl(
             carPoolRemoteDataSource,
-            authLocalDataSource
+            authLocalDataSource,
+            carPoolLocalDataSource
             )
     }
 

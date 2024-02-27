@@ -30,6 +30,7 @@ class RoboCarFireBaseMessagingService : FirebaseMessagingService() {
         intent.putExtra("guestAddress", message.data["guestDestAddress"])
         intent.putExtra("nickname", message.data["guestNickname"])
         intent.putExtra("type", message.data["type"])
+        intent.putExtra("carPoolId", message.data["in_operation_id"])
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
     }
 
