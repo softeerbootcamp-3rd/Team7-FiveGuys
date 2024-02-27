@@ -91,6 +91,6 @@ class PathSettingFragment : Fragment(), ItemClickListener{
         viewModel.setDraggable(false)
         val action =
             PathSettingFragmentDirections.actionPathSettingFragmentToSelectDestinationFragment(name,address, viewModel.startLocation.value!!)
-       findNavController().navigate(action)
+        findNavController().navigate(action)
     }
 }
