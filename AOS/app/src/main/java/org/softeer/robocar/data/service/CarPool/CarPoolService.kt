@@ -48,4 +48,10 @@ interface CarPoolService {
         @Header("Authorization") token: String,
     ): AcceptCarPoolResponse
 
+    @GET("operations/onboard")
+    suspend fun checkOperationStatus(
+        @Query("inOperationId") carPoolId: Long,
+        @Header("Authorization") token: String,
+    )
+
 }

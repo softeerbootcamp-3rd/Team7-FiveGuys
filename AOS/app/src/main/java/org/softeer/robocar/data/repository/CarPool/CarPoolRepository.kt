@@ -32,4 +32,10 @@ interface CarPoolRepository {
         guestDestination: String,
     ): Result<AcceptCarPoolResponse>
 
+    suspend fun checkOperationStatus(
+    ): Result<Unit>
+
+    suspend fun saveCarPoolId(carPoolId: Long)
+    suspend fun getCarPoolId(): Long
+
 }

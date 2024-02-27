@@ -11,13 +11,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import dagger.hilt.android.AndroidEntryPoint
 import org.softeer.robocar.databinding.FragmentDialogCarPoolRequestBinding
 import org.softeer.robocar.ui.adapter.DataPassListener
+import org.softeer.robocar.ui.viewmodel.CarPoolRequestDialogViewModel
 
+@AndroidEntryPoint
 class CarPoolRequestDialogFragment : DialogFragment() {
 
     private var _binding: FragmentDialogCarPoolRequestBinding? = null
@@ -28,6 +32,7 @@ class CarPoolRequestDialogFragment : DialogFragment() {
     private val args: CarPoolRequestDialogFragmentArgs by navArgs()
 
     private var dataPassListener: DataPassListener? = null
+    private val viewModel: CarPoolRequestDialogViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentDialogCarPoolRequestBinding.inflate(inflater, container, false)
@@ -72,6 +77,7 @@ class CarPoolRequestDialogFragment : DialogFragment() {
                 navController.navigate(action)
             } else {
                 val carPoolId = intent?.getStringExtra("carPoolId")?.toLong() ?: -1
+                viewModel.saveCarPoolId(carPoolId)
                 goToMap(carPoolId)
             }
         }

@@ -6,6 +6,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import org.softeer.robocar.data.repository.CarPool.CarPoolLocalDataSource
+import org.softeer.robocar.data.repository.CarPool.CarPoolLocalDataSourceImpl
 import org.softeer.robocar.data.repository.CarPool.CarPoolRemoteDataSource
 import org.softeer.robocar.data.repository.CarPool.CarPoolRemoteDataSourceImpl
 import org.softeer.robocar.data.repository.PlaceSearch.PlaceSearchRemoteDataSource
@@ -100,6 +102,13 @@ class DataSourceModule {
     ): RouteRemoteDataSource {
         return RouteRemoteDataSourceImpl(routeService)
     }
+
+    @Provides
+    @Singleton
+    fun provideCarPoolLocalDataSource(
+        @ApplicationContext context: Context
+    ): CarPoolLocalDataSource {
+        return CarPoolLocalDataSourceImpl(context)
 
     @Provides
     @Singleton

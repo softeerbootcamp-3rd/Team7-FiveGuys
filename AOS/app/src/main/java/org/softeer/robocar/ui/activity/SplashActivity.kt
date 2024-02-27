@@ -27,7 +27,7 @@ class SplashActivity: AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.verifyUserToken()
                 .onSuccess {
-                    goToHome()
+                    verifyAndNavigateBasedOnOperationStatus()
                 }
                 .onFailure {
                     goToLogin()
@@ -45,5 +45,24 @@ class SplashActivity: AppCompatActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    private fun goToMap(carPoolId: Long) {
+        val intent = Intent(this, MapActivity::class.java)
+        intent.putExtra("carPoolId", carPoolId)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun verifyAndNavigateBasedOnOperationStatus(){
+        lifecycleScope.launch {
+            viewModel.checkOperationStatus()
+                .onSuccess {
+                    goToMap(viewModel.getCarPoolId())
+                }
+                .onFailure {
+                    goToHome()
+                }
+        }
     }
 }

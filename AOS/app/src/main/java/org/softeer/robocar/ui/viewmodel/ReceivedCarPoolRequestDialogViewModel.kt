@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.softeer.robocar.data.repository.CarPool.CarPoolRepository
 import org.softeer.robocar.domain.usecase.AcceptCarPoolRequestUseCase
 import org.softeer.robocar.domain.usecase.RejectCarPoolRequestUseCase
 import javax.inject.Inject
@@ -13,7 +14,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ReceivedCarPoolRequestDialogViewModel @Inject constructor(
     private val rejectCarPoolRequestUseCase: RejectCarPoolRequestUseCase,
-    private val acceptCarPoolRequestUseCase: AcceptCarPoolRequestUseCase
+    private val acceptCarPoolRequestUseCase: AcceptCarPoolRequestUseCase,
+    private val carPoolRepository: CarPoolRepository
 ): ViewModel() {
 
     private var _guestId = MutableLiveData<Long>()
@@ -72,11 +74,18 @@ class ReceivedCarPoolRequestDialogViewModel @Inject constructor(
             )
                 .onSuccess {
                     _carPoolId.value = it.inOperationId
+                    carPoolRepository.saveCarPoolId(it.inOperationId)
                 }
 
                 .onFailure {
                     _carPoolId.value = -1
                 }
+        }
+    }
+
+    fun saveCarPoolId(){
+        viewModelScope.launch {
+            carPoolRepository.saveCarPoolId(carPoolId.value!!)
         }
     }
 }
