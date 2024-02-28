@@ -235,4 +235,23 @@ public class OperationController {
         return ResponseApi.ok(null);
     }
 
+    @Operation(summary = "혼자타기")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "삭제 요청 성공"),
+            @ApiResponse(responseCode = "400", description = "이미 삭제된 동승 정보"),
+            @ApiResponse(responseCode = "500", description = "서버 에러")
+    })
+    @PostMapping("/operations/alone")
+    public ResponseEntity carpoolAloneSuccess(@RequestParam String departureAddress, @RequestParam String hostDestAddress,@Auth Long id) {
+        Long inOperationId;
+        try {
+            inOperationId = operationService.carpoolAloneSuccess(id, departureAddress, hostDestAddress);
+        } catch (EntityNotFoundException e) {
+            return ResponseApi.of(ResponseStatus.CARPOOL_NOT_FOUND);
+        } catch (Exception e) {
+            return ResponseApi.of(ResponseStatus._INTERNAL_SERVER_ERROR);
+        }
+        return ResponseApi.ok(new InOperationDto(inOperationId));
+    }
+
 }

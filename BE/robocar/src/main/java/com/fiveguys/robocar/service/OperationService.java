@@ -136,7 +136,6 @@ public class OperationService {
     @Transactional
     public void carpoolRegister(CarpoolRegisterReqDto carpoolRegisterReqDto, Long id) {
         Coordinate start = mapService.convertAddressToCoordinates(carpoolRegisterReqDto.getDepartAddress());
-        String departAddress = carpoolRegisterReqDto.getDepartAddress();
 
         Garage garage = garageService.findNearestGarage(start.toString());
         if(garage == null)
@@ -164,6 +163,7 @@ public class OperationService {
         // car State를 IN_OPERATION으로 변경
         Car car = carRepository.findById(carpoolRequest.getCarId()).orElseThrow(EntityNotFoundException::new);
         car.editCarState(CarState.IN_OPERATION);
+        carRepository.save(car);
 
         InOperation inOperation = InOperation.builder()
                 .departureAddress(carpoolRequest.getHostDepartAddress())
@@ -175,10 +175,6 @@ public class OperationService {
                 .carId(carpoolRequest.getCarId())
                 .hostOnBoard(true)
                 .guestOnBoard(true)
-                //TODO
-                // 얼마나 갈리는지 아래부분 추가
-//                .estimatedHostArrivalTime()
-//                .estimatedGuestArrivalTime()
                 .build();
 
         Long inOperationId = inOperationRepository.save(inOperation).getId();
@@ -189,6 +185,38 @@ public class OperationService {
 
         return inOperationId;
     }
+    @Transactional
+    public Long carpoolAloneSuccess(Long id, String departureAddress, String hostDestAddress) throws JSONException {
+
+        Coordinate start = mapService.convertAddressToCoordinates(departureAddress);
+
+        Garage garage = garageService.findNearestGarage(start.toString());
+        if(garage == null)
+            throw new IllegalArgumentException();
+
+        Car car = carService.findAvailableCar(garage.getId());
+        if(car == null)
+            throw new IllegalArgumentException();
+
+        car.editCarState(CarState.IN_OPERATION);
+        carRepository.save(car);
+
+        // car State를 IN_OPERATION으로 변경
+
+        InOperation inOperation = InOperation.builder()
+                .departureAddress(departureAddress)
+                .hostDestAddress(hostDestAddress)
+                .hostId(id)
+                .departureTime(LocalDateTime.now())
+                .carId(car.getId())
+                .hostOnBoard(true)
+                .guestOnBoard(true)
+                .build();
+
+        return inOperationRepository.save(inOperation).getId();
+    }
+
+
 
     @Transactional
     public void carpoolRequestCancel(Long id) throws Exception {
