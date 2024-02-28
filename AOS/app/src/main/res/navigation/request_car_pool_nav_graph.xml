@@ -75,6 +75,7 @@
         <argument android:name="countOfMen" app:argType="integer"/>
         <argument android:name="countOfWomen" app:argType="integer"/>
         <argument android:name="taxiType" app:argType="org.softeer.robocar.data.model.TaxiType"/>
+        <action android:id="@+id/action_taxiCallFragment_to_mapActivity" app:destination="@id/mapActivity"/>
     </fragment>
 
     <fragment android:id="@+id/carPoolCallFragment"

@@ -67,17 +67,9 @@ class ReceivedCarPoolRequestDialogFragment : DialogFragment() {
                     if(viewModel._carPoolId.equals(-1)){
                         // TODO 수락 실패 예외처리
                     } else {
-//                    viewModel.saveCarPoolId()
                         goToMap(viewModel._carPoolId.value!!)
                     }
                 }
-
-//                if(viewModel._carPoolId.equals(-1)){
-//                    // TODO 수락 실패 예외처리
-//                } else {
-////                    viewModel.saveCarPoolId()
-//                    goToMap(viewModel._carPoolId.value!!)
-//                }
             }
         }
     }

@@ -83,7 +83,6 @@ class MapViewModel @Inject constructor(
         _placeList.value = listOf()
         _destName.value = ""
         _destRoadAddress.value = ""
-        _startLocation.value = "강남구 학동로 134"
     }
 
     fun getOptimizedRoute(
@@ -247,4 +246,23 @@ class MapViewModel @Inject constructor(
             }
         }
     }
+
+    suspend fun convertCurrentLocationToAddress(location: Location) {
+        viewModelScope.launch {
+            try {
+                val apiKey = BuildConfig.kakao_rest_api_key // API 키 설정
+                val longitude = location.longitude
+                val latitude = location.latitude
+
+                // 주소 검색 수행하고 결과 반환
+                _startLocation.value = addressSearchUseCase(apiKey, longitude, latitude).getOrThrow()
+
+                // 로그로 변환된 주소 출력 및 LiveData에 세팅
+            } catch (e: Exception) {
+                Log.e("MapViewModel", "주소 변환 실패", e)
+                _addressResult.postValue("주소를 찾을 수 없습니다.")
+            }
+        }
+    }
+
 }
