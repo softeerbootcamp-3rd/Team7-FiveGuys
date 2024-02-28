@@ -19,6 +19,8 @@ import org.softeer.robocar.data.dto.placesearch.Place
 import org.softeer.robocar.data.model.*
 import org.softeer.robocar.data.repository.auth.AuthLocalDataSource
 import org.softeer.robocar.domain.usecase.*
+import org.softeer.robocar.utils.convertMillsToHoursAndMinutes
+import org.softeer.robocar.utils.formatMillsDurationText
 import javax.inject.Inject
 
 @HiltViewModel
@@ -87,6 +89,15 @@ class MapViewModel @Inject constructor(
     private val _latestRoute = MutableLiveData<Route?>()
     val latestRoute: LiveData<Route?> = _latestRoute
 
+    private val _estimatedTime = MutableLiveData<String>()
+    val estimatedTime: LiveData<String> = _estimatedTime
+
+    private val _routeData = MutableLiveData<Route>()
+    val routeData: LiveData<Route> = _routeData
+
+    var currentUserId: Long = 0 // 현재 사용자 ID 설정 필요
+
+
     init {
         _countMale.value = 0
         _countFemale.value = 0
@@ -95,6 +106,9 @@ class MapViewModel @Inject constructor(
         _placeList.value = listOf()
         _destName.value = ""
         _destRoadAddress.value = ""
+        _routeData.observeForever {
+            updateEstimatedTime()
+        }
     }
 
     fun getOptimizedRoute(
@@ -310,6 +324,21 @@ class MapViewModel @Inject constructor(
 
     suspend fun fetchUserId(): Long {
         return authLocalDataSource.getUserInfo().first().userId // Flow에서 첫 번째 User 객체의 userId 반환
+    }
+
+    fun updateEstimatedTime() {
+        _routeData.value?.let { route ->
+            val estimatedTime = if (route.hostId == currentUserId) {
+                // 호스트인 경우
+                convertMillsToHoursAndMinutes(route.hostEstimatedArrivalTime)
+            } else {
+                // 게스트인 경우
+                convertMillsToHoursAndMinutes(route.guestEstimatedArrivalTime)
+            }
+
+            // 예상 시간 텍스트 포매팅
+            _estimatedTime.value = formatMillsDurationText(estimatedTime.first, estimatedTime.second)
+        }
     }
 
 }
