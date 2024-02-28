@@ -11,39 +11,33 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet.Layout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.navArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.kakao.vectormap.*
 import com.kakao.vectormap.camera.CameraAnimation
 import com.kakao.vectormap.camera.CameraUpdateFactory
-import com.kakao.vectormap.route.*
-import dagger.hilt.android.AndroidEntryPoint
-import org.softeer.robocar.R
-import org.softeer.robocar.databinding.ActivityMapBinding
-import com.kakao.vectormap.LatLng;
 import com.kakao.vectormap.label.Label
 import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
+import com.kakao.vectormap.route.*
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import org.softeer.robocar.ui.viewmodel.MapViewModel
-import org.softeer.robocar.ui.viewmodel.OnboardViewModel
-import androidx.lifecycle.Observer
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
+import org.softeer.robocar.R
 import org.softeer.robocar.data.model.CarPoolType
 import org.softeer.robocar.data.model.TaxiType
-import org.softeer.robocar.ui.fragment.*
+import org.softeer.robocar.databinding.ActivityMapBinding
+import org.softeer.robocar.ui.fragment.HeadcountDialogFragment
+import org.softeer.robocar.ui.fragment.InternalControlFragment
+import org.softeer.robocar.ui.fragment.TaxiInformationFragment
+import org.softeer.robocar.ui.viewmodel.MapViewModel
+import org.softeer.robocar.ui.viewmodel.OnboardViewModel
+import com.kakao.vectormap.*
 
 
 @AndroidEntryPoint
@@ -94,10 +88,25 @@ class MapActivity : AppCompatActivity() {
             override fun onMapReady(kakaoMap: KakaoMap) {
                 this@MapActivity.kakaoMap = kakaoMap // kakaoMap 객체 저장
                 updateCameraToCurrentLocation()
+
+                kakaoMap.setOnMapClickListener { _, position, _, _ ->
+                    Log.d("position", position.toString())
+                    addLocationLabel(position.latitude, position.longitude)
+
+                    lifecycleScope.launch {
+                        mapViewModel.convertCurrentLocationToAddress(
+                            Location("provider").apply {
+                                latitude = position.latitude
+                                longitude = position.longitude
+                            }
+                        )
+                    }
+                }
             }
         })
 
         setupLocationUpdates()
+
 
         val inOperationId = intent.getLongExtra("carPoolId", -1)
         println("$inOperationId")
@@ -286,11 +295,11 @@ class MapActivity : AppCompatActivity() {
             // 스타일 정의
             val labelStyles = LabelStyles.from(
                 "myCurrentLocationStyle",
-                LabelStyle.from(R.drawable.icon_car_location).setTextStyles(70, Color.BLACK, 1, Color.WHITE)
+                LabelStyle.from(R.drawable.img_location_icon).setTextStyles(70, Color.BLACK, 1, Color.WHITE)
                     .setZoomLevel(8),
-                LabelStyle.from(R.drawable.icon_car_location).setTextStyles(70, Color.BLACK, 1, Color.WHITE)
+                LabelStyle.from(R.drawable.img_location_icon).setTextStyles(70, Color.BLACK, 1, Color.WHITE)
                     .setZoomLevel(11),
-                LabelStyle.from(R.drawable.icon_car_location).setTextStyles(70, Color.BLACK, 1, Color.WHITE)
+                LabelStyle.from(R.drawable.img_location_icon).setTextStyles(70, Color.BLACK, 1, Color.WHITE)
                     .setZoomLevel(15)
             )
 
@@ -300,7 +309,6 @@ class MapActivity : AppCompatActivity() {
             // 라벨 옵션 설정
             val options = LabelOptions.from(LatLng.from(lat, lon))
                 .setStyles(styles)
-                .setTexts("\uD83D\uDE04")
 
             // 새 라벨 추가 및 참조 저장
             currentLocationLabel = labelLayer?.addLabel(options)
@@ -403,6 +411,35 @@ class MapActivity : AppCompatActivity() {
         mapViewModel.setTaxiType(taxiType)
         mapViewModel.setCarPoolType(carPoolType)
         mapViewModel.setPassengerType(taxiT = taxiType, carPoolT = carPoolType)
-
         }
+
+    private fun addLocationLabel(lat: Double, lon: Double) {
+        kakaoMap?.let { map ->
+            val labelManager = map.getLabelManager()
+            val labelLayer = labelManager?.getLayer()
+
+            // 이전 라벨이 있다면 삭제
+            currentLocationLabel?.let {
+                labelLayer?.remove(it)
+            }
+
+            val labelStyles = LabelStyles.from(
+                "myCurrentLocationStyle",
+                LabelStyle.from(R.drawable.img_location_icon).setTextStyles(70, Color.BLACK, 1, Color.WHITE)
+                    .setZoomLevel(8),
+                LabelStyle.from(R.drawable.img_location_icon).setTextStyles(70, Color.BLACK, 1, Color.WHITE)
+                    .setZoomLevel(11),
+                LabelStyle.from(R.drawable.img_location_icon).setTextStyles(70, Color.BLACK, 1, Color.WHITE)
+                    .setZoomLevel(15)
+            )
+
+            // 라벨 옵션 설정
+            val options = LabelOptions.from(LatLng.from(lat, lon))
+                .setStyles(labelStyles)
+
+            // 새 라벨 추가 및 참조 저장
+            currentLocationLabel = labelLayer?.addLabel(options)
+            BottomSheetBehavior.from(binding.destinationLayout).isDraggable
+        }
+    }
     }
