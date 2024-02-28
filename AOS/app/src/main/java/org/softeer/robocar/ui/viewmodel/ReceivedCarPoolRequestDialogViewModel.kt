@@ -76,7 +76,6 @@ class ReceivedCarPoolRequestDialogViewModel @Inject constructor(
                 .onSuccess {
                     _carPoolId.value = it.inOperationId
                     carPoolRepository.saveCarPoolId(it.inOperationId)
-                    Log.d("Response", "현재 카풀 아이디 ${_carPoolId.value!!}")
                 }
 
                 .onFailure {
