@@ -6,6 +6,6 @@ import org.softeer.robocar.data.model.Onboard
 
 interface OnboardRepository {
     suspend fun getOnboardDetails(
-        inOperationId: Int
+        inOperationId: Long
     ): Result<OnboardData>
 }

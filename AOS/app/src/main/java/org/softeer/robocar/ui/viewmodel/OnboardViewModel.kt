@@ -20,7 +20,7 @@ class OnboardViewModel @Inject constructor(
     private val _onboardDetails = MutableLiveData<OnboardData>()
     val onboardDetails: LiveData<OnboardData> = _onboardDetails
 
-    fun fetchOnboardDetails(inOperationId: Int) {
+    fun fetchOnboardDetails(inOperationId: Long) {
         viewModelScope.launch {
             onboardDetailsUseCase(inOperationId).let { result ->
                 result.onSuccess { onboard ->

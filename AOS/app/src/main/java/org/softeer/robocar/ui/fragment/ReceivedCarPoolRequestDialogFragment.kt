@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,12 +62,22 @@ class ReceivedCarPoolRequestDialogFragment : DialogFragment() {
             }
             acceptButton.setOnClickListener {
                 viewModel.acceptCarPoolRequest()
-                if(viewModel.carPoolId.equals(-1)){
-                    // TODO 수락 실패 예외처리
-                } else {
-                    viewModel.saveCarPoolId()
-                    goToMap(viewModel.carPoolId.value!!)
+
+                viewModel.carPoolId.observe(lifecycleOwner!!){
+                    if(viewModel._carPoolId.equals(-1)){
+                        // TODO 수락 실패 예외처리
+                    } else {
+//                    viewModel.saveCarPoolId()
+                        goToMap(viewModel._carPoolId.value!!)
+                    }
                 }
+
+//                if(viewModel._carPoolId.equals(-1)){
+//                    // TODO 수락 실패 예외처리
+//                } else {
+////                    viewModel.saveCarPoolId()
+//                    goToMap(viewModel._carPoolId.value!!)
+//                }
             }
         }
     }
