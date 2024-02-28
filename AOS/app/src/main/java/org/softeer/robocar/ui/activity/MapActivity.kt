@@ -19,6 +19,7 @@ import androidx.constraintlayout.widget.ConstraintSet.Layout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -29,7 +30,6 @@ import com.kakao.vectormap.route.*
 import dagger.hilt.android.AndroidEntryPoint
 import org.softeer.robocar.R
 import org.softeer.robocar.databinding.ActivityMapBinding
-import org.softeer.robocar.ui.fragment.HeadcountDialogFragment
 import com.kakao.vectormap.LatLng;
 import com.kakao.vectormap.label.Label
 import com.kakao.vectormap.label.LabelOptions
@@ -39,8 +39,11 @@ import kotlinx.coroutines.launch
 import org.softeer.robocar.ui.viewmodel.MapViewModel
 import org.softeer.robocar.ui.viewmodel.OnboardViewModel
 import androidx.lifecycle.Observer
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import org.softeer.robocar.data.model.CarPoolType
 import org.softeer.robocar.data.model.TaxiType
+import org.softeer.robocar.ui.fragment.*
 
 
 @AndroidEntryPoint
@@ -90,37 +93,60 @@ class MapActivity : AppCompatActivity() {
         }, object : KakaoMapReadyCallback() {
             override fun onMapReady(kakaoMap: KakaoMap) {
                 this@MapActivity.kakaoMap = kakaoMap // kakaoMap 객체 저장
-                observeRouteSoloData() // 혼자 타는 경로 데이터 관찰 시작
-                observeRouteData() // 경로 데이터 관찰 시작
                 updateCameraToCurrentLocation()
-                fetchAndStartMovingLabel()
             }
         })
-        mapViewModel.addressResult.observe(this) { address ->
-            Log.d("MapActivity", "관찰된 주소 변환 결과: $address")
-            // 주소 변환 결과를 사용하여 경로 최적화 요청
-//            onboardViewModel.onboardDetails.value?.let { onboard ->
-            requestOptimizedRoute(address, "서울 강남구 논현동", "서울 강남구 논현동 279-67", 1, 2)
-            Log.d("주소", address)
-//            }
-
-        }
+//        mapViewModel.addressResult.observe(this) { address ->
+//            Log.d("MapActivity", "관찰된 주소 변환 결과: $address")
+//            // 주소 변환 결과를 사용하여 경로 최적화 요청
+////            onboardViewModel.onboardDetails.value?.let { onboard ->
+//            requestOptimizedRoute(address, "서울 강남구 논현동", "서울 강남구 논현동 279-67", 1, 2)
+//            Log.d("주소", address)
+////            }
+//        }
 
         setupLocationUpdates()
 
-//        val inOperationId = intent.getIntExtra("inOperationId", 0)
-//        val inOperationId = 1
-//        if (inOperationId != 0) {
-//            fetchAndDisplayRoute(inOperationId)
-//        }
+        val inOperationId = intent.getLongExtra("carPoolId", -1)
+        println("$inOperationId")
+        if (inOperationId > 0) {
+            // 유효한 inOperationId를 사용하여 데이터 요청
+            fetchAndDisplayRoute(inOperationId)
+            showTaxiInfoFragment(inOperationId)
+            observeRouteSoloData() // 혼자 타는 경로 데이터 관찰 시작
+            observeRouteData() // 경로 데이터 관찰 시작
+            fetchAndStartMovingLabel()
+            supportFragmentManager.beginTransaction().
+                replace(binding.destinationFragmentContainer.id, InternalControlFragment()).commit()
+
+        } else {
+            // 유효한 inOperationId가 없을 때는 택시 정보 프래그먼트를 표시하지 않음
+            removeTaxiInfoFragment()
+            HeadcountDialogFragment().show(supportFragmentManager, "headCount")
+        }
 //        mapViewModel.getOptimizedRouteSolo("논현동 40", "서울특별시 강남구 학동로 171")
 //        mapViewModel.getOptimizedRoute("영등포동5가 34-1", "서울특별시 강남구 학동로 180", "분당구 정자동 50-3", 1, 2)
-
-
-        mapViewModel.getOptimizedRoute("영등포동5가 34-1", "서울특별시 강남구 학동로 180", "분당구 정자동 50-3", 1, 2)
-        HeadcountDialogFragment().show(supportFragmentManager, "headCount")
         setupCurrentLocationButton()
     }
+
+    private fun showTaxiInfoFragment(inOperationId: Long) {
+        // `TaxiInformationFragment`에 `inOperationId`를 전달하여 추가
+        val fragment = TaxiInformationFragment.newInstance(inOperationId)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.taxiInformationFragmentContainer, fragment) // ID 변경
+            .commit()
+    }
+
+    private fun removeTaxiInfoFragment() {
+        // `TaxiInformationFragment`를 찾아 제거
+        val fragment = supportFragmentManager.findFragmentById(R.id.taxiInformationFragmentContainer) // ID 변경
+        if (fragment is TaxiInformationFragment) {
+            supportFragmentManager.beginTransaction()
+                .remove(fragment)
+                .commit()
+        }
+    }
+
 
     // 경로 데이터 관찰 및 경로 그리기
     private fun observeRouteData() {
@@ -168,11 +194,10 @@ class MapActivity : AppCompatActivity() {
             currentLocation = location
             addCurrentLocationLabel(location.latitude, location.longitude)
             // inOperationId 값을 Intent에서 가져오거나 다른 방식으로 결정
-//            val inOperationId = intent.getIntExtra("inOperationId", 0)
-//            val inOperationId = 1
-//            if (inOperationId != 0) {
-//                fetchAndDisplayRoute(inOperationId)
-//            }
+            val inOperationId = intent.getLongExtra("inOperationId", 0L)
+            if (inOperationId != 0L) {
+                fetchAndDisplayRoute(inOperationId)
+            }
 
             // 현재 위치로 주소 변환 요청
             requestAddressConversion(location)
@@ -200,7 +225,7 @@ class MapActivity : AppCompatActivity() {
     }
 
 
-    private fun fetchAndDisplayRoute(inOperationId: Int) {
+    private fun fetchAndDisplayRoute(inOperationId: Long) {
         onboardViewModel.fetchOnboardDetails(inOperationId)
         observeOnboardDetails()
     }
@@ -307,7 +332,6 @@ class MapActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
 
     // 경로 데이터를 동적으로 받아오기 위해 route 변수 선언을 제거합니다.
-// 이 예제는 Coordinate 클래스가 latitude와 longitude 속성을 가지고 있다고 가정합니다.
     private fun convertCoordinatesToLatLng(coordinates: List<org.softeer.robocar.data.dto.route.response.Coordinate>): List<LatLng> {
         return coordinates.map { LatLng.from(it.latitude, it.longitude) } // Coordinate의 y를 latitude로, x를 longitude로 사용
     }
@@ -350,7 +374,7 @@ class MapActivity : AppCompatActivity() {
             // 라벨 옵션 설정
             val options = LabelOptions.from(LatLng.from(route[0]))
                 .setStyles(styles)
-                .setTexts("❤\uFE0F")
+                .setTexts("\uD83D\uDE98")
 
             // 움직이는 라벨 생성
             movingLabel = labelLayer?.addLabel(options)!!
@@ -373,10 +397,9 @@ class MapActivity : AppCompatActivity() {
                 kakaoMap?.getLabelManager()?.getLayer()?.remove(movingLabel)
                 routeIndex = 0 // routeIndex를 다시 초기화
             }
-        }, 300) // 0.3초마다 위치 업데이트
+        }, 100) // 0.3초마다 위치 업데이트
     }
     private fun setCarPoolANDTaxiType() {
-        println("테스트! ${intent.getStringExtra("taxiType")}")
         val taxiType = TaxiType.getSize(intent.getStringExtra("taxiType") ?: "SMALL")
         val carPoolType = CarPoolType.getType(intent.getStringExtra("carPoolType") ?: "ALONE")
         mapViewModel.setTaxiType(taxiType)

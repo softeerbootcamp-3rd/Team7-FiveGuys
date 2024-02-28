@@ -18,6 +18,9 @@ import org.softeer.robocar.data.repository.auth.AuthLocalDataSource
 import org.softeer.robocar.data.repository.auth.AuthRemoteDataSource
 import org.softeer.robocar.data.repository.auth.AuthRepository
 import org.softeer.robocar.data.repository.auth.AuthRepositoryImpl
+import org.softeer.robocar.data.repository.car.CarRemoteDataSource
+import org.softeer.robocar.data.repository.car.CarRepository
+import org.softeer.robocar.data.repository.car.CarRepositoryImpl
 import org.softeer.robocar.data.repository.onboard.OnboardRemoteDataSource
 import org.softeer.robocar.data.repository.onboard.OnboardRepository
 import org.softeer.robocar.data.repository.onboard.OnboardRepositoryImpl
@@ -86,9 +89,19 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun provideOnboardRepository(
-        onboardRemoteDataSource: OnboardRemoteDataSource
+        onboardRemoteDataSource: OnboardRemoteDataSource,
+        authLocalDataSource: AuthLocalDataSource,
     ): OnboardRepository {
-        return OnboardRepositoryImpl(onboardRemoteDataSource)
+        return OnboardRepositoryImpl(onboardRemoteDataSource,authLocalDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCarRepository(
+        carRemoteDataSource: CarRemoteDataSource,
+        authLocalDataSource: AuthLocalDataSource,
+    ): CarRepository {
+        return CarRepositoryImpl(carRemoteDataSource,authLocalDataSource)
     }
 
     @Provides

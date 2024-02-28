@@ -19,6 +19,8 @@ import org.softeer.robocar.data.repository.auth.AuthLocalDataSource
 import org.softeer.robocar.data.repository.auth.AuthLocalDataSourceImpl
 import org.softeer.robocar.data.repository.auth.AuthRemoteDataSource
 import org.softeer.robocar.data.repository.auth.AuthRemoteDataSourceImpl
+import org.softeer.robocar.data.repository.car.CarRemoteDataSource
+import org.softeer.robocar.data.repository.car.CarRemoteDataSourceImpl
 import org.softeer.robocar.data.repository.onboard.OnboardRemoteDataSource
 import org.softeer.robocar.data.repository.onboard.OnboardRemoteDataSourceImpl
 import org.softeer.robocar.data.repository.route.RouteRemoteDataSource
@@ -31,6 +33,7 @@ import org.softeer.robocar.data.service.CarPool.CarPoolService
 import org.softeer.robocar.data.service.addresssearch.AddressSearchService
 import org.softeer.robocar.data.service.route.RouteService
 import org.softeer.robocar.data.service.auth.AuthService
+import org.softeer.robocar.data.service.car.CarService
 import org.softeer.robocar.data.service.operation.OnboardService
 import org.softeer.robocar.data.service.route.RouteSoloService
 import org.softeer.robocar.data.service.user.UserService
@@ -63,6 +66,7 @@ class DataSourceModule {
     ): AddressSearchRemoteDataSource {
         return AddressSearchRemoteDataSourceImpl(addressSearchService)
     }
+
     @Provides
     @Singleton
     fun provideAuthRemoteDataSource(
@@ -97,6 +101,14 @@ class DataSourceModule {
 
     @Provides
     @Singleton
+    fun provideCarRemoteDataSource(
+        carService: CarService
+    ): CarRemoteDataSource {
+        return CarRemoteDataSourceImpl(carService)
+    }
+
+    @Provides
+    @Singleton
     fun provideRouteRemoteDataSource(
         routeService: RouteService
     ): RouteRemoteDataSource {
@@ -109,7 +121,7 @@ class DataSourceModule {
         @ApplicationContext context: Context
     ): CarPoolLocalDataSource {
         return CarPoolLocalDataSourceImpl(context)
-
+    }
     @Provides
     @Singleton
     fun provideRouteSoloRemoteDataSource(

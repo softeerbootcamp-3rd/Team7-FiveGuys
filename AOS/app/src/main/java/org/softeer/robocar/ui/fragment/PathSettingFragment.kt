@@ -93,4 +93,9 @@ class PathSettingFragment : Fragment(), ItemClickListener{
             PathSettingFragmentDirections.actionPathSettingFragmentToSelectDestinationFragment(name,address, viewModel.startLocation.value!!)
         findNavController().navigate(action)
     }
+
+    fun toInternalControl(carPoolId: Long) {
+        val action = SelectDestinationFragmentDirections.actionSelectDestinationFragmentToInternalControlFragment(carPoolId)
+        findNavController().navigate(action)
+    }
 }

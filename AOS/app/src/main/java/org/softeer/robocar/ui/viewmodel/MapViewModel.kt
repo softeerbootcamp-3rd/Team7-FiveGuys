@@ -1,5 +1,7 @@
 package org.softeer.robocar.ui.viewmodel
 
+import org.softeer.robocar.domain.usecase.CarDetailsUseCase
+import org.softeer.robocar.domain.usecase.OnboardDetailsUseCase
 import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -10,12 +12,10 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.softeer.robocar.BuildConfig
+import org.softeer.robocar.data.dto.operation.OnboardData
 import org.softeer.robocar.data.dto.placesearch.Place
 import org.softeer.robocar.data.model.*
-import org.softeer.robocar.domain.usecase.AddressSearchUseCase
-import org.softeer.robocar.domain.usecase.GetOptimizedRouteSoloUseCase
-import org.softeer.robocar.domain.usecase.GetOptimizedRouteUseCase
-import org.softeer.robocar.domain.usecase.SearchPlaceUseCase
+import org.softeer.robocar.domain.usecase.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,8 +23,10 @@ class MapViewModel @Inject constructor(
     private val addressSearchUseCase: AddressSearchUseCase,
     private val searchPlaceUseCase: SearchPlaceUseCase,
     private val getOptimizedRouteUseCase: GetOptimizedRouteUseCase,
-    private val getOptimizedRouteSoloUseCase: GetOptimizedRouteSoloUseCase
-): ViewModel() {
+    private val getOptimizedRouteSoloUseCase: GetOptimizedRouteSoloUseCase,
+    private val onboardDetailsUseCase: OnboardDetailsUseCase,
+    private val carDetailsUseCase: CarDetailsUseCase
+) : ViewModel() {
     val bottomSheetState = MutableLiveData<Int>()
     val bottomSheetDraggable = MutableLiveData<Boolean>()
 
@@ -56,13 +58,22 @@ class MapViewModel @Inject constructor(
     private val _addressResult = MutableLiveData<String>()
     val addressResult: LiveData<String> = _addressResult
 
-
     private var _startLocation = MutableLiveData<String>()
     val startLocation: LiveData<String> = _startLocation
 
     var total = if (taxiType.value == TaxiType.COMPACT_TAXI) 4 else 6
     private var _passenger = MutableLiveData<Int>()
     val passenger: LiveData<Int> = _passenger
+
+    private var _inOperationId = MutableLiveData<Long>()
+    val inOperationId: LiveData<Long> = _inOperationId
+
+    private val _onboardDetails = MutableLiveData<OnboardData>()
+    val onboardDetails: LiveData<OnboardData> = _onboardDetails
+
+    private val _carDetails = MutableLiveData<CarDetails>()
+    val carDetails: LiveData<CarDetails> = _carDetails
+
 
     init {
         _countMale.value = 0
@@ -205,5 +216,35 @@ class MapViewModel @Inject constructor(
 
     fun setDraggable(flag: Boolean) {
         bottomSheetDraggable.value = flag
+    }
+
+    fun setInOperationId(id: Long) {
+        _inOperationId.value = id
+        if (id > 0) {
+            fetchOnboardDetails(id)
+        }
+    }
+
+    fun fetchOnboardDetails(inOperationId: Long) {
+        viewModelScope.launch {
+            val result = onboardDetailsUseCase(inOperationId) // useCase 호출
+            result.onSuccess { onboardData ->
+                _onboardDetails.postValue(onboardData)
+            }.onFailure { exception ->
+                // 오류 처리. 예: 로그 출력, 사용자에게 오류 알림, 오류 상태 LiveData 업데이트 등
+                Log.e("MapViewModel", "Error fetching onboard details", exception)
+            }
+        }
+    }
+
+
+    fun fetchCarDetails(carId: Long) {
+        viewModelScope.launch {
+            carDetailsUseCase(carId).onSuccess { carDetails ->
+                _carDetails.value = carDetails
+            }.onFailure { exception ->
+                Log.e("MapViewModel", "Failed to fetch car details", exception)
+            }
+        }
     }
 }

@@ -10,16 +10,16 @@ data class OnboardResponse(
 
 @Serializable
 data class OnboardData(
-    val id: Int,
+    val id: Long,
     val departureTime: String,
     val departureAddress: String,
     val hostDestAddress: String,
     val guestDestAddress: String,
     val estimatedHostArrivalTime: String?,
     val estimatedGuestArrivalTime: String?,
-    val carId: Int,
-    val hostId: Int,
-    val guestId: Int,
+    val carId: Long,
+    val hostId: Long,
+    val guestId: Long,
     val guestOnBoard: Boolean,
     val hostOnBoard: Boolean
 )

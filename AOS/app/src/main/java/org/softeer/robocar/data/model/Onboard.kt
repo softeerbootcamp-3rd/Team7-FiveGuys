@@ -4,6 +4,6 @@ data class Onboard(
     val departureAddress: String,
     val hostDestAddress: String,
     val guestDestAddress: String,
-    val hostId: Int,
-    val guestId: Int
+    val hostId: Long,
+    val guestId: Long
 )

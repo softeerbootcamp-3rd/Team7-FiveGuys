@@ -1,5 +1,6 @@
 package org.softeer.robocar.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -33,7 +34,7 @@ class ReceivedCarPoolRequestDialogViewModel @Inject constructor(
     private var _guestAddress = MutableLiveData<String>()
     val guestAddress: LiveData<String> = _guestAddress
 
-    private var _carPoolId = MutableLiveData<Long>()
+    var _carPoolId = MutableLiveData<Long>()
     val carPoolId: LiveData<Long> = _carPoolId
 
 
@@ -75,17 +76,19 @@ class ReceivedCarPoolRequestDialogViewModel @Inject constructor(
                 .onSuccess {
                     _carPoolId.value = it.inOperationId
                     carPoolRepository.saveCarPoolId(it.inOperationId)
+                    Log.d("Response", "현재 카풀 아이디 ${_carPoolId.value!!}")
                 }
 
                 .onFailure {
                     _carPoolId.value = -1
+                    Log.d("Response", "카풀 수락 실패!")
                 }
         }
     }
 
     fun saveCarPoolId(){
         viewModelScope.launch {
-            carPoolRepository.saveCarPoolId(carPoolId.value!!)
+            carPoolRepository.saveCarPoolId(_carPoolId.value!!)
         }
     }
 }
