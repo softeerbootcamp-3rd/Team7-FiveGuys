@@ -11,6 +11,7 @@ data class CarDetailsResponse(
 @Serializable
 data class CarData(
     val id: Long,
+    val garage: GarageData,
     val state: String,
     val carType: String,
     val seatTemperature: Int,
@@ -20,4 +21,11 @@ data class CarData(
     val carName: String,
     val carImage: String,
     val carNumber: String
+)
+
+@Serializable
+data class GarageData(
+    val id: Long,
+    val latitude: Double,
+    val longitude: Double
 )

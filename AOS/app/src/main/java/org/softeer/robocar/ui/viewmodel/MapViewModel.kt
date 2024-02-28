@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import org.softeer.robocar.BuildConfig
 import org.softeer.robocar.data.dto.operation.OnboardData
@@ -79,6 +81,12 @@ class MapViewModel @Inject constructor(
     private val _userId = MutableLiveData<Long>()
     val userId: LiveData<Long> = _userId
 
+    private val _addressTaxiResult = MutableLiveData<String>()
+    val addressTaxiResult: LiveData<String> = _addressTaxiResult
+
+    private val _latestRoute = MutableLiveData<Route?>()
+    val latestRoute: LiveData<Route?> = _latestRoute
+
     init {
         _countMale.value = 0
         _countFemale.value = 0
@@ -87,7 +95,6 @@ class MapViewModel @Inject constructor(
         _placeList.value = listOf()
         _destName.value = ""
         _destRoadAddress.value = ""
-        fetchUserInfo()
     }
 
     fun getOptimizedRoute(
@@ -199,16 +206,29 @@ class MapViewModel @Inject constructor(
 
                 // 주소 검색 수행하고 결과 반환
                 val result = addressSearchUseCase(apiKey, longitude, latitude).getOrThrow()
-
                 // 로그로 변환된 주소 출력 및 LiveData에 세팅
                 Log.d("MapViewModel", "주소 변환 결과: $result")
-                _addressResult.postValue(result)
+                _addressResult.value = result
             } catch (e: Exception) {
                 Log.e("MapViewModel", "주소 변환 실패", e)
                 _addressResult.postValue("주소를 찾을 수 없습니다.")
             }
         }
     }
+
+    suspend fun convertLocationToAddressString(latitude: Double, longitude: Double): String {
+        return try {
+            val apiKey = BuildConfig.kakao_rest_api_key
+            // 주소 검색 수행하고 결과 반환
+            val result = addressSearchUseCase(apiKey, longitude, latitude).getOrThrow()
+            Log.d("MapViewModel", "주소 변환 결과: $result")
+            result // 변환된 주소 반환
+        } catch (e: Exception) {
+            Log.e("MapViewModel", "주소 변환 실패", e)
+            "주소를 찾을 수 없습니다." // 예외 처리
+        }
+    }
+
 
     fun convertCoordinateToAddress(latitude: Double, longitude: Double) {
         viewModelScope.launch {
@@ -220,14 +240,31 @@ class MapViewModel @Inject constructor(
 
                 // 로그로 변환된 주소 출력 및 LiveData에 세팅
                 Log.d("MapViewModel", "주소 변환 결과: $result")
-                _addressResult.postValue(result)
+                _addressTaxiResult.postValue(result)
+            } catch (e: Exception) {
+                Log.e("MapViewModel", "주소 변환 실패", e)
+                _addressTaxiResult.postValue("주소를 찾을 수 없습니다.")
+            }
+        }
+    }
+
+    suspend fun convertCurrentLocationToAddress(location: Location) {
+        viewModelScope.launch {
+            try {
+                val apiKey = BuildConfig.kakao_rest_api_key // API 키 설정
+                val longitude = location.longitude
+                val latitude = location.latitude
+
+                // 주소 검색 수행하고 결과 반환
+                _startLocation.value = addressSearchUseCase(apiKey, longitude, latitude).getOrThrow()
+
+                // 로그로 변환된 주소 출력 및 LiveData에 세팅
             } catch (e: Exception) {
                 Log.e("MapViewModel", "주소 변환 실패", e)
                 _addressResult.postValue("주소를 찾을 수 없습니다.")
             }
         }
     }
-
 
     fun sheetDown() {
         bottomSheetState.value = BottomSheetBehavior.STATE_COLLAPSED
@@ -271,11 +308,8 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    private fun fetchUserInfo() {
-        viewModelScope.launch {
-            authLocalDataSource.getUserInfo().collect { user ->
-                _userId.value = user.userId
-            }
-        }
+    suspend fun fetchUserId(): Long {
+        return authLocalDataSource.getUserInfo().first().userId // Flow에서 첫 번째 User 객체의 userId 반환
     }
+
 }

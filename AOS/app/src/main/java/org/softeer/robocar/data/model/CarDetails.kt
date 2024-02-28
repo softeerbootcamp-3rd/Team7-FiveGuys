@@ -10,5 +10,12 @@ data class CarDetails(
     val doorLock: Boolean,
     val carName: String,
     val carImage: String,
-    val carNumber: String
+    val carNumber: String,
+    val garage: GarageDetails // 차고지 정보 추가
+)
+
+data class GarageDetails(
+    val id: Long,
+    val latitude: Double,
+    val longitude: Double
 )
