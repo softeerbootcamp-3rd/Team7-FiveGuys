@@ -15,6 +15,7 @@ import org.softeer.robocar.BuildConfig
 import org.softeer.robocar.data.dto.operation.OnboardData
 import org.softeer.robocar.data.dto.placesearch.Place
 import org.softeer.robocar.data.model.*
+import org.softeer.robocar.data.repository.auth.AuthLocalDataSource
 import org.softeer.robocar.domain.usecase.*
 import javax.inject.Inject
 
@@ -25,7 +26,8 @@ class MapViewModel @Inject constructor(
     private val getOptimizedRouteUseCase: GetOptimizedRouteUseCase,
     private val getOptimizedRouteSoloUseCase: GetOptimizedRouteSoloUseCase,
     private val onboardDetailsUseCase: OnboardDetailsUseCase,
-    private val carDetailsUseCase: CarDetailsUseCase
+    private val carDetailsUseCase: CarDetailsUseCase,
+    private val authLocalDataSource: AuthLocalDataSource
 ) : ViewModel() {
     val bottomSheetState = MutableLiveData<Int>()
     val bottomSheetDraggable = MutableLiveData<Boolean>()
@@ -74,6 +76,8 @@ class MapViewModel @Inject constructor(
     private val _carDetails = MutableLiveData<CarDetails>()
     val carDetails: LiveData<CarDetails> = _carDetails
 
+    private val _userId = MutableLiveData<Long>()
+    val userId: LiveData<Long> = _userId
 
     init {
         _countMale.value = 0
@@ -83,7 +87,7 @@ class MapViewModel @Inject constructor(
         _placeList.value = listOf()
         _destName.value = ""
         _destRoadAddress.value = ""
-        _startLocation.value = "강남구 학동로 134"
+        fetchUserInfo()
     }
 
     fun getOptimizedRoute(
@@ -186,7 +190,7 @@ class MapViewModel @Inject constructor(
 
     // 주소 검색을 수행하는 함수
     // 주소 변환 로직을 suspend 함수로 구현
-    suspend fun convertLocationToAddress(location: Location) {
+    fun convertLocationToAddress(location: Location) {
         viewModelScope.launch {
             try {
                 val apiKey = BuildConfig.kakao_rest_api_key // API 키 설정
@@ -205,6 +209,25 @@ class MapViewModel @Inject constructor(
             }
         }
     }
+
+    fun convertCoordinateToAddress(latitude: Double, longitude: Double) {
+        viewModelScope.launch {
+            try {
+                val apiKey = BuildConfig.kakao_rest_api_key // API 키 설정
+
+                // 주소 검색 수행하고 결과 반환
+                val result = addressSearchUseCase(apiKey, longitude, latitude).getOrThrow()
+
+                // 로그로 변환된 주소 출력 및 LiveData에 세팅
+                Log.d("MapViewModel", "주소 변환 결과: $result")
+                _addressResult.postValue(result)
+            } catch (e: Exception) {
+                Log.e("MapViewModel", "주소 변환 실패", e)
+                _addressResult.postValue("주소를 찾을 수 없습니다.")
+            }
+        }
+    }
+
 
     fun sheetDown() {
         bottomSheetState.value = BottomSheetBehavior.STATE_COLLAPSED
@@ -244,6 +267,14 @@ class MapViewModel @Inject constructor(
                 _carDetails.value = carDetails
             }.onFailure { exception ->
                 Log.e("MapViewModel", "Failed to fetch car details", exception)
+            }
+        }
+    }
+
+    private fun fetchUserInfo() {
+        viewModelScope.launch {
+            authLocalDataSource.getUserInfo().collect { user ->
+                _userId.value = user.userId
             }
         }
     }

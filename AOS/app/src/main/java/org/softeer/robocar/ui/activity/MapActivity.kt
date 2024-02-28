@@ -96,14 +96,6 @@ class MapActivity : AppCompatActivity() {
                 updateCameraToCurrentLocation()
             }
         })
-//        mapViewModel.addressResult.observe(this) { address ->
-//            Log.d("MapActivity", "관찰된 주소 변환 결과: $address")
-//            // 주소 변환 결과를 사용하여 경로 최적화 요청
-////            onboardViewModel.onboardDetails.value?.let { onboard ->
-//            requestOptimizedRoute(address, "서울 강남구 논현동", "서울 강남구 논현동 279-67", 1, 2)
-//            Log.d("주소", address)
-////            }
-//        }
 
         setupLocationUpdates()
 
@@ -114,7 +106,7 @@ class MapActivity : AppCompatActivity() {
             fetchAndDisplayRoute(inOperationId)
             showTaxiInfoFragment(inOperationId)
             observeRouteSoloData() // 혼자 타는 경로 데이터 관찰 시작
-            observeRouteData() // 경로 데이터 관찰 시작
+//            observeUserInfoAndRouteData() // 경로 데이터 관찰 시작
             fetchAndStartMovingLabel()
             supportFragmentManager.beginTransaction().
                 replace(binding.destinationFragmentContainer.id, InternalControlFragment()).commit()
@@ -149,13 +141,20 @@ class MapActivity : AppCompatActivity() {
 
 
     // 경로 데이터 관찰 및 경로 그리기
-    private fun observeRouteData() {
-        mapViewModel.route.observe(this) { route ->
-            route?.let {
-                drawRoute(kakaoMap!!, it.hostNodes) // API 호출 결과에 따라 hostNodes 또는 guestNodes 사용
+    private fun observeUserInfoAndRouteData() {
+        mapViewModel.userId.observe(this) { userId ->
+            mapViewModel.route.observe(this) { route ->
+                route?.let {
+                    if (it.hostId == userId) {
+                        drawRoute(kakaoMap!!, it.hostNodes)
+                    } else if (it.guestId == userId) {
+                        drawRoute(kakaoMap!!, it.guestNodes)
+                    }
+                }
             }
         }
     }
+
 
     private fun observeRouteSoloData() {
         mapViewModel.routeSolo.observe(this) { routeSolo ->
@@ -344,8 +343,6 @@ class MapActivity : AppCompatActivity() {
                 startMovingLabel(latLngList) // 변환된 리스트를 사용하여 라벨 이동 시작
             }
         })
-
-        mapViewModel.getOptimizedRouteSolo("논현동 40", "서울특별시 강남구 학동로 171")
     }
 
     private var routeIndex = 0 // 클래스의 멤버 변수로 선언
@@ -396,8 +393,9 @@ class MapActivity : AppCompatActivity() {
                 // 최종 목적지에 도착했을 때 라벨 제거
                 kakaoMap?.getLabelManager()?.getLayer()?.remove(movingLabel)
                 routeIndex = 0 // routeIndex를 다시 초기화
+                observeUserInfoAndRouteData()
             }
-        }, 100) // 0.3초마다 위치 업데이트
+        }, 1000) // 0.3초마다 위치 업데이트
     }
     private fun setCarPoolANDTaxiType() {
         val taxiType = TaxiType.getSize(intent.getStringExtra("taxiType") ?: "SMALL")
