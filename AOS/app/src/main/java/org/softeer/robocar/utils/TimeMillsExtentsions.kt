@@ -2,7 +2,7 @@ package org.softeer.robocar.utils
 
 fun convertMillsToHoursAndMinutes(totalMills: Int): Pair<Int, Int> {
     val hours = totalMills / 3600000
-    val minutes = (totalMills % 600000)/60000
+    val minutes = (totalMills % 3600000)/60000
     return Pair(hours, minutes)
 }
 
