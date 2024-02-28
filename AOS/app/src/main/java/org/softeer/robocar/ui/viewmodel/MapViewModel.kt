@@ -10,12 +10,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import org.softeer.robocar.BuildConfig
 import org.softeer.robocar.data.dto.operation.OnboardData
 import org.softeer.robocar.data.dto.placesearch.Place
 import org.softeer.robocar.data.model.*
+import org.softeer.robocar.data.repository.auth.AuthLocalDataSource
 import org.softeer.robocar.domain.usecase.*
+import org.softeer.robocar.utils.convertMillsToHoursAndMinutes
+import org.softeer.robocar.utils.formatMillsDurationText
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,7 +30,8 @@ class MapViewModel @Inject constructor(
     private val getOptimizedRouteUseCase: GetOptimizedRouteUseCase,
     private val getOptimizedRouteSoloUseCase: GetOptimizedRouteSoloUseCase,
     private val onboardDetailsUseCase: OnboardDetailsUseCase,
-    private val carDetailsUseCase: CarDetailsUseCase
+    private val carDetailsUseCase: CarDetailsUseCase,
+    private val authLocalDataSource: AuthLocalDataSource
 ) : ViewModel() {
     val bottomSheetState = MutableLiveData<Int>()
     val bottomSheetDraggable = MutableLiveData<Boolean>()
@@ -74,6 +80,23 @@ class MapViewModel @Inject constructor(
     private val _carDetails = MutableLiveData<CarDetails>()
     val carDetails: LiveData<CarDetails> = _carDetails
 
+    private val _userId = MutableLiveData<Long>()
+    val userId: LiveData<Long> = _userId
+
+    private val _addressTaxiResult = MutableLiveData<String>()
+    val addressTaxiResult: LiveData<String> = _addressTaxiResult
+
+    private val _latestRoute = MutableLiveData<Route?>()
+    val latestRoute: LiveData<Route?> = _latestRoute
+
+    private val _estimatedTime = MutableLiveData<String>()
+    val estimatedTime: LiveData<String> = _estimatedTime
+
+    private val _routeData = MutableLiveData<Route>()
+    val routeData: LiveData<Route> = _routeData
+
+    var currentUserId: Long = 0 // 현재 사용자 ID 설정 필요
+
 
     init {
         _countMale.value = 0
@@ -83,6 +106,9 @@ class MapViewModel @Inject constructor(
         _placeList.value = listOf()
         _destName.value = ""
         _destRoadAddress.value = ""
+        _routeData.observeForever {
+            updateEstimatedTime()
+        }
     }
 
     fun getOptimizedRoute(
@@ -185,7 +211,7 @@ class MapViewModel @Inject constructor(
 
     // 주소 검색을 수행하는 함수
     // 주소 변환 로직을 suspend 함수로 구현
-    suspend fun convertLocationToAddress(location: Location) {
+    fun convertLocationToAddress(location: Location) {
         viewModelScope.launch {
             try {
                 val apiKey = BuildConfig.kakao_rest_api_key // API 키 설정
@@ -194,10 +220,59 @@ class MapViewModel @Inject constructor(
 
                 // 주소 검색 수행하고 결과 반환
                 val result = addressSearchUseCase(apiKey, longitude, latitude).getOrThrow()
+                // 로그로 변환된 주소 출력 및 LiveData에 세팅
+                Log.d("MapViewModel", "주소 변환 결과: $result")
+                _addressResult.value = result
+            } catch (e: Exception) {
+                Log.e("MapViewModel", "주소 변환 실패", e)
+                _addressResult.postValue("주소를 찾을 수 없습니다.")
+            }
+        }
+    }
+
+    suspend fun convertLocationToAddressString(latitude: Double, longitude: Double): String {
+        return try {
+            val apiKey = BuildConfig.kakao_rest_api_key
+            // 주소 검색 수행하고 결과 반환
+            val result = addressSearchUseCase(apiKey, longitude, latitude).getOrThrow()
+            Log.d("MapViewModel", "주소 변환 결과: $result")
+            result // 변환된 주소 반환
+        } catch (e: Exception) {
+            Log.e("MapViewModel", "주소 변환 실패", e)
+            "주소를 찾을 수 없습니다." // 예외 처리
+        }
+    }
+
+
+    fun convertCoordinateToAddress(latitude: Double, longitude: Double) {
+        viewModelScope.launch {
+            try {
+                val apiKey = BuildConfig.kakao_rest_api_key // API 키 설정
+
+                // 주소 검색 수행하고 결과 반환
+                val result = addressSearchUseCase(apiKey, longitude, latitude).getOrThrow()
 
                 // 로그로 변환된 주소 출력 및 LiveData에 세팅
                 Log.d("MapViewModel", "주소 변환 결과: $result")
-                _addressResult.postValue(result)
+                _addressTaxiResult.postValue(result)
+            } catch (e: Exception) {
+                Log.e("MapViewModel", "주소 변환 실패", e)
+                _addressTaxiResult.postValue("주소를 찾을 수 없습니다.")
+            }
+        }
+    }
+
+    suspend fun convertCurrentLocationToAddress(location: Location) {
+        viewModelScope.launch {
+            try {
+                val apiKey = BuildConfig.kakao_rest_api_key // API 키 설정
+                val longitude = location.longitude
+                val latitude = location.latitude
+
+                // 주소 검색 수행하고 결과 반환
+                _startLocation.value = addressSearchUseCase(apiKey, longitude, latitude).getOrThrow()
+
+                // 로그로 변환된 주소 출력 및 LiveData에 세팅
             } catch (e: Exception) {
                 Log.e("MapViewModel", "주소 변환 실패", e)
                 _addressResult.postValue("주소를 찾을 수 없습니다.")
@@ -247,21 +322,22 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    suspend fun convertCurrentLocationToAddress(location: Location) {
-        viewModelScope.launch {
-            try {
-                val apiKey = BuildConfig.kakao_rest_api_key // API 키 설정
-                val longitude = location.longitude
-                val latitude = location.latitude
+    suspend fun fetchUserId(): Long {
+        return authLocalDataSource.getUserInfo().first().userId // Flow에서 첫 번째 User 객체의 userId 반환
+    }
 
-                // 주소 검색 수행하고 결과 반환
-                _startLocation.value = addressSearchUseCase(apiKey, longitude, latitude).getOrThrow()
-
-                // 로그로 변환된 주소 출력 및 LiveData에 세팅
-            } catch (e: Exception) {
-                Log.e("MapViewModel", "주소 변환 실패", e)
-                _addressResult.postValue("주소를 찾을 수 없습니다.")
+    fun updateEstimatedTime() {
+        _routeData.value?.let { route ->
+            val estimatedTime = if (route.hostId == currentUserId) {
+                // 호스트인 경우
+                convertMillsToHoursAndMinutes(route.hostEstimatedArrivalTime)
+            } else {
+                // 게스트인 경우
+                convertMillsToHoursAndMinutes(route.guestEstimatedArrivalTime)
             }
+
+            // 예상 시간 텍스트 포매팅
+            _estimatedTime.value = formatMillsDurationText(estimatedTime.first, estimatedTime.second)
         }
     }
 

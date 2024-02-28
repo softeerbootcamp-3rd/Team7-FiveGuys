@@ -47,29 +47,31 @@ class TaxiInformationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // inOperationId를 arguments에서 추출
         val inOperationId = arguments?.getLong(ARG_IN_OPERATION_ID) ?: return
-        Log.d("아이디","$inOperationId")
 
-// 운행 상세 정보 요청
+        // 운행 상세 정보 요청
         viewModel.fetchOnboardDetails(inOperationId)
 
-        // 운행 상세 정보 LiveData 객체 관찰
         viewModel.onboardDetails.observe(viewLifecycleOwner) { onboardDetails ->
-            // 차량 ID 추출
-            val carId = onboardDetails.carId
-            Log.d("Car ID", "$carId")
-
-            // 차량 ID를 사용하여 차량 정보 요청
-            viewModel.fetchCarDetails(carId)
+            // 차량 정보 요청
+            viewModel.fetchCarDetails(onboardDetails.carId)
         }
 
-        // 차량 정보 LiveData 객체 관찰
         viewModel.carDetails.observe(viewLifecycleOwner) { carDetails ->
-            // 차량 정보가 업데이트되면 UI 업데이트
             updateUI(carDetails)
+            // 차고지 좌표를 한글 주소로 변환
+            viewModel.convertCoordinateToAddress(carDetails.garage.latitude, carDetails.garage.longitude)
+        }
+
+        viewModel.addressTaxiResult.observe(viewLifecycleOwner) { address ->
+            // 최적화된 경로 요청
+            viewModel.onboardDetails.value?.let { onboardDetails ->
+                viewModel.getOptimizedRouteSolo(address, onboardDetails.departureAddress)
+            }
         }
     }
+
+
 
     // 차량 정보를 UI에 반영하는 메소드
     private fun updateUI(carDetails: CarDetails) {

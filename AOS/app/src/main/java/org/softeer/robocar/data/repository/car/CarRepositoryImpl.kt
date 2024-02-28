@@ -3,7 +3,6 @@ package org.softeer.robocar.data.repository.car
 import org.softeer.robocar.data.mapper.toCarDetails
 import org.softeer.robocar.data.model.CarDetails
 import org.softeer.robocar.data.repository.auth.AuthLocalDataSource
-import org.softeer.robocar.di.RoboCarApplication.Companion.token
 import javax.inject.Inject
 
 class CarRepositoryImpl @Inject constructor(
