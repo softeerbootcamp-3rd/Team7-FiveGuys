@@ -3,19 +3,21 @@ package org.softeer.robocar.data.repository.user
 import org.softeer.robocar.data.dto.user.request.SignUpRequest
 import org.softeer.robocar.data.dto.user.response.CheckAvailableNicknameResponse
 import org.softeer.robocar.data.dto.user.response.CheckAvailableUserIdResponse
+import org.softeer.robocar.data.network.ApiResult
+import retrofit2.Response
 
 interface UserRemoteDataSource {
 
     suspend fun checkAvailableUserId(
         userId: String
-    ): Result<CheckAvailableUserIdResponse>
+    ): Response<CheckAvailableUserIdResponse>
 
     suspend fun checkAvailableNickname(
         nickname: String
-    ): Result<CheckAvailableNicknameResponse>
+    ): Response<CheckAvailableNicknameResponse>
 
     suspend fun signUp(
         signUpRequest: SignUpRequest
-    ): Result<Unit>
+    ): Response<Unit>
 
 }
