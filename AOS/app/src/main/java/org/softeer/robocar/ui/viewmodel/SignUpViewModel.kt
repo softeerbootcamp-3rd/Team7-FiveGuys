@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.softeer.robocar.data.dto.user.request.SignUpRequest
+import org.softeer.robocar.data.network.ApiResult
 import org.softeer.robocar.domain.usecase.CheckDuplicatedNicknameUseCase
 import org.softeer.robocar.domain.usecase.CheckDuplicatedUserIdUseCase
 import org.softeer.robocar.domain.usecase.SignUpUseCase
@@ -28,11 +28,14 @@ class SignUpViewModel @Inject constructor(
 
     var nickname = MutableLiveData<String>()
 
-    private var _isIdAvailable = MutableLiveData<Boolean?>()
-    val isIdAvailable: LiveData<Boolean?> = _isIdAvailable
+    private var _idCheckState = MutableLiveData<ApiResult>(ApiResult.Loading)
+    val idCheckState: LiveData<ApiResult> = _idCheckState
 
-    private var _isNicknameAvailable = MutableLiveData<Boolean?>()
-    val isNicknameAvailable: LiveData<Boolean?> = _isNicknameAvailable
+    private var _nicknameCheckState = MutableLiveData<ApiResult>(ApiResult.Loading)
+    val nicknameCheckState: LiveData<ApiResult> = _nicknameCheckState
+
+    private var _signUpState = MutableLiveData<ApiResult>(ApiResult.Loading)
+    val signUpState: LiveData<ApiResult> = _signUpState
 
     init {
         userId.value = ""
@@ -41,35 +44,84 @@ class SignUpViewModel @Inject constructor(
         nickname.value = ""
     }
 
-    suspend fun signUp(): Boolean {
-        return viewModelScope.async {
-            signUpUseCase(
+    suspend fun signUp() {
+        viewModelScope.launch {
+            val result = signUpUseCase(
                 SignUpRequest(
                     userId = userId.value!!,
                     password = password.value!!,
                     nickname = nickname.value!!,
                 )
             )
-        }.await()
+
+            when(result){
+                is ApiResult.Loading -> {
+
+                }
+                is ApiResult.Success<*> -> {
+                    _signUpState.value = ApiResult.Success(result.data)
+                }
+                is ApiResult.Failure -> {
+                    _signUpState.value = ApiResult.Failure(
+                        code = result.code,
+                        message = result.message
+                    )
+                }
+                is ApiResult.Exception -> {
+                    _signUpState.value = ApiResult.Exception(
+                        e = result.e
+                    )
+                }
+            }
+
+        }
     }
 
     fun checkDuplicatedUserId(userId: String) {
         viewModelScope.launch {
-            checkDuplicatedUserIdUseCase(userId)
-                .onSuccess {
-                    _isIdAvailable.value = it.isAvailable
+            when(val result = checkDuplicatedUserIdUseCase(userId)){
+                is ApiResult.Loading -> {
+
                 }
-                .onFailure { }
+                is ApiResult.Success<*> -> {
+                    _idCheckState.value = ApiResult.Success(result.data)
+                }
+                is ApiResult.Failure -> {
+                    _idCheckState.value = ApiResult.Failure(
+                        code = result.code,
+                        message = result.message
+                    )
+                }
+                is ApiResult.Exception -> {
+                    _idCheckState.value = ApiResult.Exception(
+                        e = result.e
+                    )
+                }
+            }
         }
     }
 
     fun checkDuplicatedNickname(nickname: String) {
         viewModelScope.launch {
-            checkDuplicatedNicknameUseCase(nickname)
-                .onSuccess {
-                    _isNicknameAvailable.value = it.isAvailable
+            when(val result = checkDuplicatedNicknameUseCase(nickname)){
+                is ApiResult.Loading -> {
+
                 }
-                .onFailure { }
+                is ApiResult.Success<*> -> {
+                    _nicknameCheckState.value = ApiResult.Success(result.data)
+                }
+                is ApiResult.Failure -> {
+                    _nicknameCheckState.value = ApiResult.Failure(
+                        code = result.code,
+                        message = result.message
+                    )
+                }
+                is ApiResult.Exception -> {
+                    _nicknameCheckState.value = ApiResult.Exception(
+                        e = result.e
+                    )
+                }
+            }
         }
     }
 }
