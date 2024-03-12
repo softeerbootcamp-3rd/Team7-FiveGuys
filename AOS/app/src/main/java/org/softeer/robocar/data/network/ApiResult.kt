@@ -1,10 +1,10 @@
 package org.softeer.robocar.data.network
 
-sealed class ApiResult<out T> {
+sealed class ApiResult {
 
-    object Loading : ApiResult<Nothing>()
-    data class Success<out T>(val data: T) : ApiResult<T>()
-    data class Failure(val message: String?) : ApiResult<Nothing>()
-    data class Exception(val e: Throwable) : ApiResult<Nothing>()
+    object Loading : ApiResult()
+    data class Success<out T>(val data: T) : ApiResult()
+    data class Failure(val code: Int, val message: String?) : ApiResult()
+    data class Exception(val e: Throwable) : ApiResult()
 
 }
