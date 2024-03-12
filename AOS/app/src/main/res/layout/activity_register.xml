@@ -19,7 +19,7 @@
                 android:layout_marginTop="8dp"
                 android:visibility="gone"
                 android:layout_marginStart="24dp"
-                showNicknameAvailabilityMessage="@{signUpViewModel.isNicknameAvailable}"
+                showNicknameAvailabilityMessage="@{signUpViewModel.nicknameCheckState}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nickNameInputText"/>
 
@@ -228,7 +228,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="24dp"
                 android:visibility="gone"
-                showIdAvailabilityMessage="@{signUpViewModel.isIdAvailable}"
+                showIdAvailabilityMessage="@{signUpViewModel.idCheckState}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/idInputText"/>
 
@@ -263,8 +263,8 @@
                 checkPasswordInputValid="@{signUpViewModel.password}"
                 checkConfirmedPasswordInputValid="@{signUpViewModel.passwordConfirmation}"
                 checkNicknameInputValid="@{signUpViewModel.nickname}"
-                checkAvailableId="@{signUpViewModel.isIdAvailable}"
-                checkAvailableNickname="@{signUpViewModel.isNicknameAvailable}"
+                checkAvailableId="@{signUpViewModel.idCheckState}"
+                checkAvailableNickname="@{signUpViewModel.nicknameCheckState}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nickNameInputText"

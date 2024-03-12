@@ -76,4 +76,11 @@
     <string name="logo">RoboCar</string>
     <string name="go_to_riding_taxi">택시 타기</string>
     <string name="reject_car_pool">요청이 거절당했어요.</string>
+    <string name="is_available_id">사용 가능한 아이디입니다.</string>
+    <string name="is_already_exist_id">이미 존재하는 아이디입니다.</string>
+    <string name="network_error_toast_message">네트워크 에러가 발생했습니다.\n다시 시도해주세요.</string>
+    <string name="internal_server_error_toast_message">서버 에러가 발생했습니다.\n잠시후 다시 시도해주세요.</string>
+    <string name="is_available_nickname">사용 가능한 닉네임입니다.</string>
+    <string name="is_already_exist_nickname">이미 존재하는 닉네임입니다.</string>
+    <string name="is_already_exist_id_or_nickname">이미 존재하는 아이디 또는 닉네임입니다.</string>
 </resources>
